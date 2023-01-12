@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const Layout = ({ title, children }) => {
+export default function Layout({ title, children }) {
   return (
     <>
       <Head>
@@ -11,6 +11,4 @@ const Layout = ({ title, children }) => {
       <div className="flex min-h-screen flex-col justify-between"></div>
     </>
   );
-};
-
-export default Layout;
+}
