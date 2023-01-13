@@ -7,6 +7,10 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import RadioInput from "../components/forms/RadioInput";
 import InputGroup from "../components/forms/InputGroup";
+import { useRouter } from "next/router";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import Loading from "../components/layout/Loading";
+import { useState } from "react";
 
 const schema = yup.object({
   loginas: yup.string().typeError("choose either customer or vendor"),
@@ -25,15 +29,24 @@ export default function LogInForm() {
   } = useForm({ resolver: yupResolver(schema) });
 
   const supabaseClient = useSupabaseClient();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    await supabaseClient.auth.signInWithPassword({
+    setLoading(true);
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
+    setLoading(false);
+    if (!error) {
+      router.push("/");
+    }
   };
+
   return (
     <>
+      <Loading isLoading={loading} />
       <div className="flex flex-col items-center">
         <Image src="/logo.png" alt="" width={350} height={350} />
         <p className="text-3xl font-bold mb-8">Log in</p>
@@ -102,3 +115,14 @@ export default function LogInForm() {
     </>
   );
 }
+
+export const getServerSideProps = async (ctx) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) return { redirect: { destination: "/", permanent: false } };
+  return { props: {} };
+};
