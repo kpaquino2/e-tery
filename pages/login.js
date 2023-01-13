@@ -8,7 +8,7 @@ import Image from "next/image";
 import InputGroup from "../components/forms/InputGroup";
 import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import Loading from "../components/layout/Loading";
+import Loading from "../components/Loading";
 import { useState } from "react";
 
 const schema = yup.object({

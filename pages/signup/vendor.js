@@ -11,7 +11,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import Loading from "../../components/layout/Loading";
+import Loading from "../../components/Loading";
 
 const schema = yup.object({
   name: yup.string().required("store name is required"),
