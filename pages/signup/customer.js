@@ -1,9 +1,9 @@
 import Link from "next/link";
-import CheckboxInput from "../components/forms/CheckboxInput";
-import PasswordInput from "../components/forms/PasswordInput";
-import SelectInput from "../components/forms/SelectInput";
-import TextInput from "../components/forms/TextInput";
-import Header from "../components/layout/Header";
+import CheckboxInput from "../../components/forms/CheckboxInput";
+import PasswordInput from "../../components/forms/PasswordInput";
+import SelectInput from "../../components/forms/SelectInput";
+import TextInput from "../../components/forms/TextInput";
+import Header from "../../components/layout/Header";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -36,7 +36,7 @@ const schema = yup.object({
   tnc: yup.boolean().isTrue("please read and accept the terms and conditions"),
 });
 
-export default function SignUp() {
+export default function Customer() {
   const {
     register,
     handleSubmit,

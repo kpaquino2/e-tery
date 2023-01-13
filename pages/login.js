@@ -13,7 +13,6 @@ import Loading from "../components/layout/Loading";
 import { useState } from "react";
 
 const schema = yup.object({
-  loginas: yup.string().typeError("choose either customer or vendor"),
   email: yup
     .string()
     .email("enter a valid email address")
@@ -49,39 +48,11 @@ export default function LogInForm() {
       <Loading isLoading={loading} />
       <div className="flex flex-col items-center">
         <Image src="/logo.png" alt="" width={350} height={350} />
-        <p className="text-3xl font-bold mb-8">Log in</p>
-        <p className="text-2xl font-light">as</p>
+        <p className="text-3xl font-bold mb-6">Log in</p>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-center w-full"
         >
-          <div className="flex items-center w-32">
-            <RadioInput
-              register={register}
-              name="loginas"
-              id="customer"
-              value="customer"
-              size="5"
-            />
-            <label htmlFor="customer" className="ml-2 mb-[7px] text-2xl">
-              customer
-            </label>
-          </div>
-          <div className="flex items-center w-32">
-            <RadioInput
-              register={register}
-              name="loginas"
-              id="vendor"
-              value="vendor"
-              size="5"
-            />
-            <label htmlFor="vendor" className="ml-5 mb-[7px] text-2xl">
-              vendor
-            </label>
-          </div>
-          <p className="mb-5 text-red-500 font-semibold">
-            {errors.loginas?.message}
-          </p>
           <InputGroup
             register={register}
             name="email"
