@@ -4,6 +4,7 @@ import Header from "../../components/layout/Header";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 const schema = yup.object({
   account_type: yup.number().typeError("please select either one"),
@@ -72,3 +73,14 @@ export default function SignUp() {
     </>
   );
 }
+
+export const getServerSideProps = async (ctx) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) return { redirect: { destination: "/", permanent: false } };
+  return { props: {} };
+};

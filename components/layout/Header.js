@@ -10,7 +10,9 @@ export default function Header() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await supabaseClient.auth.signOut();
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (!error) router.push("/login");
   };
 
   return (

@@ -29,6 +29,7 @@ export default function LogInForm() {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState();
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -40,6 +41,7 @@ export default function LogInForm() {
     if (!error) {
       router.push("/");
     }
+    setLoginError(error?.message);
   };
 
   return (
@@ -48,6 +50,7 @@ export default function LogInForm() {
       <div className="flex flex-col items-center">
         <Image src="/logo.png" alt="" width={350} height={350} />
         <p className="text-3xl font-bold mb-6">Log in</p>
+        <div className="text-red-500 font-semibold mb-3">{loginError}</div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-center w-full"

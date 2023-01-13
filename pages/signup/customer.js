@@ -8,6 +8,10 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import Loading from "../../components/layout/Loading";
 
 const schema = yup.object({
   firstname: yup.string().required("first name is required"),
@@ -48,13 +52,18 @@ export default function Customer() {
   } = useForm({ resolver: yupResolver(schema) });
 
   const supabaseClient = useSupabaseClient();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [createAccError, setCreateAccError] = useState();
 
   const onSubmit = async (data) => {
+    setLoading(true);
     const { data: signUpData, error: signUpError } =
       await supabaseClient.auth.signUp({
         email: data.email,
         password: data.password,
       });
+    setLoading(false);
     if (!signUpError) {
       await supabaseClient.from("users").insert([
         {
@@ -65,12 +74,15 @@ export default function Customer() {
           classification: data.classification,
         },
       ]);
+      router.push("/");
     }
+    setCreateAccError(signUpError?.message);
   };
 
   return (
     <>
       <Header />
+      <Loading isLoading={loading} />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-2 gap-4 p-5"
@@ -143,6 +155,13 @@ export default function Customer() {
         <div className="col-span-2 place-self-center text-red-500 font-semibold ml-2 text-sm">
           {errors.tnc?.message}
         </div>
+        {createAccError ? (
+          <div className="col-span-2 place-self-center text-red-500 font-semibold mb-3">
+            {createAccError}
+          </div>
+        ) : (
+          <></>
+        )}
         <button
           type="submit"
           className="col-span-2 w-1/2 px-10 py-1 font-bold leading-tight place-self-center bg-cream rounded-full text-lg hover:opacity-75"
@@ -159,3 +178,14 @@ export default function Customer() {
     </>
   );
 }
+
+export const getServerSideProps = async (ctx) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) return { redirect: { destination: "/", permanent: false } };
+  return { props: {} };
+};
