@@ -1,10 +1,7 @@
-import { Inter } from "@next/font/google";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import Layout from "../components/layout/Layout";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function Home({ user, acct_type }) {
+export default function Home({ user, acct_type, data }) {
   return (
     <>
       <Layout title="Home" acct_type={acct_type}>
@@ -24,7 +21,6 @@ export const getServerSideProps = async (ctx) => {
   if (!session)
     return { redirect: { destination: "/login", permanent: false } };
 
-  const { user } = session;
   const { data: user_data } = await supabase.from("users").select("*");
   const { data: vendor_data } = await supabase.from("vendors").select("*");
   const acct_type = user_data.length
@@ -32,5 +28,10 @@ export const getServerSideProps = async (ctx) => {
     : vendor_data.length
     ? "vendor"
     : "unauth";
-  return { props: { user, acct_type } };
+  const data = user_data.length
+    ? user_data[0]
+    : vendor_data.length
+    ? vendor_data[0]
+    : {};
+  return { props: { acct_type, data } };
 };
