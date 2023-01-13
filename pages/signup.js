@@ -52,7 +52,7 @@ export default function SignUp() {
         password: data.password,
       });
     if (!signUpError) {
-      const aaa = await supabaseClient.from("users").insert([
+      await supabaseClient.from("users").insert([
         {
           id: signUpData.user.id,
           firstname: data.firstname,
@@ -61,7 +61,6 @@ export default function SignUp() {
           classification: data.classification,
         },
       ]);
-      console.log(aaa);
     }
   };
 

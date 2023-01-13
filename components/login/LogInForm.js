@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Link from "next/link";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const schema = yup.object({
   loginas: yup.string().typeError("choose either customer or vendor"),
@@ -22,7 +23,14 @@ export default function LogInForm() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => console.log(data);
+  const supabaseClient = useSupabaseClient();
+
+  const onSubmit = async (data) => {
+    await supabaseClient.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+  };
 
   return (
     <>
