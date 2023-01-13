@@ -1,10 +1,12 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useUser } from "@supabase/auth-helpers-react";
-import { ImArrowLeft2 } from "react-icons/im";
+import { ImArrowLeft2, ImCart } from "react-icons/im";
+import { TiThMenu } from "react-icons/ti";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-export default function Header() {
+export default function Header({ acct_type }) {
+  console.log(acct_type);
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const router = useRouter();
@@ -18,7 +20,24 @@ export default function Header() {
   return (
     <>
       <header className="bg-maroon">
-        {user ? (
+        {acct_type === "customer" ? (
+          <div className="flex justify-between items-center px-3">
+            <button className="rounded-full" onClick={() => router.push("/")}>
+              <Image src="/logo-light.png" alt="" width={80} height={80} />
+            </button>
+            <div className="flex gap-3">
+              <button
+                className="rounded-full"
+                onClick={() => router.push("/cart")}
+              >
+                <ImCart className="text-cream w-6 h-6" />
+              </button>
+              <button className="rounded-full">
+                <TiThMenu className="text-cream w-7 h-7" />
+              </button>
+            </div>
+          </div>
+        ) : acct_type === "vendor" ? (
           <button onClick={handleSignOut}>Sign out</button>
         ) : (
           <div className="grid grid-cols-3 px-3 place-items-center">

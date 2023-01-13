@@ -4,10 +4,12 @@ import Layout from "../components/layout/Layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({ user, acct_type }) {
   return (
     <>
-      <Layout title="Home"></Layout>
+      <Layout title="Home" acct_type={acct_type}>
+        {acct_type}
+      </Layout>
     </>
   );
 }
@@ -23,5 +25,10 @@ export const getServerSideProps = async (ctx) => {
     return { redirect: { destination: "/login", permanent: false } };
 
   const { user } = session;
-  return { props: { user } };
+  const {
+    data: [{ id }],
+  } = await supabase.from("users").select("id");
+
+  const acct_type = "customer";
+  return { props: { user, acct_type } };
 };
