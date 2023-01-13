@@ -64,7 +64,7 @@ export default function LogInForm() {
           type="text"
           error={errors.email?.message}
         >
-          <MdEmail className="w-5 h-5 text-teal" />
+          <MdEmail className="w-6 h-6 text-teal" />
         </InputGroup>
         <InputGroup
           register={register}
@@ -73,7 +73,7 @@ export default function LogInForm() {
           type="password"
           error={errors.password?.message}
         >
-          <MdLock className="w-5 h-5 text-teal" />
+          <MdLock className="w-6 h-6 text-teal" />
         </InputGroup>
         <button
           type="submit"
