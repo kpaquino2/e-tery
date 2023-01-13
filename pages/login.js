@@ -5,7 +5,6 @@ import * as yup from "yup";
 import Link from "next/link";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
-import RadioInput from "../components/forms/RadioInput";
 import InputGroup from "../components/forms/InputGroup";
 import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
