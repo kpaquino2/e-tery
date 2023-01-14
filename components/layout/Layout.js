@@ -11,7 +11,7 @@ export default function Layout({ title, acct_type, children }) {
       </Head>
       <div className="flex min-h-screen flex-col gap-2">
         <Header acct_type={acct_type} />
-        <main className="place-self-center">{children}</main>
+        <main className="w-full px-10 place-self-center">{children}</main>
       </div>
     </>
   );
