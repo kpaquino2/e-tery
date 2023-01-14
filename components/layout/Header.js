@@ -21,9 +21,9 @@ export default function Header({ acct_type }) {
     <>
       <header className="bg-maroon">
         {acct_type === "customer" ? (
-          <div className="flex justify-between items-center px-3">
+          <div className="flex justify-between items-center px-3 h-20">
             <button className="rounded-full" onClick={() => router.push("/")}>
-              <Image src="/logo-light.png" alt="" width={80} height={80} />
+              <Image src="/logo-light.png" alt="" width={70} height={70} />
             </button>
             <div className="flex gap-3">
               <button
@@ -46,7 +46,7 @@ export default function Header({ acct_type }) {
                 <ImArrowLeft2 className="text-cream w-6 h-6" />
               </button>
             </div>
-            <Image src="/logo-light.png" alt="" width={80} height={80} />
+            <Image src="/logo-light.png" alt="" width={70} height={70} />
           </div>
         )}
       </header>
