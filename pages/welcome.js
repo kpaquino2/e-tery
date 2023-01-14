@@ -102,7 +102,10 @@ export const getServerSideProps = async (ctx) => {
   if (!session)
     return { redirect: { destination: "/login", permanent: false } };
 
-  const { data: user_data } = await supabase.from("users").select("*");
+  const { data: user_data } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", session.user.id);
 
   if (user_data.length > 0)
     return { redirect: { destination: "/", permanent: false } };

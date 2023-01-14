@@ -50,8 +50,14 @@ export const getServerSideProps = async (ctx) => {
   if (!session)
     return { redirect: { destination: "/login", permanent: false } };
 
-  const { data: user_data } = await supabase.from("users").select("*");
-  const { data: vendor_data } = await supabase.from("vendors").select("*");
+  const { data: user_data } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", session.user.id);
+  const { data: vendor_data } = await supabase
+    .from("vendors")
+    .select("*")
+    .eq("id", session.user.id);
   const acct_type = user_data.length
     ? "customer"
     : vendor_data.length
