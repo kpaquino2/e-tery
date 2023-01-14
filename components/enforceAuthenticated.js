@@ -26,6 +26,9 @@ const enforceAuthenticated = () => {
 
     if (acct_type === "vendor" && !data.activated)
       return { redirect: { destination: "/unactivated", permanent: false } };
+
+    if (acct_type === "vendor" && data.new_account)
+      return { redirect: { destination: "/welcome", permanent: false } };
     return { props: { acct_type, data } };
   };
 };
