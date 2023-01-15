@@ -1,13 +1,32 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
 import CustomerHome from "../components/CustomerHome/CustomerHome";
 import Layout from "../components/layout/Layout";
+import Welcome from "../components/Welcome";
+import { useEffect, useState } from "react";
 
-export default function Home({ acct_type, stores }) {
+export default function Home({ id, acct_type, stores }) {
+  const [welcomed, setWelcomed] = useState(true);
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("accounts_welcomed"));
+    if (!stored?.includes(id)) setWelcomed(false);
+  }, []);
+
+  const hideWelcome = () => {
+    const stored = JSON.parse(localStorage.getItem("accounts_welcomed"));
+    if (!stored) {
+      localStorage.setItem("accounts_welcomed", JSON.stringify([id]));
+      setWelcomed(true);
+      return;
+    }
+    localStorage.setItem("accounts_welcomed", JSON.stringify([id, ...stored]));
+    setWelcomed(true);
+  };
+
   return (
     <>
+      {!welcomed ? <Welcome hideWelcome={hideWelcome} /> : <></>}
       <Layout title="Home" acct_type={acct_type}>
-        <CustomerHome stores={stores} />
+        {acct_type === "customer" ? <CustomerHome stores={stores} /> : <></>}
       </Layout>
     </>
   );
@@ -32,5 +51,5 @@ export const getServerSideProps = async (ctx) => {
     return { props: { acct_type, stores } };
   }
 
-  return { props: {} };
+  return { props: { id: session?.user.id, acct_type } };
 };

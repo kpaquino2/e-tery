@@ -1,10 +1,9 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useKeenSlider } from "keen-slider/react";
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { useUser } from "@supabase/auth-helpers-react";
 
-export default function Welcome() {
+export default function Welcome({ hideWelcome }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -16,20 +15,9 @@ export default function Welcome() {
       setLoaded(true);
     },
   });
-  const router = useRouter();
-  const supabaseClient = useSupabaseClient();
-
-  const finishWelcome = async () => {
-    const { error } = await supabaseClient
-      .from("vendors")
-      .update({ new_account: false })
-      .eq("new_account", true);
-
-    if (!error) router.push("/");
-  };
 
   return (
-    <>
+    <div className="fixed top-0 bot-0 left-0 right-0 bg-white">
       <div ref={sliderRef} className="keen-slider h-[85vh]">
         <div className="keen-slider__slide flex flex-col items-center justify-center gap-6 pt-52 bg-welcome bg-[right_top_2rem] bg-no-repeat bg-[length:115%]">
           <p className="text-4xl font-bold z-50">Welcome to E-tery</p>
@@ -62,7 +50,7 @@ export default function Welcome() {
           </ul>
           <button
             className="bg-teal text-cream rounded-full w-min px-3 py-2 place-self-center mt-6"
-            onClick={finishWelcome}
+            onClick={hideWelcome}
           >
             proceed
           </button>
@@ -88,7 +76,7 @@ export default function Welcome() {
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }
 
