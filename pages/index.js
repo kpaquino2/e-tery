@@ -4,7 +4,7 @@ import Layout from "../components/layout/Layout";
 import Welcome from "../components/Welcome";
 import { useEffect, useState } from "react";
 
-export default function Home({ id, acct_type, stores }) {
+export default function Home({ id, acct_type, stores, open }) {
   const [welcomed, setWelcomed] = useState(true);
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("accounts_welcomed"));
@@ -24,8 +24,12 @@ export default function Home({ id, acct_type, stores }) {
 
   return (
     <>
-      {!welcomed ? <Welcome hideWelcome={hideWelcome} /> : <></>}
-      <Layout title="Home" acct_type={acct_type}>
+      {acct_type === "vendor" && !welcomed ? (
+        <Welcome hideWelcome={hideWelcome} />
+      ) : (
+        <></>
+      )}
+      <Layout title="Home" acct_type={acct_type} open={open}>
         {acct_type === "customer" ? <CustomerHome stores={stores} /> : <></>}
       </Layout>
     </>
@@ -50,6 +54,8 @@ export const getServerSideProps = async (ctx) => {
       .eq("open", true);
     return { props: { acct_type, stores } };
   }
-
-  return { props: { id: session?.user.id, acct_type } };
+  const {
+    data: [{ open }],
+  } = await supabase.from("vendors").select("open").eq("id", session?.user.id);
+  return { props: { id: session?.user.id, acct_type, open } };
 };

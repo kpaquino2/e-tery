@@ -21,6 +21,8 @@ module.exports = {
         maroon: "#8C1C13",
         teal: "#197278",
         cream: "#EDDDD4",
+        dark: "#283d3b",
+        light: "#fefefe",
       },
     },
   },

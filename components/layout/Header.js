@@ -1,13 +1,13 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useUser } from "@supabase/auth-helpers-react";
-import { ImArrowLeft2, ImCart } from "react-icons/im";
+import { ImCart } from "react-icons/im";
 import { TiThMenu } from "react-icons/ti";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import VendorNav from "./VendorNav";
 
-export default function Header({ acct_type }) {
+export default function Header({ acct_type, open }) {
   const supabaseClient = useSupabaseClient();
-  const user = useUser();
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -19,30 +19,32 @@ export default function Header({ acct_type }) {
   return (
     <>
       <header className="bg-maroon">
-        {acct_type === "customer" ? (
-          <div className="flex justify-between items-center px-3 h-20">
-            <button className="rounded-full" onClick={() => router.push("/")}>
+        <div className="flex justify-between items-center px-3 h-20">
+          {acct_type === "customer" ? (
+            <>
+              <button className="rounded-full" onClick={() => router.push("/")}>
+                <Image src="/logo-light.png" alt="" width={70} height={70} />
+              </button>
+              <div className="flex gap-3">
+                <button
+                  className="rounded-full"
+                  onClick={() => router.push("/cart")}
+                >
+                  <ImCart className="text-cream w-6 h-6" />
+                </button>
+                <button onClick={handleSignOut} className="rounded-full">
+                  <TiThMenu className="text-cream w-7 h-7" />
+                </button>
+              </div>
+            </>
+          ) : acct_type === "vendor" ? (
+            <VendorNav open={open} />
+          ) : (
+            <div className="grid place-items-center w-full">
               <Image src="/logo-light.png" alt="" width={70} height={70} />
-            </button>
-            <div className="flex gap-3">
-              <button
-                className="rounded-full"
-                onClick={() => router.push("/cart")}
-              >
-                <ImCart className="text-cream w-6 h-6" />
-              </button>
-              <button onClick={handleSignOut} className="rounded-full">
-                <TiThMenu className="text-cream w-7 h-7" />
-              </button>
             </div>
-          </div>
-        ) : acct_type === "vendor" ? (
-          <button onClick={handleSignOut}>Sign out</button>
-        ) : (
-          <div className="grid px-3 place-items-center">
-            <Image src="/logo-light.png" alt="" width={70} height={70} />
-          </div>
-        )}
+          )}
+        </div>
       </header>
     </>
   );
