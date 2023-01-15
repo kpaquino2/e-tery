@@ -65,7 +65,7 @@ export default function Customer() {
       });
     setLoading(false);
     if (!signUpError) {
-      await supabaseClient.from("users").insert([
+      await supabaseClient.from("customers").insert([
         {
           id: signUpData.user.id,
           firstname: data.firstname,

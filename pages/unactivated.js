@@ -51,7 +51,7 @@ export const getServerSideProps = async (ctx) => {
     return { redirect: { destination: "/login", permanent: false } };
 
   const { data: user_data } = await supabase
-    .from("users")
+    .from("customers")
     .select("*")
     .eq("id", session.user.id);
   const { data: vendor_data } = await supabase
