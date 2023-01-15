@@ -3,3 +3,7 @@
 @tailwind utilities;
 
 @import "keen-slider/keen-slider.min.css";
+
+.clip-banner {
+  clip-path: ellipse(90% 50% at 50% 50%);
+}

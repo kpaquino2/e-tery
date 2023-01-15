@@ -3,6 +3,7 @@ import CustomerHome from "../components/CustomerHome/CustomerHome";
 import Layout from "../components/layout/Layout";
 import Welcome from "../components/Welcome";
 import { useEffect, useState } from "react";
+import VendorHome from "../components/VendorHome/VendorHome";
 
 export default function Home({ id, acct_type, stores, open }) {
   const [welcomed, setWelcomed] = useState(true);
@@ -30,7 +31,11 @@ export default function Home({ id, acct_type, stores, open }) {
         <></>
       )}
       <Layout title="Home" acct_type={acct_type} open={open}>
-        {acct_type === "customer" ? <CustomerHome stores={stores} /> : <></>}
+        {acct_type === "customer" ? (
+          <CustomerHome stores={stores} />
+        ) : (
+          <VendorHome />
+        )}
       </Layout>
     </>
   );
