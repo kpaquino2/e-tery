@@ -9,7 +9,7 @@ export default function Home({ id, acct_type, stores }) {
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("accounts_welcomed"));
     if (!stored?.includes(id)) setWelcomed(false);
-  }, []);
+  }, [id]);
 
   const hideWelcome = () => {
     const stored = JSON.parse(localStorage.getItem("accounts_welcomed"));

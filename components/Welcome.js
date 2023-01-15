@@ -79,24 +79,3 @@ export default function Welcome({ hideWelcome }) {
     </div>
   );
 }
-
-export const getServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session)
-    return { redirect: { destination: "/login", permanent: false } };
-
-  const { data: user_data } = await supabase
-    .from("customers")
-    .select("*")
-    .eq("id", session.user.id);
-
-  if (user_data.length > 0)
-    return { redirect: { destination: "/", permanent: false } };
-
-  return { props: {} };
-};

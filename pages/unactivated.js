@@ -50,26 +50,21 @@ export const getServerSideProps = async (ctx) => {
   if (!session)
     return { redirect: { destination: "/login", permanent: false } };
 
-  const { data: user_data } = await supabase
-    .from("customers")
-    .select("*")
-    .eq("id", session.user.id);
-  const { data: vendor_data } = await supabase
-    .from("vendors")
-    .select("*")
-    .eq("id", session.user.id);
-  const acct_type = user_data.length
+  const acct_type = session?.user.email?.endsWith("@g.batstate-u.edu.ph")
     ? "customer"
-    : vendor_data.length
-    ? "vendor"
-    : 0;
-  const data = user_data.length
-    ? user_data[0]
-    : vendor_data.length
-    ? vendor_data[0]
-    : {};
+    : "vendor";
 
-  if (acct_type === "customer" || (acct_type === "vendor" && data.activated))
+  if (acct_type === "customer")
+    return { redirect: { destination: "/", permanent: false } };
+
+  const {
+    data: [details],
+  } = await supabase
+    .from("vendors")
+    .select("activated")
+    .eq("id", session.user.id);
+
+  if (acct_type === "vendor" && details.activated)
     return { redirect: { destination: "/", permanent: false } };
 
   return { props: {} };
