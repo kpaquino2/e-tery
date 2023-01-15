@@ -32,7 +32,7 @@ export default function Header({ acct_type }) {
               >
                 <ImCart className="text-cream w-6 h-6" />
               </button>
-              <button className="rounded-full">
+              <button onClick={handleSignOut} className="rounded-full">
                 <TiThMenu className="text-cream w-7 h-7" />
               </button>
             </div>
