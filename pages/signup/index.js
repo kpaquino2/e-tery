@@ -5,6 +5,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
+import { FaChevronLeft } from "react-icons/fa";
 
 const schema = yup.object({
   account_type: yup.number().typeError("please select either one"),
@@ -27,6 +29,9 @@ export default function SignUp() {
   return (
     <>
       <Header />
+      <Link href={"/login"}>
+        <FaChevronLeft className="absolute w-7 h-7 text-maroon mt-4 ml-2" />
+      </Link>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col h-full items-center mt-48"

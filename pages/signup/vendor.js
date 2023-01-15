@@ -12,6 +12,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Loading from "../../components/Loading";
+import { FaChevronLeft } from "react-icons/fa";
 
 const schema = yup.object({
   name: yup.string().required("store name is required"),
@@ -78,6 +79,9 @@ export default function Customer() {
   return (
     <>
       <Header />
+      <Link href={"/signup"}>
+        <FaChevronLeft className="absolute w-7 h-7 text-maroon mt-4 ml-2" />
+      </Link>
       <Loading isLoading={loading} />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -151,7 +155,7 @@ export default function Customer() {
         )}
         <button
           type="submit"
-          className="w-1/2 px-10 py-1 font-bold leading-tight place-self-center bg-cream rounded-full text-lg hover:opacity-75"
+          className="w-48 px-10 py-1 font-bold leading-tight place-self-center bg-cream rounded-full text-lg hover:opacity-75"
         >
           create your account
         </button>

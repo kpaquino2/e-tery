@@ -40,12 +40,7 @@ export default function Header({ acct_type }) {
         ) : acct_type === "vendor" ? (
           <button onClick={handleSignOut}>Sign out</button>
         ) : (
-          <div className="grid grid-cols-3 px-3 place-items-center">
-            <div className="justify-self-start">
-              <button className="rounded-full" onClick={() => router.back()}>
-                <ImArrowLeft2 className="text-cream w-6 h-6" />
-              </button>
-            </div>
+          <div className="grid px-3 place-items-center">
             <Image src="/logo-light.png" alt="" width={70} height={70} />
           </div>
         )}
