@@ -160,7 +160,7 @@ export default function Customer() {
         </button>
         <p className="place-self-center mt-3">
           {"have an account? "}
-          <Link href="/login" className="font-bold underline pb-16">
+          <Link href="/login" className="font-bold underline">
             log in
           </Link>
         </p>
