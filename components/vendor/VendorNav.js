@@ -2,23 +2,22 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ImCart } from "react-icons/im";
 import { TiThMenu } from "react-icons/ti";
+import VendorMenu from "./VendorMenu";
 
 export default function VendorNav({ vendor_id }) {
   const supabaseClient = useSupabaseClient();
   const [storeOpen, setStoreOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isMenuOpen, setisMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchOpen = async () => {
-      const {
-        data: [{ open }],
-      } = await supabaseClient
+      const { data } = await supabaseClient
         .from("vendors")
         .select("open")
         .eq("id", vendor_id);
-      setStoreOpen(open);
+      if (data) setStoreOpen(data[0]?.open);
     };
     fetchOpen();
   }, [supabaseClient, vendor_id]);
@@ -31,6 +30,10 @@ export default function VendorNav({ vendor_id }) {
       .eq("open", storeOpen);
     if (!error) setStoreOpen(!storeOpen);
     setLoading(false);
+  };
+
+  const openMenu = () => {
+    setisMenuOpen(!isMenuOpen);
   };
   return (
     <>
@@ -61,10 +64,17 @@ export default function VendorNav({ vendor_id }) {
         >
           ORDERS
         </Link>
-        <button className="rounded-full">
-          <TiThMenu className="text-cream w-7 h-7" />
+        <button onClick={openMenu} className="rounded-full">
+          <TiThMenu
+            className={(isMenuOpen ? "text-dark" : "text-cream") + " w-7 h-7"}
+          />
         </button>
       </div>
+      <VendorMenu
+        vendor_id={vendor_id}
+        isOpen={isMenuOpen}
+        setIsOpen={setisMenuOpen}
+      />
     </>
   );
 }

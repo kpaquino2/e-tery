@@ -9,13 +9,13 @@ export default function Drawer({ children, isOpen, setIsOpen, title }) {
         (isOpen ? "translate-x-0" : "translate-x-full")
       }
     >
+      <button
+        className="absolute top-6 left-4 rounded-full p-1"
+        onClick={() => setIsOpen(false)}
+      >
+        <FaChevronLeft className="text-3xl text-cream" />
+      </button>
       <div className="flex flex-col items-center mt-6">
-        <button
-          className="absolute top-6 left-4 rounded-full p-1"
-          onClick={() => setIsOpen(false)}
-        >
-          <FaChevronLeft className="text-3xl text-cream" />
-        </button>
         <p className="text-5xl font-bold text-light">{title}</p>
         {children}
       </div>
