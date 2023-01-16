@@ -9,9 +9,9 @@ export default function Layout({ title, children }) {
         <meta name="description" content="delivery web app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex min-h-screen flex-col gap-2">
+      <div className="flex min-h-screen flex-col">
         <Header />
-        <main className="w-full px-10 place-self-center">{children}</main>
+        <main className="w-full">{children}</main>
       </div>
     </>
   );

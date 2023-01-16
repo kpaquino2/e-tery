@@ -1,11 +1,11 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import CustomerHome from "../components/CustomerHome/CustomerHome";
+import CustomerHome from "../components/customer/CustomerHome";
 import Layout from "../components/layout/Layout";
 import Welcome from "../components/Welcome";
 import { useEffect, useState } from "react";
-import VendorHome from "../components/VendorHome/VendorHome";
+import VendorHome from "../components/vendor/VendorHome";
 
-export default function Home({ id, acct_type, stores, menu }) {
+export default function Home({ id, acct_type, stores, vendor_data }) {
   const [welcomed, setWelcomed] = useState(true);
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("accounts_welcomed"));
@@ -34,7 +34,7 @@ export default function Home({ id, acct_type, stores, menu }) {
         {acct_type === "customer" ? (
           <CustomerHome stores={stores} />
         ) : (
-          <VendorHome menu={menu} />
+          <VendorHome data={vendor_data} />
         )}
       </Layout>
     </>
@@ -59,9 +59,12 @@ export const getServerSideProps = async (ctx) => {
       .eq("open", true);
     return { props: { acct_type, stores } };
   }
-  const { data: menu } = await supabase
-    .from("items")
-    .select("*")
-    .eq("vendor_id", session?.user.id);
-  return { props: { id: session?.user.id, acct_type, menu } };
+  const {
+    data: [vendor_data],
+  } = await supabase
+    .from("vendors")
+    .select("name, categories (name, items (id, name))")
+    .eq("id", session?.user.id);
+
+  return { props: { id: session?.user.id, acct_type, vendor_data } };
 };
