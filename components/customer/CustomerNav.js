@@ -10,6 +10,10 @@ export default function CustomerNav({ customer_id }) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
 
   const openMenu = () => {
+    if (typeof window != "undefined" && window.document) {
+      if (!isMenuOpen) document.body.style.overflow = "hidden";
+      else document.body.style.overflow = "unset";
+    }
     setisMenuOpen(!isMenuOpen);
   };
   return (

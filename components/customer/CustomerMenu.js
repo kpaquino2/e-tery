@@ -42,7 +42,7 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
       </Link>
       <p className="text-cream text-3xl font-bold mb-8">Order Status</p>
       <p className="text-cream text-3xl font-bold mb-4">Details</p>
-      <div className="flex flex-col text-cream text-2xl mx-12 max-w-[80%] overflow-hidden">
+      <div className="flex flex-col text-cream text-2xl mx-12 mb-8 max-w-[80%] overflow-hidden">
         <p>
           Name:{" "}
           <b>{customerDetails?.firstname + " " + customerDetails?.lastname}</b>
@@ -55,7 +55,7 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
         </p>
       </div>
       <button
-        className="rounded-full text-cream font-bold text-3xl mt-12"
+        className="rounded-full text-cream font-bold text-3xl mb-8"
         onClick={handleSignOut}
       >
         Log Out
