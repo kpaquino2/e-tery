@@ -1,9 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { ImCart } from "react-icons/im";
 import { TiThMenu } from "react-icons/ti";
+import CustomerMenu from "./CustomerMenu";
+import SearchBox from "../forms/SearchBox";
 
-export default function CustomerNav() {
+export default function CustomerNav({ customer_id }) {
+  const [isMenuOpen, setisMenuOpen] = useState(false);
+
+  const openMenu = () => {
+    setisMenuOpen(!isMenuOpen);
+  };
   return (
     <>
       <Link href="/" className="rounded-full">
@@ -13,10 +21,18 @@ export default function CustomerNav() {
         <Link href="/cart" className="rounded-full">
           <ImCart className="text-cream w-6 h-6" />
         </Link>
-        <button className="rounded-full">
-          <TiThMenu className="text-cream w-7 h-7" />
+        <button onClick={openMenu} className="rounded-full">
+          <TiThMenu
+            className={(isMenuOpen ? "text-dark" : "text-cream") + " w-7 h-7"}
+          />
         </button>
       </div>
+      <CustomerMenu
+        customer_id={customer_id}
+        isOpen={isMenuOpen}
+        setIsOpen={setisMenuOpen}
+      />
+      <SearchBox isMenuOpen={isMenuOpen} />
     </>
   );
 }

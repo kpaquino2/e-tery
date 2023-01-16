@@ -1,0 +1,65 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Drawer from "../layout/Drawer";
+
+export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
+  const supabaseClient = useSupabaseClient();
+  const [customerDetails, setCustomerDetails] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const getVendorDetails = async () => {
+      const { data } = await supabaseClient
+        .from("customers")
+        .select("*")
+        .eq("id", customer_id);
+      if (data) setCustomerDetails(data[0]);
+    };
+
+    getVendorDetails();
+  }, [supabaseClient, customer_id]);
+
+  const handleSignOut = async () => {
+    const { error } = await supabaseClient.auth.signOut();
+    if (!error) router.push("/login");
+  };
+
+  return (
+    <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
+      <Link
+        href="/details"
+        className="text-cream text-3xl font-bold mb-8 mt-12"
+      >
+        Details
+      </Link>
+      <Link href="/favorites" className="text-cream text-3xl font-bold mb-8">
+        Favorites
+      </Link>
+      <Link href="/history" className="text-cream text-3xl font-bold mb-8">
+        History
+      </Link>
+      <p className="text-cream text-3xl font-bold mb-8">Order Status</p>
+      <p className="text-cream text-3xl font-bold mb-4">Details</p>
+      <div className="flex flex-col text-cream text-2xl mx-12 max-w-[80%] overflow-hidden">
+        <p>
+          Name:{" "}
+          <b>{customerDetails?.firstname + " " + customerDetails?.lastname}</b>
+        </p>
+        <p>
+          Contact Number: <b>{customerDetails?.contact_no}</b>
+        </p>
+        <p>
+          Classification: <b>{customerDetails?.classification}</b>
+        </p>
+      </div>
+      <button
+        className="rounded-full text-cream font-bold text-3xl mt-12"
+        onClick={handleSignOut}
+      >
+        Log Out
+      </button>
+    </Drawer>
+  );
+}

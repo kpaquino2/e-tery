@@ -1,9 +1,14 @@
 import { MdSearch } from "react-icons/md";
 
-export default function SearchBox({ type, error }) {
+export default function SearchBox({ isMenuOpen }) {
   return (
     <>
-      <div className="sticky top-20 -translate-y-3.5 z-50">
+      <div
+        className={
+          "fixed right-12 left-12 top-16 z-20 transform transition duration-300 ease-in-out " +
+          (isMenuOpen ? "scale-0" : "")
+        }
+      >
         <div className="absolute inset-y-0 left-0 flex items-center pl-2">
           <MdSearch className="w-7 h-7" />
         </div>
