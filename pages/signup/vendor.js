@@ -1,7 +1,6 @@
 import Link from "next/link";
 import CheckboxInput from "../../components/forms/CheckboxInput";
 import PasswordInput from "../../components/forms/PasswordInput";
-import SelectInput from "../../components/forms/SelectInput";
 import TextInput from "../../components/forms/TextInput";
 import Header from "../../components/layout/Header";
 import * as yup from "yup";
