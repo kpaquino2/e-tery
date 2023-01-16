@@ -3,7 +3,7 @@ import { MdSearch } from "react-icons/md";
 export default function SearchBox({ type, error }) {
   return (
     <>
-      <div className="relative -translate-y-5">
+      <div className="sticky top-20 -translate-y-3.5 z-50">
         <div className="absolute inset-y-0 left-0 flex items-center pl-2">
           <MdSearch className="w-7 h-7" />
         </div>

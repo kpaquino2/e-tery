@@ -7,6 +7,7 @@ import Link from "next/link";
 import VendorNav from "../vendor/VendorNav";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
+import CustomerNav from "../customer/CustomerNav";
 
 export default function Header() {
   const supabaseClient = useSupabaseClient();
@@ -30,25 +31,10 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 bg-maroon">
+      <header className="sticky top-0 bg-maroon z-40">
         <div className="flex justify-between items-center px-3 h-20">
           {acctType === "customer" ? (
-            <>
-              <button className="rounded-full" onClick={() => router.push("/")}>
-                <Image src="/logo-light.png" alt="" width={70} height={70} />
-              </button>
-              <div className="flex gap-3">
-                <button
-                  className="rounded-full"
-                  onClick={() => router.push("/cart")}
-                >
-                  <ImCart className="text-cream w-6 h-6" />
-                </button>
-                <button onClick={handleSignOut} className="rounded-full">
-                  <TiThMenu className="text-cream w-7 h-7" />
-                </button>
-              </div>
-            </>
+            <CustomerNav />
           ) : acctType === "vendor" ? (
             <VendorNav vendor_id={user?.id} />
           ) : (
