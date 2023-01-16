@@ -4,7 +4,7 @@ import { TiThMenu } from "react-icons/ti";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import VendorNav from "./VendorNav";
+import VendorNav from "../vendor/VendorNav";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 
