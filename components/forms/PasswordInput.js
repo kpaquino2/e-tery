@@ -15,14 +15,14 @@ export default function PasswordInput({ placeholder, error, register, name }) {
           {...register(name)}
         />
         <button
-          className="absolute inset-y-0 right-0 flex items-center pr-4"
+          className="absolute rounded-full inset-y-0 right-0 flex items-center px-4"
           type="button"
           onClick={() => setShowPw(!showPw)}
         >
           {showPw ? (
-            <IoMdEyeOff className="w-6 h-6 text-gray-600" />
+            <IoMdEyeOff className="w-6 h-6 text-dark" />
           ) : (
-            <IoMdEye className="w-6 h-6 text-gray-600" />
+            <IoMdEye className="w-6 h-6 text-dark" />
           )}
         </button>
       </div>
