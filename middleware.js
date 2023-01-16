@@ -15,7 +15,7 @@ export async function middleware(req) {
     ? "customer"
     : "vendor";
 
-  if (acct_type === "user") return;
+  if (acct_type === "customer") return;
 
   const {
     data: [details],
