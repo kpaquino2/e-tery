@@ -4,7 +4,7 @@ import Store from "./Store";
 
 export default function CustomerHome({ stores }) {
   return (
-    <>
+    <dic className="flex flex-col mx-8">
       <SearchBox />
       <AdCarousel />
       <div className="font-bold text-4xl mb-2">Stores</div>
@@ -13,6 +13,6 @@ export default function CustomerHome({ stores }) {
           <Store details={value} key={index} />
         ))}
       </div>
-    </>
+    </dic>
   );
 }
