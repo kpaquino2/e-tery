@@ -11,6 +11,111 @@ export default function VendorHome({ data }) {
             {value.name}
           </div>
         ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
+        {data.categories.map((value, index) => (
+          <div key={index} className="text-2xl font-semibold">
+            {value.name}
+          </div>
+        ))}
       </div>
     </div>
   );

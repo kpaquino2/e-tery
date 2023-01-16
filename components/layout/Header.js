@@ -29,7 +29,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-maroon">
+      <header className="sticky top-0 bg-maroon">
         <div className="flex justify-between items-center px-3 h-20">
           {acctType === "customer" ? (
             <>
