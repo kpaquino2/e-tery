@@ -12,8 +12,8 @@ export default function Item({ data }) {
         height={200}
       />
       <div className="flex flex-col bg-teal text-cream text-md rounded-b-3xl px-4 py-2 w-[200px]">
-        <p className="truncate font-semibold">{data.id}</p>
-        <p>Php {data.base_price.toFixed(2)}</p>
+        <p className="truncate font-semibold text-xl">{data.name}</p>
+        <p className="truncate text-lg">Php {data.base_price.toFixed(2)}</p>
         <p>SET AS {data.available ? "UNAVAILABLE" : "AVAILABLE"}</p>
       </div>
     </>
