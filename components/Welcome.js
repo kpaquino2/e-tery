@@ -17,7 +17,7 @@ export default function Welcome({ hideWelcome }) {
   });
 
   return (
-    <div className="fixed top-0 bot-0 left-0 right-0 bg-white">
+    <div className="fixed top-0 bot-0 left-0 right-0 bg-white z-50">
       <div ref={sliderRef} className="keen-slider h-[85vh]">
         <div className="keen-slider__slide flex flex-col items-center justify-center gap-6 pt-52 bg-welcome bg-[right_top_2rem] bg-no-repeat bg-[length:115%]">
           <p className="text-4xl font-bold z-50">Welcome to E-tery</p>
@@ -57,7 +57,7 @@ export default function Welcome({ hideWelcome }) {
         </div>
       </div>
       {loaded && instanceRef.current && (
-        <div className="flex justify-center gap-6">
+        <div className="flex justify-center gap-6 h-[15vh]">
           {[
             ...Array(instanceRef.current.track.details.slides.length).keys(),
           ].map((idx) => {
