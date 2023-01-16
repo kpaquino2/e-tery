@@ -22,13 +22,6 @@ export default function Header() {
       );
   }, [user]);
 
-  const open = true;
-  const handleSignOut = async () => {
-    const { error } = await supabaseClient.auth.signOut();
-
-    if (!error) router.push("/login");
-  };
-
   return (
     <>
       <header className="sticky top-0 bg-maroon z-40">
