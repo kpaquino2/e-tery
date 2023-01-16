@@ -5,11 +5,22 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import VendorNav from "./VendorNav";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useEffect, useState } from "react";
 
-export default function Header({ acct_type, open }) {
+export default function Header() {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
+  const user = useUser();
+  const [acctType, setAcctType] = useState("");
 
+  useEffect(() => {
+    setAcctType(
+      user?.email?.endsWith("@g.batstate-u.edu.ph") ? "customer" : "vendor"
+    );
+  }, [user]);
+
+  const open = true;
   const handleSignOut = async () => {
     const { error } = await supabaseClient.auth.signOut();
 
@@ -20,7 +31,7 @@ export default function Header({ acct_type, open }) {
     <>
       <header className="bg-maroon">
         <div className="flex justify-between items-center px-3 h-20">
-          {acct_type === "customer" ? (
+          {acctType === "customer" ? (
             <>
               <button className="rounded-full" onClick={() => router.push("/")}>
                 <Image src="/logo-light.png" alt="" width={70} height={70} />
@@ -37,8 +48,8 @@ export default function Header({ acct_type, open }) {
                 </button>
               </div>
             </>
-          ) : acct_type === "vendor" ? (
-            <VendorNav open={open} />
+          ) : acctType === "vendor" ? (
+            <VendorNav vendor_id={user?.id} />
           ) : (
             <div className="grid place-items-center w-full">
               <Image src="/logo-light.png" alt="" width={70} height={70} />

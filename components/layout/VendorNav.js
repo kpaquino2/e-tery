@@ -1,14 +1,27 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ImCart } from "react-icons/im";
 import { TiThMenu } from "react-icons/ti";
 
-export default function VendorNav({ open }) {
+export default function VendorNav({ vendor_id }) {
   const supabaseClient = useSupabaseClient();
-  const [storeOpen, setStoreOpen] = useState(open);
+  const [storeOpen, setStoreOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchOpen = async () => {
+      const {
+        data: [{ open }],
+      } = await supabaseClient
+        .from("vendors")
+        .select("open")
+        .eq("id", vendor_id);
+      setStoreOpen(open);
+    };
+    fetchOpen();
+  }, [supabaseClient, vendor_id]);
 
   const openStore = async () => {
     setLoading(true);
