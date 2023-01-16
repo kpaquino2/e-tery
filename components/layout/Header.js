@@ -15,9 +15,10 @@ export default function Header() {
   const [acctType, setAcctType] = useState("");
 
   useEffect(() => {
-    setAcctType(
-      user?.email?.endsWith("@g.batstate-u.edu.ph") ? "customer" : "vendor"
-    );
+    if (user)
+      setAcctType(
+        user.email?.endsWith("@g.batstate-u.edu.ph") ? "customer" : "vendor"
+      );
   }, [user]);
 
   const open = true;
