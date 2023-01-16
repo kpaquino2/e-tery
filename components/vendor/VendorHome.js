@@ -1,10 +1,10 @@
 import Banner from "./Banner";
 import Item from "./Item";
 
-export default function VendorHome({ data }) {
+export default function VendorHome({ id, data }) {
   return (
     <div className="flex flex-col items-center">
-      <Banner />
+      <Banner id={id} />
       <div className="font-bold text-4xl">{data.name}</div>
       <div className="flex flex-col">
         {data.categories.map((category, index) => (

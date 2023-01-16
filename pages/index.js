@@ -34,7 +34,7 @@ export default function Home({ id, acct_type, stores, vendor_data }) {
         {acct_type === "customer" ? (
           <CustomerHome stores={stores} />
         ) : (
-          <VendorHome data={vendor_data} />
+          <VendorHome id={id} data={vendor_data} />
         )}
       </Layout>
     </>
@@ -57,13 +57,13 @@ export const getServerSideProps = async (ctx) => {
       .from("vendors")
       .select("name,rating,price_range")
       .eq("open", true);
-    return { props: { acct_type, stores } };
+    return { props: { id: session?.user.id, acct_type, stores } };
   }
   const {
     data: [vendor_data],
   } = await supabase
     .from("vendors")
-    .select("name, categories (name, items (id, name))")
+    .select("name, categories (name, items (id, name, base_price, available))")
     .eq("id", session?.user.id);
 
   return { props: { id: session?.user.id, acct_type, vendor_data } };

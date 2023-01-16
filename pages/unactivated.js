@@ -30,7 +30,7 @@ export default function Waiting() {
         </button>
         <Image
           className="absolute top-16"
-          src="/graphics/waiting.png"
+          src="graphics/waiting.png"
           alt=""
           width={500}
           height={500}

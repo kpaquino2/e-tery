@@ -7,7 +7,7 @@ export default function CustomerNav() {
   return (
     <>
       <Link href="/" className="rounded-full">
-        <Image src="/logo-light.png" alt="" width={60} height={60} />
+        <Image src="graphics/logo-light.png" alt="" width={60} height={60} />
       </Link>
       <div className="flex gap-3">
         <Link href="/cart" className="rounded-full">

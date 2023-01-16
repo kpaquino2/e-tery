@@ -48,7 +48,7 @@ export default function LogInForm() {
     <>
       <Loading isLoading={loading} />
       <div className="flex flex-col items-center">
-        <Image src="/logo.png" alt="" width={350} height={350} />
+        <Image src="graphics/logo.png" alt="" width={350} height={350} />
         <p className="text-3xl font-bold mb-6">Log in</p>
         <div className="text-red-500 font-semibold mb-3">{loginError}</div>
         <form

@@ -39,7 +39,12 @@ export default function Header() {
             <VendorNav vendor_id={user?.id} />
           ) : (
             <div className="grid place-items-center w-full">
-              <Image src="/logo-light.png" alt="" width={60} height={60} />
+              <Image
+                src="graphics/logo-light.png"
+                alt=""
+                width={60}
+                height={60}
+              />
             </div>
           )}
         </div>
