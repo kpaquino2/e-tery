@@ -64,7 +64,7 @@ export default function Customer() {
         email: data.email,
         password: data.password,
       });
-    setLoading(false);
+
     if (!signUpError) {
       await supabaseClient.from("customers").insert([
         {

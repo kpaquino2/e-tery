@@ -37,7 +37,7 @@ export default function LogInForm() {
       email: data.email,
       password: data.password,
     });
-    setLoading(false);
+
     if (!error) {
       router.push("/");
     }
