@@ -55,7 +55,7 @@ export const getServerSideProps = async (ctx) => {
   if (acct_type === "customer") {
     const { data: stores } = await supabase
       .from("vendors")
-      .select("name,rating,price_range")
+      .select("id,name,rating,price_range")
       .eq("open", true);
     return { props: { id: session?.user.id, acct_type, stores } };
   }
