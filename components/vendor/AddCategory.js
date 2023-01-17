@@ -48,7 +48,7 @@ export default function AddCategory({ id }) {
   return (
     <>
       <button
-        className="bg-cream rounded-xl h-28 p-2 m-4 flex flex-row items-center justify-center gap-2 hover:scale-110 transition"
+        className="bg-cream rounded-xl h-28 my-4 flex flex-row items-center justify-center gap-2 hover:scale-110 transition"
         onClick={() => setIsOpen(true)}
       >
         <FaPlus className="text-4xl text-teal" />
