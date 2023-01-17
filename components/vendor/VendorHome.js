@@ -14,45 +14,6 @@ export default function VendorHome({ id, data }) {
               {category.items.map((item, index) => (
                 <Item key={index} data={item} />
               ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
-              {category.items.map((item, index) => (
-                <Item key={index} data={item} />
-              ))}
             </div>
           </div>
         ))}
