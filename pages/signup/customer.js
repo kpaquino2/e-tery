@@ -42,7 +42,6 @@ const schema = yup.object({
     .required("contact number is required")
     .matches(/^((09)|(639))[0-9]{9}/, "enter a valid phone number"),
   classification: yup.string().required("select a user classification"),
-  tnc: yup.boolean().isTrue("please read and accept the terms and conditions"),
 });
 
 export default function Customer() {
@@ -146,19 +145,6 @@ export default function Customer() {
           <option value="student">Student</option>
           <option value="faculty/staff">Faculty/Staff</option>
         </SelectInput>
-        <div className="col-span-2 flex flex-row justify-center mt-3">
-          <CheckboxInput register={register} name="tnc" id="tnc" />
-          <p htmlFor="t&c" className="ml-2 text-center w-3/4">
-            I have fully read, understood, and agree to the{" "}
-            <Link href="/" className="font-bold underline mb-10">
-              Data Privacy Policy, Terms & Conditions
-            </Link>{" "}
-            of E-TERY*
-          </p>
-        </div>
-        <div className="col-span-2 place-self-center text-red-500 font-semibold ml-2 text-sm">
-          {errors.tnc?.message}
-        </div>
         {createAccError ? (
           <div className="col-span-2 place-self-center text-red-500 font-semibold mb-3">
             {createAccError}
