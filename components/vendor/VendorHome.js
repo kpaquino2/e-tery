@@ -1,5 +1,6 @@
 import Image from "next/image";
 import AddCategory from "./AddCategory";
+import AddItem from "./AddItem";
 import Banner from "./Banner";
 import Item from "./Item";
 
@@ -13,10 +14,11 @@ export default function VendorHome({ id, data }) {
           data.categories.map((category, index) => (
             <div key={index}>
               <div className="text-2xl font-semibold">{category.name}</div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-2 auto-rows-fr">
                 {category.items.map((item, index) => (
                   <Item key={index} data={item} />
                 ))}
+                <AddItem />
               </div>
             </div>
           ))
