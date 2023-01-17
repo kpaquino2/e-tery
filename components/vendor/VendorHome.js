@@ -18,7 +18,7 @@ export default function VendorHome({ id, data }) {
                 {category.items.map((item, index) => (
                   <Item key={index} data={item} />
                 ))}
-                <AddItem />
+                <AddItem empty={category.items.length ? false : true} />
               </div>
             </div>
           ))
