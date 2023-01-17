@@ -15,6 +15,7 @@ import { FaChevronLeft } from "react-icons/fa";
 
 const schema = yup.object({
   name: yup.string().required("store name is required"),
+  address: yup.string().required("address is required"),
   email: yup
     .string()
     .required("email is required")
@@ -36,7 +37,7 @@ const schema = yup.object({
     .required("contact number is required")
     .matches(/^((09)|(639))[0-9]{9}/, "enter a valid phone number"),
   bir_no: yup.string().required("BIR number is required"),
-  address: yup.string().required("address is required"),
+  owner: yup.string().required("owner name is required"),
 });
 
 export default function Customer() {
@@ -67,6 +68,7 @@ export default function Customer() {
           address: data.address,
           phone: data.contact_no,
           bir_no: data.bir_no,
+          owner: data.owner,
         },
       ]);
       router.push("/");
@@ -93,6 +95,13 @@ export default function Customer() {
           name="name"
           placeholder="store name"
         />
+        <TextInput
+          register={register}
+          error={errors.address?.message}
+          name="address"
+          placeholder="address"
+        />
+
         <div className="text-xl font-bold">LOGIN & CONTACT DETAILS*</div>
         <TextInput
           register={register}
@@ -127,9 +136,9 @@ export default function Customer() {
         />
         <TextInput
           register={register}
-          error={errors.address?.message}
-          name="address"
-          placeholder="address"
+          error={errors.owner?.message}
+          name="owner"
+          placeholder="owner"
         />
         {createAccError ? (
           <div className="place-self-center text-red-500 font-semibold mb-3">
