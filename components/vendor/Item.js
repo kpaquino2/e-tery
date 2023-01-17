@@ -22,8 +22,8 @@ export default function Item({ data }) {
           className={"rounded-t-3xl " + (itemAvailable ? "" : "opacity-50")}
           src={`items/${data.id}`}
           alt={data.name}
-          width={200}
-          height={200}
+          width={400}
+          height={400}
         />
         {!itemAvailable ? (
           <MdDoNotDisturbAlt className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-maroon text-8xl shadow-lg" />
