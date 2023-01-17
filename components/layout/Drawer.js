@@ -29,7 +29,9 @@ export default function Drawer({ children, isOpen, setIsOpen, title }) {
         <FaChevronLeft className="text-3xl text-cream" />
       </button>
       <div className="flex flex-col items-center mt-6">
-        <p className="text-5xl font-bold text-light">{title}</p>
+        <p className="text-5xl font-bold text-light text-center mx-12">
+          {title}
+        </p>
         {children}
       </div>
     </div>

@@ -9,8 +9,8 @@ export default function Banner({ id }) {
           className="clip-banner drop-shadow-2xl"
           src={`banners/${id}`}
           alt="banner"
-          width={1200}
-          height={600}
+          width={600}
+          height={300}
         />
       </div>
     </>
