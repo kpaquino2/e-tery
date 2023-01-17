@@ -36,7 +36,7 @@ export default function VendorHome({ id, data }) {
             </div>
           </>
         )}
-        <AddCategory />
+        <AddCategory id={id} />
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export default function TextInputAlt({
         <label>{label}:</label>
         <input
           type={type}
-          className="border-x-0 border-t-0 border-b-2 border-light bg-dark focus:ring-0 text-xl p-1 focus:border-inherit"
+          className="border-x-0 border-t-0 border-b-2 grow w-full border-light bg-dark focus:ring-0 text-xl p-1 focus:border-inherit"
           placeholder={placeholder}
           {...register(name)}
         />

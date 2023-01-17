@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 
-export default function Drawer({ children, isOpen, setIsOpen, title }) {
+export default function Drawer({
+  children,
+  isOpen,
+  setIsOpen,
+  title,
+  loading = false,
+}) {
   useEffect(() => {
     if (isOpen) {
       if (typeof window != "undefined" && window.document) {
@@ -25,6 +31,7 @@ export default function Drawer({ children, isOpen, setIsOpen, title }) {
       <button
         className="absolute top-6 left-4 rounded-full p-1"
         onClick={() => setIsOpen(false)}
+        disabled={loading}
       >
         <FaChevronLeft className="text-3xl text-cream" />
       </button>
