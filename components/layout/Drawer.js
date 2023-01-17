@@ -1,6 +1,20 @@
+import { useEffect } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 
 export default function Drawer({ children, isOpen, setIsOpen, title }) {
+  useEffect(() => {
+    if (isOpen) {
+      if (typeof window != "undefined" && window.document) {
+        document.body.style.overflow = "hidden";
+      }
+      return;
+    }
+
+    if (typeof window != "undefined" && window.document) {
+      document.body.style.overflow = "unset";
+    }
+  }, [isOpen]);
+
   return (
     <div
       className={

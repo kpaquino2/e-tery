@@ -23,7 +23,10 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
 
   const handleSignOut = async () => {
     const { error } = await supabaseClient.auth.signOut();
-    if (!error) router.push("/login");
+    if (!error) {
+      setIsOpen(false);
+      router.push("/login");
+    }
   };
 
   return (
