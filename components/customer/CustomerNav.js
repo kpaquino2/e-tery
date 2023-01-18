@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ImCart } from "react-icons/im";
+import { IoCart } from "react-icons/io5";
 import { TiThMenu } from "react-icons/ti";
 import CustomerMenu from "./CustomerMenu";
 import SearchBox from "../forms/SearchBox";
@@ -17,15 +17,15 @@ export default function CustomerNav({ customer_id }) {
   return (
     <>
       <Link href="/" className="rounded-full">
-        <Image src="graphics/logo-light.png" alt="" width={60} height={60} />
+        <Image src="graphics/logo-light.png" alt="" width={70} height={70} />
       </Link>
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         <Link href="/cart" className="rounded-full">
-          <ImCart className="text-cream w-6 h-6" />
+          <IoCart className="text-cream text-4xl" />
         </Link>
         <button onClick={openMenu} className="rounded-full">
           <TiThMenu
-            className={(isMenuOpen ? "text-dark" : "text-cream") + " w-7 h-7"}
+            className={(isMenuOpen ? "text-dark" : "text-cream") + " text-3xl"}
           />
         </button>
       </div>
