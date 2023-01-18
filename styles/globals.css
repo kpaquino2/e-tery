@@ -7,3 +7,27 @@
 .clip-banner {
   clip-path: ellipse(90% 50% at 50% 50%);
 }
+
+.ReactCrop__crop-selection {
+  border-radius: 1rem;
+}
+
+.ReactCrop__drag-handle::after {
+  border-radius: 50%;
+}
+
+.ReactCrop .ord-nw::after {
+  transform: translate(0.25rem, 0.25rem);
+}
+
+.ReactCrop .ord-ne::after {
+  transform: translate(-0.25rem, 0.25rem);
+}
+
+.ReactCrop .ord-sw::after {
+  transform: translate(0.25rem, -0.25rem);
+}
+
+.ReactCrop .ord-se::after {
+  transform: translate(-0.25rem, -0.25rem);
+}
