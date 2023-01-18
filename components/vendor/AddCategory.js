@@ -13,7 +13,7 @@ const schema = yup.object({
   desc: yup.string(),
 });
 
-export default function AddCategory({ id }) {
+export default function AddCategory({ vendor_id }) {
   const {
     register,
     handleSubmit,
@@ -36,7 +36,7 @@ export default function AddCategory({ id }) {
     setLoading(true);
     const { error } = await supabaseClient
       .from("categories")
-      .insert([{ name: data.name, desc: data.desc, vendor_id: id }]);
+      .insert([{ name: data.name, desc: data.desc, vendor_id: vendor_id }]);
     if (!error) {
       router.replace(router.asPath).then(() => {
         setIsOpen(false);
