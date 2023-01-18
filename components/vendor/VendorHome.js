@@ -14,11 +14,11 @@ export default function VendorHome({ id, data }) {
           data.categories.map((category, index) => (
             <div key={index}>
               <div className="text-2xl font-semibold">{category.name}</div>
-              <div className="grid grid-cols-2 gap-2 auto-rows-fr">
+              <div className="columns-2 gap-2">
                 {category.items.map((item, index) => (
-                  <Item key={index} data={item} />
+                  <Item key={index} vendor_id={id} data={item} />
                 ))}
-                <AddItem empty={category.items.length ? false : true} />
+                <AddItem vendor_id={id} category_id={category.id} />
               </div>
             </div>
           ))
@@ -38,7 +38,7 @@ export default function VendorHome({ id, data }) {
             </div>
           </>
         )}
-        <AddCategory id={id} />
+        <AddCategory vendor_id={id} />
       </div>
     </div>
   );
