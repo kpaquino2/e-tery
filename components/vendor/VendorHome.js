@@ -13,7 +13,8 @@ export default function VendorHome({ id, data }) {
         {data.categories.length ? (
           data.categories.map((category, index) => (
             <div key={index}>
-              <div className="text-2xl font-semibold">{category.name}</div>
+              <div className="text-2xl font-semibold">{category.name} </div>
+              <div>{category.desc}</div>
               <div className="columns-2 gap-2">
                 {category.items.map((item, index) => (
                   <Item key={index} vendor_id={id} data={item} />

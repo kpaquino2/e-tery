@@ -64,7 +64,7 @@ export const getServerSideProps = async (ctx) => {
   } = await supabase
     .from("vendors")
     .select(
-      "name, categories (id, name, items (id, name, base_price, available))"
+      "name, categories (id, name, desc, items (id, name, base_price, description, available))"
     )
     .eq("id", session?.user.id);
 
