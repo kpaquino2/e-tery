@@ -23,34 +23,44 @@ export default function StorePage({ store }) {
           <Banner id={store.id} />
           <div className="font-bold text-4xl m-auto">{store.name}</div>
           <div ref={sliderRef} className="my-2 keen-slider">
-            {store.categories.map((category, index) => (
-              <Link
-                key={index}
-                href={`#${category.id}`}
-                className="text-center keen-slider__slide"
-              >
-                {category.name}
-              </Link>
-            ))}
+            {store.categories.map((category, index) => {
+              if (!category.items.length) return;
+              return (
+                <Link
+                  key={index}
+                  href={`#${category.id}`}
+                  className="text-center keen-slider__slide"
+                >
+                  {category.name}
+                </Link>
+              );
+            })}
           </div>
           <div className="bg-cream h-1 w-11/12 rounded-full" />
           <div className="flex flex-col pb-12 w-full">
             {store.categories.length ? (
-              store.categories.map((category, index) => (
-                <div key={index}>
-                  <div
-                    className="text-2xl my-2 font-semibold text-center"
-                    id={category.id}
-                  >
-                    {category.name}
+              store.categories.map((category, index) => {
+                if (!category.items.length) return;
+                return (
+                  <div key={index}>
+                    <div
+                      className="text-2xl my-2 font-semibold text-center"
+                      id={category.id}
+                    >
+                      {category.name}
+                    </div>
+                    <div className="columns-2 gap-2">
+                      {category.items.map((item, index) => (
+                        <StoreItem
+                          key={index}
+                          vendor_id={store.id}
+                          data={item}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <div className="columns-2 gap-2">
-                    {category.items.map((item, index) => (
-                      <StoreItem key={index} vendor_id={store.id} data={item} />
-                    ))}
-                  </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <></>
             )}
