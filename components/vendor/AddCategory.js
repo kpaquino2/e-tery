@@ -39,10 +39,10 @@ export default function AddCategory({ id }) {
       .insert([{ name: data.name, desc: data.desc, vendor_id: id }]);
     if (!error) {
       router.replace(router.asPath).then(() => {
-        setLoading(false);
         setIsOpen(false);
       });
     }
+    setLoading(false);
   };
 
   return (
