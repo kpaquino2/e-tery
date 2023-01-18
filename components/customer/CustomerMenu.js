@@ -32,12 +32,9 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
   return (
     <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
       <Link
-        href="/details"
+        href="/favorites"
         className="text-cream text-3xl font-bold mb-8 mt-12"
       >
-        Details
-      </Link>
-      <Link href="/favorites" className="text-cream text-3xl font-bold mb-8">
         Favorites
       </Link>
       <Link href="/history" className="text-cream text-3xl font-bold mb-8">
