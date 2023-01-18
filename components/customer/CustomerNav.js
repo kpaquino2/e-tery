@@ -5,9 +5,11 @@ import { ImCart } from "react-icons/im";
 import { TiThMenu } from "react-icons/ti";
 import CustomerMenu from "./CustomerMenu";
 import SearchBox from "../forms/SearchBox";
+import { useRouter } from "next/router";
 
 export default function CustomerNav({ customer_id }) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
+  const router = useRouter();
 
   const openMenu = () => {
     setisMenuOpen(!isMenuOpen);
@@ -32,7 +34,7 @@ export default function CustomerNav({ customer_id }) {
         isOpen={isMenuOpen}
         setIsOpen={setisMenuOpen}
       />
-      <SearchBox isMenuOpen={isMenuOpen} />
+      {router.asPath === "/" ? <SearchBox isMenuOpen={isMenuOpen} /> : <></>}
     </>
   );
 }
