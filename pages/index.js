@@ -63,7 +63,9 @@ export const getServerSideProps = async (ctx) => {
     data: [vendor_data],
   } = await supabase
     .from("vendors")
-    .select("name, categories (name, items (id, name, base_price, available))")
+    .select(
+      "name, categories (id, name, items (id, name, base_price, available))"
+    )
     .eq("id", session?.user.id);
 
   return { props: { id: session?.user.id, acct_type, vendor_data } };
