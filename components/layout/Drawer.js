@@ -28,13 +28,13 @@ export default function Drawer({
         (isOpen ? "translate-x-0" : "translate-x-full")
       }
     >
-      <button
+      <div
         className="absolute top-6 left-4 rounded-full p-1"
         onClick={() => setIsOpen(false)}
         disabled={loading}
       >
         <FaChevronLeft className="text-3xl text-cream" />
-      </button>
+      </div>
       <div className="flex flex-col items-center mt-6">
         <p className="text-5xl font-bold text-light text-center mx-12">
           {title}
