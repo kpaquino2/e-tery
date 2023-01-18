@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { TiStarFullOutline } from "react-icons/ti";
 
 export default function Store({ details }) {
@@ -7,7 +8,7 @@ export default function Store({ details }) {
     len = details.price_range;
   while (++i <= len) price.push("$");
   return (
-    <div className="flex flex-col drop-shadow-md">
+    <Link href={"store/" + details.id} className="flex flex-col drop-shadow-md">
       <Image
         className="rounded-t-2xl"
         src={`banners/${details.id}`}
@@ -33,6 +34,6 @@ export default function Store({ details }) {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
