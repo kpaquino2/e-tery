@@ -18,6 +18,7 @@ export default function AddCategory({ vendor_id }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ resolver: yupResolver(schema) });
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
@@ -45,6 +46,7 @@ export default function AddCategory({ vendor_id }) {
         })
         .finally(() => {
           setLoading(false);
+          reset();
         });
     }
   };
