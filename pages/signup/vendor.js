@@ -159,7 +159,6 @@ export default function Customer() {
           width={600}
           register={register}
           name="banner"
-          error={errors.banner?.message}
         >
           <div className="bg-cream rounded-2xl w-full p-4">
             <HiUpload className="m-auto text-5xl text-teal" />
