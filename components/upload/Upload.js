@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 import Drawer from "../layout/Drawer";
-
 import ReactCrop from "react-image-crop";
 import Image from "next/image";
 import "react-image-crop/dist/ReactCrop.css";
@@ -13,6 +12,7 @@ export default function Upload({
   height,
   width,
   setKey,
+  loading,
 }) {
   const imgRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -139,6 +139,7 @@ export default function Upload({
           onClick={(e) => {
             e.currentTarget.value = null;
           }}
+          disabled={loading}
         />
         {finalImage ? (
           <Image

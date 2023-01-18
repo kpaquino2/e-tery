@@ -60,13 +60,13 @@ export default function AddItem({ vendor_id, category_id }) {
         setIsOpen(false);
         reset();
         setImage("");
+        setLoading(false);
       });
     }
-    setLoading(false);
   };
 
   return (
-    <>
+    <div className="py-1">
       <button
         className="flex flex-row py-4 gap-2 w-full items-center justify-center rounded-2xl bg-teal"
         onClick={() => setIsOpen(true)}
@@ -107,6 +107,7 @@ export default function AddItem({ vendor_id, category_id }) {
             width={400}
             register={register}
             name="image"
+            loading={loading}
           >
             <div className="bg-teal rounded-2xl w-full p-4">
               <HiUpload className="m-auto text-5xl text-maroon" />
@@ -124,6 +125,6 @@ export default function AddItem({ vendor_id, category_id }) {
           </button>
         </form>
       </Drawer>
-    </>
+    </div>
   );
 }
