@@ -38,11 +38,15 @@ export default function AddCategory({ vendor_id }) {
       .from("categories")
       .insert([{ name: data.name, desc: data.desc, vendor_id: vendor_id }]);
     if (!error) {
-      router.replace(router.asPath).then(() => {
-        setIsOpen(false);
-      });
+      router
+        .replace(router.asPath)
+        .then(() => {
+          setIsOpen(false);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-    setLoading(false);
   };
 
   return (
