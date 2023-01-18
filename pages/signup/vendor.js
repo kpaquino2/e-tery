@@ -1,5 +1,5 @@
 import Link from "next/link";
-import CheckboxInput from "../../components/forms/CheckboxInput";
+import { HiUpload } from "react-icons/hi";
 import PasswordInput from "../../components/forms/PasswordInput";
 import TextInput from "../../components/forms/TextInput";
 import Header from "../../components/layout/Header";
@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Loading from "../../components/Loading";
 import { FaChevronLeft } from "react-icons/fa";
+import Upload from "../../components/upload/Upload";
 
 const schema = yup.object({
   name: yup.string().required("store name is required"),
@@ -51,8 +52,12 @@ export default function Customer() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [createAccError, setCreateAccError] = useState();
-
+  const [banner, setBanner] = useState("");
   const onSubmit = async (data) => {
+    if (!banner) {
+      setCreateAccError("store banner is required");
+      return;
+    }
     setLoading(true);
     const { data: signUpData, error: signUpError } =
       await supabaseClient.auth.signUp({
@@ -71,6 +76,9 @@ export default function Customer() {
           owner: data.owner,
         },
       ]);
+      await supabaseClient.storage
+        .from("banners")
+        .upload(signUpData.user.id, banner);
       router.push("/");
     }
     setCreateAccError(signUpError?.message);
@@ -91,7 +99,7 @@ export default function Customer() {
         <div className="text-xl font-bold">STORE DETAILS*</div>
         <TextInput
           register={register}
-          error={errors.firstname?.message}
+          error={errors.name?.message}
           name="name"
           placeholder="store name"
         />
@@ -140,6 +148,21 @@ export default function Customer() {
           name="owner"
           placeholder="owner"
         />
+        <div className="text-xl font-bold">STORE BANNER*</div>
+        <Upload
+          finalImage={banner}
+          setFinalImage={setBanner}
+          aspect={2}
+          height={300}
+          width={600}
+          register={register}
+          name="banner"
+          error={errors.banner?.message}
+        >
+          <div className="bg-cream rounded-2xl w-full p-4">
+            <HiUpload className="m-auto text-5xl text-teal" />
+          </div>
+        </Upload>
         {createAccError ? (
           <div className="place-self-center text-red-500 font-semibold mb-3">
             {createAccError}
