@@ -19,7 +19,7 @@ export default function Item({ data }) {
     <div className="drop-shadow-lg">
       <div className="relative">
         <Image
-          className={"rounded-t-3xl " + (itemAvailable ? "" : "opacity-50")}
+          className={"rounded-t-2xl " + (itemAvailable ? "" : "opacity-50")}
           src={`items/${data.id}`}
           alt={data.name}
           width={400}
@@ -31,7 +31,7 @@ export default function Item({ data }) {
           <></>
         )}
       </div>
-      <div className="flex flex-col bg-teal text-cream text-md rounded-b-3xl px-4 py-2 w-full">
+      <div className="flex flex-col bg-teal text-cream text-md rounded-b-2xl px-4 py-2 w-full">
         <p className="truncate font-semibold">{data.name}</p>
         <p className="truncate">Php {data.base_price.toFixed(2)}</p>
         <button

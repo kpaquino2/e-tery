@@ -8,7 +8,7 @@ export default function TextInputAlt({
 }) {
   return (
     <>
-      <div className="flex gap-2 items-center text-light text-2xl">
+      <div className="flex gap-2 items-center text-light text-2xl w-full">
         <label>{label}:</label>
         <input
           type={type}

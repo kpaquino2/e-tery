@@ -9,8 +9,8 @@ export default function AddItem({ empty }) {
     <>
       <button
         className={
-          (empty ? "flex-row py-4 rounded-2xl gap-2" : "flex-col") +
-          " flex items-center justify-center rounded-3xl bg-teal"
+          (empty ? "flex-row py-4  gap-2" : "flex-col") +
+          " flex items-center justify-center rounded-2xl bg-teal"
         }
         onClick={() => setIsOpen(true)}
       >

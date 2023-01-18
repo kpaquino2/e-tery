@@ -62,7 +62,7 @@ export default function AddCategory({ id }) {
       >
         <p className="text-cream text-4xl font-bold mb-4 mt-12">Details</p>
         <form
-          className="flex flex-col items-center gap-2 text-cream mx-12"
+          className="flex flex-col items-center gap-2 text-cream w-3/4"
           onSubmit={handleSubmit(onSubmit)}
         >
           <TextInputAlt
@@ -72,7 +72,12 @@ export default function AddCategory({ id }) {
             name="name"
             placeholder={"eg. " + categorySamples[(5 * Math.random()) | 0]}
           />
-          <TextInputAlt label="Description" register={register} name="desc" />
+          <TextInputAlt
+            label="Description"
+            register={register}
+            name="desc"
+            placeholder="Optional"
+          />
           <button
             type="submit"
             className={
