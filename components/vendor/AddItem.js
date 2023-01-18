@@ -24,6 +24,7 @@ export default function AddItem({ vendor_id, category_id }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ resolver: yupResolver(schema) });
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
@@ -57,6 +58,8 @@ export default function AddItem({ vendor_id, category_id }) {
       }
       router.replace(router.asPath).then(() => {
         setIsOpen(false);
+        reset();
+        setImage("");
       });
     }
     setLoading(false);
