@@ -2,7 +2,6 @@ import Image from "next/image";
 import { TiStarFullOutline } from "react-icons/ti";
 
 export default function Store({ details }) {
-  console.log(details);
   var price = [],
     i = 0,
     len = details.price_range;

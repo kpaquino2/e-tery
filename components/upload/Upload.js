@@ -25,7 +25,6 @@ export default function Upload({
   });
 
   const onSelectFile = (e) => {
-    console.log("ah");
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
