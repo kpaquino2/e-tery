@@ -12,12 +12,8 @@ export default function Upload({
   aspect,
   height,
   width,
-  register,
-  name,
   setKey,
 }) {
-  const { onChange, ref, ...rest } = register(name);
-  const imgInputRef = useRef(null);
   const imgRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState("");
@@ -103,6 +99,7 @@ export default function Upload({
         setIsOpen={setIsOpen}
         title="Store Banner"
         close={closeDrawer}
+        top={0}
       >
         <ReactCrop
           crop={crop}
@@ -139,18 +136,10 @@ export default function Upload({
           type="file"
           accept="image/png, image/jpeg, image/webp"
           className="hidden"
-          onChange={(e) => {
-            onSelectFile(e);
-            // onChange(e);
-          }}
+          onChange={onSelectFile}
           onClick={(e) => {
             e.currentTarget.value = null;
           }}
-          ref={(e) => {
-            ref(e);
-            imgInputRef.current = e;
-          }}
-          {...rest}
         />
         {finalImage ? (
           <Image
