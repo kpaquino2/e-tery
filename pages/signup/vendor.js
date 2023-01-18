@@ -80,8 +80,10 @@ export default function Customer() {
         .from("banners")
         .upload(signUpData.user.id, banner);
       router.push("/");
+      return;
     }
     setCreateAccError(signUpError?.message);
+    setLoading(false);
   };
 
   return (

@@ -40,7 +40,9 @@ export default function LogInForm() {
 
     if (!error) {
       router.push("/");
+      return;
     }
+    setLoading(false);
     setLoginError(error?.message);
   };
 

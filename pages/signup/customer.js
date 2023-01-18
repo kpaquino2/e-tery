@@ -75,8 +75,10 @@ export default function Customer() {
         },
       ]);
       router.push("/");
+      return;
     }
     setCreateAccError(signUpError?.message);
+    setLoading(false);
   };
 
   return (
