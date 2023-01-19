@@ -1,8 +1,7 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/router";
-import StoreItem from "../../components/customer/StoreItem";
-import Layout from "../../components/layout/Layout";
-import Banner from "../../components/vendor/Banner";
+import StoreItem from "../../../components/customer/StoreItem";
+import Layout from "../../../components/layout/Layout";
+import Banner from "../../../components/vendor/Banner";
 import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
 
@@ -79,8 +78,9 @@ export const getServerSideProps = async (ctx) => {
     .select(
       "id, name, open, categories (id, name, desc, items (id, name, description, base_price, available))"
     )
-    .eq("id", ctx.params.id);
+    .eq("id", ctx.params.store_id)
+    .single();
 
-  if (!data?.length) return { notFound: true };
-  return { props: { store: data[0] } };
+  if (!data) return { notFound: true };
+  return { props: { store: data } };
 };
