@@ -37,7 +37,7 @@ export default function StorePage({ store }) {
             })}
           </div>
           <div className="bg-cream h-1 w-11/12 rounded-full" />
-          <div className="flex flex-col pb-12 w-full">
+          <div className="flex flex-col pb-12 px-2 w-full">
             {store.categories.length ? (
               store.categories.map((category, index) => {
                 if (!category.items.length) return;
@@ -80,7 +80,7 @@ export const getServerSideProps = async (ctx) => {
       "id, name, open, categories (id, name, desc, items (id, name, description, base_price, available))"
     )
     .eq("id", ctx.params.id);
-  console.log(data);
+
   if (!data?.length) return { notFound: true };
   return { props: { store: data[0] } };
 };
