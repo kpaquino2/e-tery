@@ -6,7 +6,8 @@ export default function StoreItem({ vendor_id, data }) {
   return (
     <div
       className={
-        "w-full py-1 break-inside-avoid " + (data.available ? "" : "opacity-50")
+        "drop-shadow w-full py-1 break-inside-avoid " +
+        (data.available ? "" : "opacity-50")
       }
     >
       <Image
