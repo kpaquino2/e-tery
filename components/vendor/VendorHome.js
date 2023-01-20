@@ -1,8 +1,6 @@
 import Image from "next/image";
-import { useState } from "react";
 import AddCategory from "./AddCategory";
 import { FaPlus } from "react-icons/fa";
-import AddItemMenu from "./AddItemMenu";
 import Banner from "./Banner";
 import Item from "./Item";
 import Link from "next/link";
