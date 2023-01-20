@@ -7,6 +7,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState } from "react";
+import OptionsFields from "./OptionsFields";
 
 const schema = yup.object({
   name: yup.string().required("name is required"),
@@ -15,7 +16,7 @@ const schema = yup.object({
     .required("base price is required")
     .typeError("please put a valid price"),
   desc: yup.string(),
-  variations: yup.array().of(
+  variations: yup.array(
     yup.object({
       name: yup.string().required("variation name is required"),
       min: yup
@@ -26,6 +27,15 @@ const schema = yup.object({
         .number()
         .typeError("please put a valid maximum")
         .required("please put a maximum"),
+      options: yup.array(
+        yup.object({
+          name: yup.string().required("option name is required"),
+          addtl_price: yup
+            .number()
+            .typeError("please put a valid price")
+            .required("please put a valid price"),
+        })
+      ),
     })
   ),
 });
@@ -45,44 +55,51 @@ export default function AddItemMenu({
     control,
   } = useForm({ resolver: yupResolver(schema) });
   const { fields, append, remove } = useFieldArray({
-    name: "desc",
+    name: "variations",
     control,
   });
+
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log(category_id);
-  const onSubmit = async (data) => {
-    setLoading(true);
-    const {
-      data: [responseData],
-      error,
-    } = await supabaseClient
-      .from("items")
-      .insert([
-        {
-          name: data.name,
-          base_price: data.price,
-          description: data.desc,
-          vendor_id: vendor_id,
-          category_id: category_id,
-        },
-      ])
-      .select();
 
-    if (!error) {
-      if (image) {
-        supabaseClient.storage
-          .from("items")
-          .upload(vendor_id + "/" + responseData.id, image);
-      }
-      router.replace(router.asPath).then(() => {
-        setIsOpen(false);
-        reset();
-        setImage("");
-        setLoading(false);
-      });
-    }
+  const onSubmit = async (data) => {
+    console.log(data);
+    // setLoading(true);
+    // const {
+    //   data: [responseData],
+    //   error,
+    // } = await supabaseClient
+    //   .from("items")
+    //   .insert([
+    //     {
+    //       name: data.name,
+    //       base_price: data.price,
+    //       description: data.desc,
+    //       vendor_id: vendor_id,
+    //       category_id: category_id,
+    //     },
+    //   ])
+    //   .select();
+
+    // if (!error) {
+    //   if (image) {
+    //     supabaseClient.storage
+    //       .from("items")
+    //       .upload(vendor_id + "/" + responseData.id, image);
+    //   }
+    //   router.replace(router.asPath).then(() => {
+    //     setIsOpen(false);
+    //     reset();
+    //     setImage("");
+    //     setLoading(false);
+    //   });
+    // }
   };
+
+  const addVariation = () => {
+    append({ name: "", min: "", max: "" });
+  };
+
   return (
     <Drawer title="New Item" isOpen={isOpen} setIsOpen={setIsOpen}>
       <p className="text-cream text-4xl font-bold mb-4 mt-12">Details</p>
@@ -108,7 +125,42 @@ export default function AddItemMenu({
           error={errors.price?.message}
           name="price"
         />
-        <button type="button" className="underline text-2xl">
+
+        {fields.map((field, index) => {
+          return (
+            <div key={field.id}>
+              <TextInputAlt
+                label={`Variation ${index + 1}`}
+                register={register}
+                error={errors.variations?.[index]?.name?.message}
+                name={`variations.${index}.name`}
+              />
+              <TextInputAlt
+                label="Minimum selection"
+                register={register}
+                error={errors.variations?.[index]?.min?.message}
+                name={`variations.${index}.min`}
+              />
+              <TextInputAlt
+                label="Maximum selection"
+                register={register}
+                error={errors.variations?.[index]?.max?.message}
+                name={`variations.${index}.max`}
+              />
+              <OptionsFields
+                index={index}
+                register={register}
+                control={control}
+                errors={errors}
+              />
+            </div>
+          );
+        })}
+        <button
+          type="button"
+          onClick={addVariation}
+          className="underline text-2xl"
+        >
           + add variation
         </button>
         <p className="text-cream text-4xl font-bold my-4">Insert Image:</p>
