@@ -7,7 +7,6 @@ export default function Drawer({
   setIsOpen,
   title,
   loading = false,
-  top = 20,
 }) {
   useEffect(() => {
     if (isOpen) {
@@ -25,7 +24,7 @@ export default function Drawer({
   return (
     <div
       className={
-        `fixed overflow-y-auto overflow-x-hidden top-${top} right-0 bottom-0 left-0 pb-12 bg-dark z-50 transform ease-in-out transition duration-300 ` +
+        `fixed overflow-y-auto overflow-x-hidden top-20 right-0 bottom-0 left-0 pb-12 bg-dark z-50 transform ease-in-out transition duration-300 ` +
         (isOpen ? "translate-x-0" : "translate-x-full")
       }
     >
