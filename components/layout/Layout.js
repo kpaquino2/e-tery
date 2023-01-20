@@ -9,7 +9,7 @@ export default function Layout({ title, children }) {
         <meta name="description" content="delivery web app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex flex-col grow h-full w-full">{children}</main>
       </div>
