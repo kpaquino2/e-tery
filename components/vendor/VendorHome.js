@@ -1,5 +1,4 @@
 import Image from "next/image";
-import AddCategory from "./AddCategory";
 import { FaPlus } from "react-icons/fa";
 import Banner from "./Banner";
 import Item from "./Item";
@@ -51,7 +50,13 @@ export default function VendorHome({ id, data }) {
               </div>
             </>
           )}
-          <AddCategory vendor_id={id} />
+          <Link
+            href="add-category"
+            className="bg-cream rounded-xl h-28 my-4 flex flex-row items-center justify-center gap-2"
+          >
+            <FaPlus className="text-4xl text-teal" />
+            <p className="text-maroon font-bold text-2xl">add food category</p>
+          </Link>
         </div>
       </div>
     </>
