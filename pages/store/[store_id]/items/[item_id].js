@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import CheckboxInput from "../../../../components/forms/CheckboxInput";
 import { useEffect } from "react";
 import { FaCheck } from "react-icons/fa";
+import useCart from "../../../../lib/cart";
 
 const schema = yup.object({
   variants: yup.array(
@@ -20,6 +21,7 @@ const schema = yup.object({
         select: yup.number(),
         options: yup.array(
           yup.object({
+            id: yup.string(),
             addtl_price: yup.number(),
             checked: yup.boolean(),
           })
@@ -46,6 +48,7 @@ export default function StoreItemPage({ store_id, item }) {
     resolver: yupResolver(schema),
   });
   const [quantity, setQuantity] = useState(1);
+  const addToCart = useCart((state) => state.addToCart);
 
   useEffect(() => {
     for (let i = 0; i < item.item_variants.length; i++) {
@@ -53,11 +56,16 @@ export default function StoreItemPage({ store_id, item }) {
       setValue(`variants.${i}.optional`, item.item_variants[i].optional);
       register(`variants.${i}.select`);
       setValue(`variants.${i}.select`, item.item_variants[i].select);
-      for (let j = 0; j < item.item_variants[i].length; j++) {
+      for (let j = 0; j < item.item_variants[i].item_options.length; j++) {
+        register(`variants.${i}.options.${j}.id`);
+        setValue(
+          `variants.${i}.options.${j}.id`,
+          item.item_variants[i].item_options[j].id
+        );
         register(`variants.${i}.options.${j}.addtl_price`);
         setValue(
           `variants.${i}.options.${j}.addtl_price`,
-          item.item_variants[i].options[j].addtl_price
+          item.item_variants[i].item_options[j].addtl_price
         );
       }
     }
@@ -73,7 +81,25 @@ export default function StoreItemPage({ store_id, item }) {
   };
 
   const onSubmit = (data) => {
-    // console.log(data);
+    const final_price =
+      item.base_price +
+      data.variants
+        .map((variant) =>
+          variant.options
+            .map((option) => (option.checked ? option.addtl_price : 0))
+            .reduce((a, b) => a + b)
+        )
+        .reduce((a, b) => a + b);
+    const order_item = {
+      item_id: item.id,
+      quantity: quantity,
+      price: final_price * quantity,
+      options: data.variants
+        .map((variant) => variant.options.filter((option) => option.checked))
+        .flat(1),
+    };
+
+    addToCart({ store_id, order_item });
   };
 
   const onBlur = () => {
@@ -169,7 +195,7 @@ export default function StoreItemPage({ store_id, item }) {
             </button>
             <span className="text-cream font-bold text-2xl">{quantity}</span>
             <button
-              type="submit"
+              type="button"
               onClick={add}
               className="bg-light rounded-full p-1"
             >
