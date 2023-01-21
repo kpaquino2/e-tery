@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 bg-maroon z-40">
+      <header className="sticky top-0 bg-maroon z-30">
         <div className="flex justify-between items-center px-3 h-20">
           {acctType === "customer" ? (
             <CustomerNav customer_id={user?.id} />
