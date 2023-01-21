@@ -60,11 +60,9 @@ export default function StorePage({ store }) {
                     </div>
                     <div className="columns-2 gap-2">
                       {category.items.map((item, index) => (
-                        <StoreItem
-                          key={index}
-                          vendor_id={store.id}
-                          data={item}
-                        />
+                        <Link key={index} href={`${store.id}/items/${item.id}`}>
+                          <StoreItem vendor_id={store.id} data={item} />
+                        </Link>
                       ))}
                     </div>
                   </div>
