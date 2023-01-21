@@ -8,7 +8,7 @@ export default function TextInputAlt({
 }) {
   return (
     <>
-      <div className="flex gap-2 items-center text-light text-2xl w-full">
+      <div className="flex gap-2 items-center text-light text-xl w-full">
         <label className="whitespace-nowrap">{label}:</label>
         <input
           type={type}
