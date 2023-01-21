@@ -64,7 +64,6 @@ export default function AddItemPage({ vendor_id, category_id }) {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    console.log(data);
     setLoading(true);
     const { data: itemData, error: itemError } = await supabaseClient
       .from("items")
@@ -185,11 +184,18 @@ export default function AddItemPage({ vendor_id, category_id }) {
                   />
                   <div className="flex items-center gap-3 justify-evenly">
                     <CheckboxInputAlt
+                      id={`variant${index}`}
+                      value={true}
                       size={7}
                       register={register}
                       name={`variants.${index}.optional`}
                     />
-                    <span className="text-xl text-light">Optional</span>
+                    <label
+                      htmlFor={`variant${index}`}
+                      className="text-xl text-light"
+                    >
+                      Optional
+                    </label>
                     <button
                       type="button"
                       onClick={() => remove(index)}
