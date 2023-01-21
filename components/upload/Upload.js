@@ -98,7 +98,7 @@ export default function Upload({
         setIsOpen={setIsOpen}
         title="Resize Image"
         close={closeDrawer}
-        top={0}
+        top="top-0"
       >
         <ReactCrop
           crop={crop}
@@ -106,7 +106,7 @@ export default function Upload({
           onComplete={(c) => setCompletedCrop(c)}
           aspect={aspect}
           keepSelection={true}
-          className="mt-12 mx-20 rounded-2xl"
+          className="m-12 rounded-2xl"
         >
           <Image
             src={file}
@@ -122,7 +122,7 @@ export default function Upload({
             (!completedCrop?.width || !completedCrop?.height
               ? "opacity-25"
               : "") +
-            " rounded-full bg-teal text-white font-bold text-lg w-min px-8 py-1 mt-8 mb-8"
+            " rounded-full bg-teal text-white font-bold text-lg w-min px-8 py-1 "
           }
           disabled={!completedCrop?.width || !completedCrop?.height}
           onClick={uploadImage}
