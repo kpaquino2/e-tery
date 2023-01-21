@@ -21,9 +21,9 @@ const schema = yup.object({
     .required("base price is required")
     .typeError("please put a valid price"),
   desc: yup.string(),
-  variations: yup.array(
+  variants: yup.array(
     yup.object({
-      name: yup.string().required("variation name is required"),
+      name: yup.string().required("variant name is required"),
       min: yup
         .number()
         .typeError("please put a valid minimum")
@@ -55,7 +55,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
     control,
   } = useForm({ resolver: yupResolver(schema) });
   const { fields, append, remove } = useFieldArray({
-    name: "variations",
+    name: "variants",
     control,
   });
   const router = useRouter();
@@ -83,29 +83,29 @@ export default function AddItemPage({ vendor_id, category_id }) {
       throw itemError;
     }
 
-    for (let i = 0; i < data.variations.length; i++) {
-      const { data: variationData } = await supabaseClient
+    for (let i = 0; i < data.variants.length; i++) {
+      const { data: variantData } = await supabaseClient
         .from("item_variants")
         .insert([
           {
-            name: data.variations[i].name,
-            min: data.variations[i].min,
-            max: data.variations[i].max,
+            name: data.variants[i].name,
+            min: data.variants[i].min,
+            max: data.variants[i].max,
             item_id: itemData.id,
           },
         ])
         .select()
         .single();
 
-      for (let j = 0; j < data.variations[i].options.length; j++) {
+      for (let j = 0; j < data.variants[i].options.length; j++) {
         console.log("a");
         const { data: optionData } = await supabaseClient
           .from("item_options")
           .insert([
             {
-              name: data.variations[i].options[j].name,
-              addtl_price: data.variations[i].options[j].addtl_price,
-              variant_id: variationData.id,
+              name: data.variants[i].options[j].name,
+              addtl_price: data.variants[i].options[j].addtl_price,
+              variant_id: variantData.id,
             },
           ]);
       }
@@ -123,7 +123,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
     setLoading(false);
   };
 
-  const addVariation = () => {
+  const addVariant = () => {
     append({ name: "", min: "", max: "" });
   };
 
@@ -167,29 +167,29 @@ export default function AddItemPage({ vendor_id, category_id }) {
               return (
                 <div className="flex flex-col items-cnter" key={field.id}>
                   <TextInputAlt
-                    label={`Variation ${index + 1}`}
+                    label={`Variant ${index + 1}`}
                     register={register}
-                    error={errors.variations?.[index]?.name?.message}
-                    name={`variations.${index}.name`}
+                    error={errors.variants?.[index]?.name?.message}
+                    name={`variants.${index}.name`}
                   />
                   <TextInputAlt
                     label="Minimum selection"
                     register={register}
-                    error={errors.variations?.[index]?.min?.message}
-                    name={`variations.${index}.min`}
+                    error={errors.variants?.[index]?.min?.message}
+                    name={`variants.${index}.min`}
                   />
                   <TextInputAlt
                     label="Maximum selection"
                     register={register}
-                    error={errors.variations?.[index]?.max?.message}
-                    name={`variations.${index}.max`}
+                    error={errors.variants?.[index]?.max?.message}
+                    name={`variants.${index}.max`}
                   />
                   <button
                     type="button"
                     onClick={() => remove(index)}
                     className="underline text-xl self-end"
                   >
-                    - remove variation
+                    - remove variant
                   </button>
                   <OptionsFields
                     index={index}
@@ -202,10 +202,10 @@ export default function AddItemPage({ vendor_id, category_id }) {
             })}
             <button
               type="button"
-              onClick={addVariation}
+              onClick={addVariant}
               className="underline text-2xl"
             >
-              + add variation
+              + add variant
             </button>
             <p className="text-cream text-4xl font-bold my-4">Insert Image:</p>
             <Upload
