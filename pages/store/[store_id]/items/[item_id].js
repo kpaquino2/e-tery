@@ -9,15 +9,30 @@ import * as yup from "yup";
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CheckboxInput from "../../../../components/forms/CheckboxInput";
+import { useEffect } from "react";
+import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const schema = yup.object({
-  options: yup.array(
-    yup.object({
-      addtl_price: yup
-        .number()
-        .typeError("please put a valid price")
-        .required("please put a valid price"),
-    })
+  variants: yup.array(
+    yup
+      .object({
+        optional: yup.boolean(),
+        select: yup.number(),
+        options: yup.array(
+          yup.object({
+            addtl_price: yup.number(),
+            checked: yup.boolean(),
+          })
+        ),
+      })
+      .test("count-checked", (value) =>
+        value.optional
+          ? value.select >=
+            value.options.map((v) => Number(v.checked)).reduce((a, b) => a + b)
+          : value.select ===
+            value.options.map((v) => Number(v.checked)).reduce((a, b) => a + b)
+      )
   ),
 });
 
@@ -25,12 +40,30 @@ export default function StoreItemPage({ store_id, item }) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-    reset,
-    control,
-  } = useForm({ resolver: yupResolver(schema) });
+    trigger,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   const [quantity, setQuantity] = useState(1);
-  var optionsCount = -1;
+
+  useEffect(() => {
+    for (let i = 0; i < item.item_variants.length; i++) {
+      register(`variants.${i}.optional`);
+      setValue(`variants.${i}.optional`, item.item_variants[i].optional);
+      register(`variants.${i}.select`);
+      setValue(`variants.${i}.select`, item.item_variants[i].select);
+      for (let j = 0; j < item.item_variants[i].length; j++) {
+        register(`variants.${i}.options.${j}.addtl_price`);
+        setValue(
+          `variants.${i}.options.${j}.addtl_price`,
+          item.item_variants[i].options[j].addtl_price
+        );
+      }
+    }
+    trigger();
+  }, [register, setValue, trigger, item]);
 
   const subtract = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -41,31 +74,42 @@ export default function StoreItemPage({ store_id, item }) {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
   };
+
+  const onBlur = () => {
+    trigger();
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} onChange={onBlur}>
       <Layout title={item.name}>
         <Banner url={`items/${store_id}/${item.id}`} />
         <div className="grid grid-cols-2 mx-6 gap-2 pb-20">
           <div className="font-bold text-4xl mt-4">{item.name}</div>
-          <div className="font-semibold text-xl row-span-2 justify-self-end self-center">
+          <div className="font-semibold text-xl justify-self-end self-end mt-4">
             Php {item.base_price.toFixed(2)}
           </div>
-          <div className="text-2xl">{item.description}</div>
+          <div className="col-span-2">{item.description}</div>
           <div className="bg-cream h-1 col-span-2 rounded-full" />
           {item.item_variants.map((variant, index) => (
             <>
-              <div key={index} className="col-span-2 text-xl font-semibold">
+              <div key={index} className="text-xl font-semibold leading-none">
                 {variant.name}
-                <span className="text-base font-normal">
-                  {variant.optional
-                    ? " Optional, max " + variant.select
-                    : " Pick " + variant.select}
-                </span>
               </div>
+              <div className="justify-self-end">
+                {Object.keys(errors).length || variant.optional ? (
+                  <></>
+                ) : (
+                  <FaCheck className="text-teal mt-1" />
+                )}
+              </div>
+              <span className="col-span-2 text-sm leading-tight">
+                {variant.optional
+                  ? " Optional, max " + variant.select
+                  : " Pick " + variant.select}
+              </span>
               {variant.item_options.map((option, idx) => {
-                optionsCount += 1;
                 if (variant.optional && variant.select === 1)
                   return (
                     <>
@@ -77,9 +121,9 @@ export default function StoreItemPage({ store_id, item }) {
                         <RadioInput
                           id={option.id}
                           size={5}
-                          value={option.addtl_price}
+                          value={true}
                           register={register}
-                          name={`options[${optionsCount}].addtl_price`}
+                          name={`variants.${index}.options.${idx}.checked`}
                         />
                         <div className="">{option.name}</div>
                       </label>
@@ -98,9 +142,9 @@ export default function StoreItemPage({ store_id, item }) {
                       <CheckboxInput
                         id={option.id}
                         size={5}
-                        value={option.addtl_price}
+                        value={true}
                         register={register}
-                        name={`options[${optionsCount}].addtl_price`}
+                        name={`variants.${index}.options.${idx}.checked`}
                       />
                       <div className="">{option.name}</div>
                     </label>
