@@ -143,11 +143,11 @@ export default function Upload({
         />
         {finalImage ? (
           <Image
-            className="rounded-2xl cursor-pointer drop-shadow-lg"
+            className="rounded-2xl cursor-pointer drop-shadow-lg m-auto"
             src={URL.createObjectURL(finalImage)}
             alt="a"
-            width={width}
-            height={height}
+            width={width / 2}
+            height={height / 2}
           />
         ) : (
           <>{children}</>
