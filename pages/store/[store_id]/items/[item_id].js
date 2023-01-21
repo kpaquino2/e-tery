@@ -6,12 +6,11 @@ import Banner from "../../../../components/vendor/Banner";
 import { TiMinus, TiPlus } from "react-icons/ti";
 import RadioInput from "../../../../components/forms/RadioInput";
 import * as yup from "yup";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CheckboxInput from "../../../../components/forms/CheckboxInput";
 import { useEffect } from "react";
-import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
 const schema = yup.object({
   variants: yup.array(
@@ -177,7 +176,10 @@ export default function StoreItemPage({ store_id, item }) {
               <TiPlus className="text-maroon text-2xl font-semibold" />
             </button>
           </div>
-          <button className="bg-light my-2 rounded-full text-xl font-bold text-dark">
+          <button
+            className="bg-teal my-2 rounded-full text-xl font-bold text-light disabled:grayscale"
+            disabled={Object.keys(errors).length}
+          >
             ADD TO CART
           </button>
         </div>
