@@ -3,7 +3,7 @@ import TextInputAlt from "../forms/TextInputAlt";
 
 export default function OptionsFields({ index, control, register, errors }) {
   const { fields, remove, append } = useFieldArray({
-    name: `variations.${index}.options`,
+    name: `variants.${index}.options`,
     control,
   });
 
@@ -19,18 +19,18 @@ export default function OptionsFields({ index, control, register, errors }) {
       {fields.map((field, idx) => (
         <div className="flex flex-col items-center" key={field.id}>
           <TextInputAlt
-            label={`Option ${index + 1}`}
+            label={`Option ${idx + 1}`}
             register={register}
-            error={errors.variations?.[index]?.options?.[idx]?.name?.message}
-            name={`variations.${index}.options.${idx}.name`}
+            error={errors.variants?.[index]?.options?.[idx]?.name?.message}
+            name={`variants.${index}.options.${idx}.name`}
           />
           <TextInputAlt
             label="Price"
             register={register}
             error={
-              errors.variations?.[index]?.options?.[idx]?.addtl_price?.message
+              errors.variants?.[index]?.options?.[idx]?.addtl_price?.message
             }
-            name={`variations.${index}.options.${idx}.addtl_price`}
+            name={`variants.${index}.options.${idx}.addtl_price`}
           />
           <button
             type="button"
