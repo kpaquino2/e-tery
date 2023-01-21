@@ -1,11 +1,9 @@
 import { HiUpload } from "react-icons/hi";
-
 import * as yup from "yup";
 import { useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState } from "react";
-
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import TextInputAlt from "../../components/forms/TextInputAlt";
 import Upload from "../../components/upload/Upload";
@@ -13,6 +11,7 @@ import OptionsFields from "../../components/vendor/OptionsFields";
 import Layout from "../../components/layout/Layout";
 import { FaChevronLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
+import CheckboxInputAlt from "../../components/forms/CheckboxInputAlt";
 
 const schema = yup.object({
   name: yup.string().required("name is required"),
@@ -24,14 +23,16 @@ const schema = yup.object({
   variants: yup.array(
     yup.object({
       name: yup.string().required("variant name is required"),
-      min: yup
+      optional: yup.boolean().required(),
+      select: yup
         .number()
-        .typeError("please put a valid minimum")
-        .required("please put a minimum"),
-      max: yup
-        .number()
-        .typeError("please put a valid maximum")
-        .required("please put a maximum"),
+        .typeError("please put a valid number")
+        .min(1, "put a number greater than 0")
+        .test(
+          "max-select",
+          "number should be less than or equal to the number of options",
+          (value, ctx) => value <= ctx.parent.options.length
+        ),
       options: yup.array(
         yup.object({
           name: yup.string().required("option name is required"),
@@ -89,8 +90,8 @@ export default function AddItemPage({ vendor_id, category_id }) {
         .insert([
           {
             name: data.variants[i].name,
-            min: data.variants[i].min,
-            max: data.variants[i].max,
+            optional: data.variants[i].optional,
+            select: data.variants[i].select,
             item_id: itemData.id,
           },
         ])
@@ -124,7 +125,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
   };
 
   const addVariant = () => {
-    append({ name: "", min: "", max: "" });
+    append({ name: "", optional: false, select: "" });
   };
 
   return (
@@ -162,40 +163,42 @@ export default function AddItemPage({ vendor_id, category_id }) {
               placeholder="Optional"
             />
             <TextInputAlt
-              label="Price"
+              label="Base Price"
               register={register}
               error={errors.price?.message}
               name="price"
             />
-
             {fields.map((field, index) => {
               return (
                 <div className="flex flex-col items-cnter" key={field.id}>
                   <TextInputAlt
-                    label={`Variant ${index + 1}`}
+                    label={`Variant ${index + 1} Name`}
                     register={register}
                     error={errors.variants?.[index]?.name?.message}
                     name={`variants.${index}.name`}
                   />
                   <TextInputAlt
-                    label="Minimum selection"
+                    label="Number of options to select"
                     register={register}
-                    error={errors.variants?.[index]?.min?.message}
-                    name={`variants.${index}.min`}
+                    error={errors.variants?.[index]?.select?.message}
+                    name={`variants.${index}.select`}
                   />
-                  <TextInputAlt
-                    label="Maximum selection"
-                    register={register}
-                    error={errors.variants?.[index]?.max?.message}
-                    name={`variants.${index}.max`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="underline text-xl self-end"
-                  >
-                    - remove variant
-                  </button>
+                  <div className="flex items-center gap-3 justify-evenly">
+                    <CheckboxInputAlt
+                      size={7}
+                      register={register}
+                      name={`variants.${index}.optional`}
+                    />
+                    <span className="text-xl text-light">Optional</span>
+                    <button
+                      type="button"
+                      onClick={() => remove(index)}
+                      className="underline text-xl self-end"
+                    >
+                      - remove variant
+                    </button>
+                  </div>
+
                   <OptionsFields
                     index={index}
                     register={register}
