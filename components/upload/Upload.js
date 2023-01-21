@@ -96,7 +96,7 @@ export default function Upload({
       <Drawer
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        title="Store Banner"
+        title="Resize Image"
         close={closeDrawer}
         top={0}
       >
