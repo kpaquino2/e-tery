@@ -130,7 +130,12 @@ export default function AddItemPage({ vendor_id, category_id }) {
   return (
     <>
       <Layout title="New Item">
-        <div className="relative flex flex-col items-center bg-dark h-full grow pb-12">
+        <div
+          className={
+            "relative flex flex-col items-center bg-dark h-full grow pb-12" +
+            (loading ? "opacity-75 cursor-wait" : "")
+          }
+        >
           <button
             type="button"
             className="absolute top-6 left-4 rounded-full p-1"
@@ -225,8 +230,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
             <button
               type="submit"
               className={
-                "rounded-full bg-teal text-white font-bold text-lg w-min px-8 py-1 mt-8 " +
-                (loading ? "opacity-75 cursor-wait" : "")
+                "rounded-full bg-teal text-white font-bold text-lg w-min px-8 py-1 mt-8 "
               }
               disabled={loading}
             >
