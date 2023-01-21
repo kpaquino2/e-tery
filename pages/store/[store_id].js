@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import StoreItem from "../../../components/customer/StoreItem";
-import Layout from "../../../components/layout/Layout";
-import Banner from "../../../components/vendor/Banner";
+import StoreItem from "../../components/customer/StoreItem";
+import Layout from "../../components/layout/Layout";
+import Banner from "../../components/vendor/Banner";
 import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
 
