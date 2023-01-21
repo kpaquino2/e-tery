@@ -98,7 +98,6 @@ export default function AddItemPage({ vendor_id, category_id }) {
         .single();
 
       for (let j = 0; j < data.variants[i].options.length; j++) {
-        console.log("a");
         const { data: optionData } = await supabaseClient
           .from("item_options")
           .insert([

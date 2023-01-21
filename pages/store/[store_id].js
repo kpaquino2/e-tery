@@ -18,7 +18,6 @@ export default function StorePage({ store }) {
   });
 
   const scrollToElement = (index) => {
-    console.log(categoryRefs.current[index]);
     window.scrollTo({
       top: categoryRefs.current[index].offsetTop - 80,
       behavior: "smooth",
