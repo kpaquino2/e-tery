@@ -19,7 +19,7 @@ export default function StorePage({ store }) {
     <>
       <Layout title={store.name}>
         <div className="flex flex-col items-center">
-          <Banner id={store.id} />
+          <Banner url={`banner/${store.id}`} />
           <div className="font-bold text-4xl m-auto">{store.name}</div>
           <div ref={sliderRef} className="my-2 keen-slider">
             {store.categories.map((category, index) => {
