@@ -6,6 +6,7 @@ import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
 
 export default function StorePage({ store }) {
+  console.log(store);
   const [sliderRef] = useKeenSlider({
     mode: "free-snap",
     slides: {
@@ -19,7 +20,7 @@ export default function StorePage({ store }) {
     <>
       <Layout title={store.name}>
         <div className="flex flex-col items-center">
-          <Banner url={`banner/${store.id}`} />
+          <Banner url={`banners/${store.id}`} />
           <div className="font-bold text-4xl m-auto">{store.name}</div>
           <div ref={sliderRef} className="my-2 keen-slider">
             {store.categories.map((category, index) => {
