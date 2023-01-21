@@ -17,7 +17,7 @@ export default function OptionsFields({ index, control, register, errors }) {
   return (
     <div className="flex flex-col mx-4">
       {fields.map((field, idx) => (
-        <div key={field.id}>
+        <div className="flex flex-col items-center" key={field.id}>
           <TextInputAlt
             label={`Option ${index + 1}`}
             register={register}
@@ -32,9 +32,20 @@ export default function OptionsFields({ index, control, register, errors }) {
             }
             name={`variations.${index}.options.${idx}.addtl_price`}
           />
+          <button
+            type="button"
+            onClick={() => remove(idx)}
+            className="underline text-xl self-end"
+          >
+            -remove option
+          </button>
         </div>
       ))}
-      <button type="button" onClick={addOption} className="underline text-xl">
+      <button
+        type="button"
+        onClick={addOption}
+        className="underline text-xl self-start"
+      >
         + add option
       </button>
     </div>

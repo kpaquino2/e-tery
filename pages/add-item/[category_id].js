@@ -64,36 +64,63 @@ export default function AddItemPage({ vendor_id, category_id }) {
 
   const onSubmit = async (data) => {
     console.log(data);
-    // setLoading(true);
-    // const {
-    //   data: [responseData],
-    //   error,
-    // } = await supabaseClient
-    //   .from("items")
-    //   .insert([
-    //     {
-    //       name: data.name,
-    //       base_price: data.price,
-    //       description: data.desc,
-    //       vendor_id: vendor_id,
-    //       category_id: category_id,
-    //     },
-    //   ])
-    //   .select();
+    setLoading(true);
+    const { data: itemData, error: itemError } = await supabaseClient
+      .from("items")
+      .insert([
+        {
+          name: data.name,
+          base_price: data.price,
+          description: data.desc,
+          vendor_id: vendor_id,
+          category_id: category_id,
+        },
+      ])
+      .select()
+      .single();
 
-    // if (!error) {
-    //   if (image) {
-    //     supabaseClient.storage
-    //       .from("items")
-    //       .upload(vendor_id + "/" + responseData.id, image);
-    //   }
-    //   router.replace(router.asPath).then(() => {
-    //     setIsOpen(false);
-    //     reset();
-    //     setImage("");
-    //     setLoading(false);
-    //   });
-    // }
+    if (itemError) {
+      throw itemError;
+    }
+
+    for (let i = 0; i < data.variations.length; i++) {
+      const { data: variationData } = await supabaseClient
+        .from("item_variants")
+        .insert([
+          {
+            name: data.variations[i].name,
+            min: data.variations[i].min,
+            max: data.variations[i].max,
+            item_id: itemData.id,
+          },
+        ])
+        .select()
+        .single();
+
+      for (let j = 0; j < data.variations[i].options.length; j++) {
+        console.log("a");
+        const { data: optionData } = await supabaseClient
+          .from("item_options")
+          .insert([
+            {
+              name: data.variations[i].options[j].name,
+              addtl_price: data.variations[i].options[j].addtl_price,
+              variant_id: variationData.id,
+            },
+          ]);
+      }
+    }
+
+    if (!itemError) {
+      if (image) {
+        supabaseClient.storage
+          .from("items")
+          .upload(vendor_id + "/" + itemData.id, image);
+      }
+      router.push("/");
+      return;
+    }
+    setLoading(false);
   };
 
   const addVariation = () => {
@@ -103,7 +130,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
   return (
     <>
       <Layout title="New Item">
-        <div className="relative flex flex-col items-center bg-dark grow pb-12">
+        <div className="relative flex flex-col items-center bg-dark h-full grow pb-12">
           <button
             type="button"
             className="absolute top-6 left-4 rounded-full p-1"
@@ -138,7 +165,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
 
             {fields.map((field, index) => {
               return (
-                <div key={field.id}>
+                <div className="flex flex-col items-cnter" key={field.id}>
                   <TextInputAlt
                     label={`Variation ${index + 1}`}
                     register={register}
@@ -157,6 +184,13 @@ export default function AddItemPage({ vendor_id, category_id }) {
                     error={errors.variations?.[index]?.max?.message}
                     name={`variations.${index}.max`}
                   />
+                  <button
+                    type="button"
+                    onClick={() => remove(index)}
+                    className="underline text-xl self-end"
+                  >
+                    - remove variation
+                  </button>
                   <OptionsFields
                     index={index}
                     register={register}
