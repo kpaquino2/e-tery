@@ -1,9 +1,11 @@
-export default function CheckboxInputAlt({ size, register, name }) {
+export default function CheckboxInputAlt({ id, value, size, register, name }) {
   return (
     <>
       <input
+        id={id}
+        value={value}
         type="checkbox"
-        className={`w-${size} h-${size} mt-1.5 text-teal bg-dark border-cream focus:ring-teal`}
+        className={`w-${size} h-${size} text-teal bg-dark border-cream focus:ring-teal`}
         {...register(name)}
       />
     </>
