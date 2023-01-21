@@ -4,9 +4,10 @@ import Layout from "../../components/layout/Layout";
 import Banner from "../../components/vendor/Banner";
 import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
+import { useRef } from "react";
 
 export default function StorePage({ store }) {
-  console.log(store);
+  const categoryRefs = useRef([]);
   const [sliderRef] = useKeenSlider({
     mode: "free-snap",
     slides: {
@@ -15,6 +16,14 @@ export default function StorePage({ store }) {
       spacing: 20,
     },
   });
+
+  const scrollToElement = (index) => {
+    console.log(categoryRefs.current[index]);
+    window.scrollTo({
+      top: categoryRefs.current[index].offsetTop - 80,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <>
@@ -26,13 +35,13 @@ export default function StorePage({ store }) {
             {store.categories.map((category, index) => {
               if (!category.items.length) return;
               return (
-                <Link
+                <button
                   key={index}
-                  href={`#${category.id}`}
+                  onClick={() => scrollToElement(index)}
                   className="text-center keen-slider__slide"
                 >
                   {category.name}
-                </Link>
+                </button>
               );
             })}
           </div>
@@ -42,11 +51,11 @@ export default function StorePage({ store }) {
               store.categories.map((category, index) => {
                 if (!category.items.length) return;
                 return (
-                  <div key={index}>
-                    <div
-                      className="text-2xl my-2 font-semibold text-center"
-                      id={category.id}
-                    >
+                  <div
+                    key={index}
+                    ref={(el) => (categoryRefs.current[index] = el)}
+                  >
+                    <div className="text-2xl my-2 font-semibold text-center">
                       {category.name}
                     </div>
                     <div className="columns-2 gap-2">
