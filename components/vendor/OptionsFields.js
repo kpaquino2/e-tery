@@ -25,7 +25,7 @@ export default function OptionsFields({ index, control, register, errors }) {
             name={`variants.${index}.options.${idx}.name`}
           />
           <TextInputAlt
-            label="Price"
+            label="Additional Price"
             register={register}
             error={
               errors.variants?.[index]?.options?.[idx]?.addtl_price?.message
