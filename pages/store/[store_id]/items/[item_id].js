@@ -37,7 +37,7 @@ const schema = yup.object({
   ),
 });
 
-export default function StoreItemPage({ store_id, item }) {
+export default function StoreItemPage({ store, item }) {
   const {
     register,
     handleSubmit,
@@ -99,7 +99,7 @@ export default function StoreItemPage({ store_id, item }) {
         .flat(1),
     };
 
-    addToCart({ store_id, order_item });
+    addToCart({ ...store, order_item });
   };
 
   const onBlur = () => {
@@ -109,7 +109,7 @@ export default function StoreItemPage({ store_id, item }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} onChange={onBlur}>
       <Layout title={item.name}>
-        <Banner url={`items/${store_id}/${item.id}`} />
+        <Banner url={`items/${store.id}/${item.id}`} />
         <div className="grid grid-cols-2 mx-6 gap-2 pb-20">
           <div className="font-bold text-4xl mt-4">{item.name}</div>
           <div className="font-semibold text-xl justify-self-end self-end mt-4">
@@ -216,14 +216,20 @@ export default function StoreItemPage({ store_id, item }) {
 
 export const getServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);
-  const { data } = await supabase
+  const { data: storeData } = await supabase
+    .from("vendors")
+    .select("id, name, open")
+    .eq("id", ctx.params.store_id)
+    .single();
+
+  const { data: itemData } = await supabase
     .from("items")
     .select(
       "id, name, base_price, description, item_variants(id, name, select, optional, item_options(id, name, addtl_price))"
     )
     .eq("id", ctx.params.item_id)
     .single();
-
-  if (!data) return { notFound: true };
-  return { props: { store_id: ctx.params.store_id, item: data } };
+  console.log(itemData);
+  if (!itemData) return { notFound: true };
+  return { props: { store: storeData, item: itemData } };
 };
