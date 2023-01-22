@@ -6,10 +6,12 @@ import { TiThMenu } from "react-icons/ti";
 import CustomerMenu from "./CustomerMenu";
 import SearchBox from "../forms/SearchBox";
 import { useRouter } from "next/router";
+import useCart from "../../lib/cart";
 
 export default function CustomerNav({ customer_id }) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
   const router = useRouter();
+  const totalQty = useCart((state) => state.totalQty);
 
   const openMenu = () => {
     setisMenuOpen(!isMenuOpen);
@@ -21,7 +23,12 @@ export default function CustomerNav({ customer_id }) {
       </Link>
       <div className="flex gap-2">
         <Link href="/cart" className="rounded-full">
-          <IoCart className="text-cream text-4xl" />
+          <div className="relative">
+            <IoCart className="text-cream text-4xl" />
+            <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-light bg-red-500 border-2 border-cream rounded-full -top-2 -right-2">
+              {totalQty || 0}
+            </div>
+          </div>
         </Link>
         <button onClick={openMenu} className="rounded-full">
           <TiThMenu
