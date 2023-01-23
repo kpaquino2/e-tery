@@ -62,6 +62,11 @@ export default function StoreItemPage({ store, item }) {
           `variants.${i}.options.${j}.id`,
           item.item_variants[i].item_options[j].id
         );
+        register(`variants.${i}.options.${j}.name`);
+        setValue(
+          `variants.${i}.options.${j}.name`,
+          item.item_variants[i].item_options[j].name
+        );
         register(`variants.${i}.options.${j}.addtl_price`);
         setValue(
           `variants.${i}.options.${j}.addtl_price`,
@@ -92,6 +97,7 @@ export default function StoreItemPage({ store, item }) {
         .reduce((a, b) => a + b);
     const order_item = {
       item_id: item.id,
+      item_name: item.name,
       quantity: quantity,
       price: final_price * quantity,
       options: data.variants
