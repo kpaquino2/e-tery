@@ -4,12 +4,36 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TiThMenu } from "react-icons/ti";
 import VendorMenu from "./VendorMenu";
+import { motion } from "framer-motion";
+import { FaRegBell } from "react-icons/fa";
+
+const notifScreen = {
+  open: {
+    clipPath: `circle(2000px)`,
+    transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+    },
+  },
+  closed: {
+    clipPath: "circle(0)",
+    transition: {
+      delay: 0.5,
+      type: "spring",
+      stiffness: 400,
+      damping: 40,
+    },
+  },
+};
 
 export default function VendorNav({ vendor_id }) {
   const supabaseClient = useSupabaseClient();
   const [storeOpen, setStoreOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isMenuOpen, setisMenuOpen] = useState(false);
+  const [isNotifScreenOpen, setIsNotifScreenOpen] = useState(true);
+  const [newOderId, setNewOrderId] = useState(null);
 
   useEffect(() => {
     const fetchOpen = async () => {
@@ -21,6 +45,27 @@ export default function VendorNav({ vendor_id }) {
     };
     fetchOpen();
   }, [supabaseClient, vendor_id]);
+
+  useEffect(() => {
+    const subscription = supabaseClient
+      .channel("db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "orders",
+          filter: `vendor_id=eq.${vendor_id}`,
+        },
+        (payload) => {
+          if (newOderId === null) {
+            setNewOrderId(payload.new.id);
+            setIsNotifScreenOpen(true);
+          }
+        }
+      )
+      .subscribe();
+  }, [supabaseClient, vendor_id, isNotifScreenOpen, newOderId]);
 
   const openStore = async () => {
     setLoading(true);
@@ -37,6 +82,28 @@ export default function VendorNav({ vendor_id }) {
   };
   return (
     <>
+      <motion.div
+        animate={isNotifScreenOpen && newOderId ? "open" : "closed"}
+        variants={notifScreen}
+        className="fixed inset-0 bg-maroon grid place-content-center place-items-center gap-4 p-12"
+        onClick={() => setIsNotifScreenOpen(false)}
+      >
+        <motion.div
+          animate={{
+            rotate: [-10, 10, -10],
+            transition: {
+              delay: -1,
+              repeat: Infinity,
+              duration: 0.2,
+            },
+          }}
+        >
+          <FaRegBell className="text-7xl text-light" />
+        </motion.div>
+        <span className="text-3xl font-bold text-light text-center">
+          You have a new order
+        </span>
+      </motion.div>
       <button
         className={
           (loading ? "cursor-wait bg-gray-300" : "") +
