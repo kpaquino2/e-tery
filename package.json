@@ -17,6 +17,7 @@
     "@supabase/supabase-js": "^2.4.0",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
+    "framer-motion": "^8.5.2",
     "keen-slider": "^6.8.5",
     "moment": "^2.29.4",
     "next": "13.1.1",
