@@ -224,7 +224,7 @@ export const getServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);
   const { data: storeData } = await supabase
     .from("vendors")
-    .select("id, name, open")
+    .select("id, name, open, address")
     .eq("id", ctx.params.store_id)
     .single();
 
