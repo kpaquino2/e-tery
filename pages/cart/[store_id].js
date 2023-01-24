@@ -84,7 +84,7 @@ export default function StoreCartPage({ id }) {
 
   const onSubmit = async (data) => {
     const time = data.when === "now" ? moment().format("HH:mm:ss") : data.time;
-    console.log(typeof time);
+
     const insertOrder =
       data.option === "delivery"
         ? await supabaseClient

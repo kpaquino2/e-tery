@@ -235,7 +235,7 @@ export const getServerSideProps = async (ctx) => {
     )
     .eq("id", ctx.params.item_id)
     .single();
-  console.log(itemData);
+
   if (!itemData) return { notFound: true };
   return { props: { store: storeData, item: itemData } };
 };
