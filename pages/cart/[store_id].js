@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import SelectInputAlt from "../../components/forms/SelectInputAlt";
 import * as moment from "moment";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 const schema = yup.object({});
 
@@ -31,8 +32,9 @@ const getTimes = () => {
   return times;
 };
 
-export default function StoreCartPage() {
-  const { register, watch } = useForm({
+export default function StoreCartPage({ id }) {
+  const times = useMemo(() => getTimes(), []);
+  const { register, watch, handleSubmit } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       option: "delivery",
@@ -40,7 +42,7 @@ export default function StoreCartPage() {
       building: 1,
       room: 1,
       when: "now",
-      time: "",
+      time: times[0].from.format("HH:mm:ss"),
     },
   });
   const supabaseClient = useSupabaseClient();
@@ -48,7 +50,6 @@ export default function StoreCartPage() {
   const cart = useCart((state) => state.getCartStore(router.query.store_id));
   const [buildings, setBuildings] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const times = useMemo(() => getTimes(), []);
   const selected_bldg = watch("building");
 
   useEffect(() => {
@@ -81,10 +82,73 @@ export default function StoreCartPage() {
     return null;
   }
 
+  const onSubmit = async (data) => {
+    const time = data.when === "now" ? moment().format("HH:mm:ss") : data.time;
+    console.log(typeof time);
+    const insertOrder =
+      data.option === "delivery"
+        ? await supabaseClient
+            .from("orders")
+            .insert([
+              {
+                payment_option: data.payment,
+                delivery_option: data.option,
+                time: time,
+                status: "pending",
+                vendor_id: router.query.store_id,
+                customer_id: id,
+                room_id: data.room,
+                note: data.note,
+                total: cart.subtotal + 10,
+              },
+            ])
+            .select()
+            .single()
+        : await supabaseClient
+            .from("orders")
+            .insert([
+              {
+                payment_option: data.payment,
+                delivery_option: data.option,
+                time: time,
+                status: "pending",
+                vendor_id: router.query.store_id,
+                customer_id: id,
+                total: cart.subtotal + 10,
+              },
+            ])
+            .select()
+            .single();
+    if (insertOrder.error) return;
+    cart.items.forEach(async (item) => {
+      const insertOrderItem = await supabaseClient
+        .from("order_items")
+        .insert([
+          {
+            order_id: insertOrder.data.id,
+            item_id: item.item_id,
+            quantity: item.quantity,
+            price: item.price,
+          },
+        ])
+        .select()
+        .single();
+      if (insertOrderItem.error) return;
+      await supabaseClient.from("order_item_options").insert(
+        item.options.map((option) => {
+          return {
+            option_id: option.id,
+            order_item_id: insertOrderItem.data.id,
+          };
+        })
+      );
+    });
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Layout title={cart?.name}>
-        <div className="mx-2">
+        <div className="mx-2 pb-20">
           <p className="text-3xl font-bold text-dark text-center my-2">
             {cart?.name} - Cart
           </p>
@@ -167,6 +231,7 @@ export default function StoreCartPage() {
                     className="col-span-2 p-1 bg-cream rounded-lg border-maroon placeholder-dark text-dark text-sm focus:border-maroon focus:ring-cream"
                     type="text"
                     placeholder="Optional..."
+                    {...register("note")}
                   ></input>
                 </div>
               )}
@@ -204,11 +269,8 @@ export default function StoreCartPage() {
               <div className="col-span-2 flex bg-teal rounded-lg gap-2 p-3 mt-2 text-cream">
                 <FaClock className="text-xl text-maroon" />
                 <SelectInputAlt register={register} name="time">
-                  <option value="" disabled>
-                    Select time
-                  </option>
                   {times?.map((time, index) => (
-                    <option key={index} value={time}>
+                    <option key={index} value={time.from.format("HH:mm:ss")}>
                       {time.from.format("hh:mm a")} to{" "}
                       {time.to.format("hh:mm a")}
                     </option>
@@ -259,6 +321,15 @@ export default function StoreCartPage() {
           </button>
         </div>
       </Footer>
-    </>
+    </form>
   );
 }
+
+export const getServerSideProps = async (ctx) => {
+  const supabase = createServerSupabaseClient(ctx);
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  return { props: { id: session?.user.id } };
+};
