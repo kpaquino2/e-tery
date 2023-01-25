@@ -136,7 +136,7 @@ export const getServerSideProps = async (ctx) => {
 
   const { data: customer } = await supabase
     .from("customers")
-    .select("*")
+    .select("firstname, lastname, contact_no")
     .eq("id", data.customer_id)
     .single();
 
