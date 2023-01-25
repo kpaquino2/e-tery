@@ -6,6 +6,7 @@ import { TiThMenu } from "react-icons/ti";
 import VendorMenu from "./VendorMenu";
 import { motion } from "framer-motion";
 import { FaRegBell } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const notifScreen = {
   open: {
@@ -34,6 +35,7 @@ export default function VendorNav({ vendor_id }) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
   const [isNotifScreenOpen, setIsNotifScreenOpen] = useState(true);
   const [newOderId, setNewOrderId] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchOpen = async () => {
@@ -80,13 +82,19 @@ export default function VendorNav({ vendor_id }) {
   const openMenu = () => {
     setisMenuOpen(!isMenuOpen);
   };
+
+  const handleClick = () => {
+    setIsNotifScreenOpen(false);
+    router.push(`orders/${newOderId}`);
+  };
+
   return (
     <>
       <motion.div
         animate={isNotifScreenOpen && newOderId ? "open" : "closed"}
         variants={notifScreen}
         className="fixed inset-0 bg-maroon grid place-content-center place-items-center gap-4 p-12"
-        onClick={() => setIsNotifScreenOpen(false)}
+        onClick={handleClick}
       >
         <motion.div
           animate={{
