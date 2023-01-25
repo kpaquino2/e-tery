@@ -11,7 +11,9 @@ export default function OrdersPage({ orders, acct_type }) {
   const statusColor = {
     pending: "bg-gray-400 text-gray-900",
     accepted: "bg-blue-400 text-blue-900",
-    declined: "bg-red-400 text-red-900",
+    prepared: "bg-amber-400 text-amber-900",
+    picked_up: "bg-purple-400 text-purple-900",
+    cancelled: "bg-red-400 text-red-900",
   };
 
   return (
@@ -48,13 +50,9 @@ export default function OrdersPage({ orders, acct_type }) {
           {orders?.map(
             (order, index) =>
               (tab === 1 ||
-                [
-                  "in-transit",
-                  "ready",
-                  "prepared",
-                  "accepted",
-                  "pending",
-                ].includes(order.status)) && (
+                ["picked_up", "prepared", "accepted", "pending"].includes(
+                  order.status
+                )) && (
                 <Link
                   href={
                     acct_type === "vendor"
