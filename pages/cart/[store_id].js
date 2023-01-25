@@ -146,7 +146,9 @@ export default function StoreCartPage({ id }) {
         );
       if (insertOrderItemOptions.error) throw insertOrderItemOptions.error;
     });
-    router.push("/").then(() => removeStoreFromCart(router.query.store_id));
+    router
+      .push(`/orders/c/${insertOrder.data.id}`)
+      .then(() => removeStoreFromCart(router.query.store_id));
   };
 
   return (
