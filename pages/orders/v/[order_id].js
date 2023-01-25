@@ -16,6 +16,67 @@ export default function OrderPage({ order, items, customer }) {
     if (!error) router.replace(router.asPath);
   };
 
+  const buttons = {
+    pending: (
+      <div className="grid grid-cols-2 gap-4">
+        <button
+          onClick={() => updateOrder("cancelled")}
+          className="bg-maroon text-light font-bold rounded-full"
+        >
+          DECLINE
+        </button>
+        <button
+          onClick={() => updateOrder("accepted")}
+          className="bg-teal text-light font-bold rounded-full"
+        >
+          ACCEPT
+        </button>
+      </div>
+    ),
+    accepted: (
+      <div className="grid grid-cols-2 gap-4">
+        <button
+          onClick={() => updateOrder("cancelled")}
+          className="bg-maroon text-light font-bold rounded-full"
+        >
+          CANCEL
+        </button>
+        <button
+          onClick={() => updateOrder("prepared")}
+          className="bg-teal text-light font-bold rounded-full"
+        >
+          DONE PREPARING
+        </button>
+      </div>
+    ),
+    prepared: (
+      <div className="grid gap-4">
+        {order.delivery_option === "pickup" ? (
+          <div className="font-semibold text-base text-center">
+            Waiting for customer to pick up their order...
+          </div>
+        ) : (
+          <button
+            onClick={() => updateOrder("picked_up")}
+            className="bg-teal text-light font-bold rounded-full"
+          >
+            ORDER PICKED UP
+          </button>
+        )}
+      </div>
+    ),
+    picked_up: (
+      <div className="grid font-semibold text-base text-center">
+        Waiting for customer to receive their order...
+      </div>
+    ),
+    cancelled: (
+      <div className="grid font-semibold text-base text-center">
+        This order has been cancelled.
+      </div>
+    ),
+  };
+
   return (
     <>
       <Layout title="Order">
@@ -81,22 +142,7 @@ export default function OrderPage({ order, items, customer }) {
           <div className="-translate-y-4 text-2xl font-bold text-center text-dark">
             Total Amount: <span>₱{order?.total.toFixed(2)}</span>
           </div>
-          {order.status === "pending" && (
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={() => updateOrder("declined")}
-                className="bg-maroon text-light font-bold rounded-full"
-              >
-                DECLINE
-              </button>
-              <button
-                onClick={() => updateOrder("accepted")}
-                className="bg-teal text-light font-bold rounded-full"
-              >
-                ACCEPT
-              </button>
-            </div>
-          )}
+          {buttons[order?.status]}
         </div>
       </Layout>
     </>
