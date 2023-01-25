@@ -133,15 +133,18 @@ export default function StoreCartPage({ id }) {
         ])
         .select()
         .single();
-      if (insertOrderItem.error) return;
-      await supabaseClient.from("order_item_options").insert(
-        item.options.map((option) => {
-          return {
-            option_id: option.id,
-            order_item_id: insertOrderItem.data.id,
-          };
-        })
-      );
+      if (insertOrderItem.error) throw insertOrder.error;
+      const insertOrderItemOptions = await supabaseClient
+        .from("order_item_options")
+        .insert(
+          item.options.map((option) => {
+            return {
+              option_id: option.id,
+              order_item_id: insertOrderItem.data.id,
+            };
+          })
+        );
+      if (insertOrderItemOptions.error) throw insertOrderItemOptions.error;
     });
   };
 
