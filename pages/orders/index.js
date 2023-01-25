@@ -70,7 +70,7 @@ export default function OrdersPage({ orders, acct_type }) {
                   <span
                     className={
                       statusColor[order.status] +
-                      " flex row-span-2 m-1 justify-center items-center font-semibold rounded-lg"
+                      " flex row-span-2 m-1 justify-center items-center font-semibold rounded-full"
                     }
                   >
                     {order.status.toUpperCase()}
