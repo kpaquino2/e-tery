@@ -85,7 +85,7 @@ export default function VendorNav({ vendor_id }) {
 
   const handleClick = () => {
     setIsNotifScreenOpen(false);
-    router.push(`orders/${newOderId}`);
+    router.push(`/orders/${newOderId}`);
   };
 
   return (
