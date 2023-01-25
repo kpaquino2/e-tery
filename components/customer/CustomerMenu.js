@@ -40,7 +40,9 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
       <Link href="/history" className="text-cream text-3xl font-bold mb-8">
         History
       </Link>
-      <p className="text-cream text-3xl font-bold mb-8">Order Status</p>
+      <Link href="/orders" className="text-cream text-3xl font-bold mb-8">
+        Orders
+      </Link>
       <p className="text-cream text-3xl font-bold mb-4">Details</p>
       <div className="flex flex-col text-cream text-2xl mx-12 mb-8 max-w-[80%] overflow-hidden">
         <p>
