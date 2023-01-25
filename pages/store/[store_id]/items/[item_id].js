@@ -12,6 +12,7 @@ import CheckboxInput from "../../../../components/forms/CheckboxInput";
 import { useEffect } from "react";
 import { FaCheck } from "react-icons/fa";
 import useCart from "../../../../lib/cart";
+import { useRouter } from "next/router";
 
 const schema = yup.object({
   variants: yup.array(
@@ -49,6 +50,7 @@ export default function StoreItemPage({ store, item }) {
   });
   const [quantity, setQuantity] = useState(1);
   const addToCart = useCart((state) => state.addToCart);
+  const router = useRouter();
 
   useEffect(() => {
     for (let i = 0; i < item.item_variants.length; i++) {
@@ -106,6 +108,7 @@ export default function StoreItemPage({ store, item }) {
     };
 
     addToCart({ ...store, order_item });
+    router.back();
   };
 
   const onBlur = () => {
