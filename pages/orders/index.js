@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { motion } from "framer-motion";
 import moment from "moment/moment";
+import Link from "next/link";
 import { useState } from "react";
 import { FaClock } from "react-icons/fa";
 import Layout from "../../components/layout/Layout";
@@ -44,7 +45,8 @@ export default function OrdersPage({ orders }) {
             ? orders?.map(
                 (order, index) =>
                   order.status !== "delivered" && (
-                    <div
+                    <Link
+                      href={`/orders/${order.id}`}
                       key={index}
                       className="p-2 bg-teal rounded-lg text-cream grid grid-cols-[2fr_1fr]"
                     >
@@ -53,7 +55,7 @@ export default function OrdersPage({ orders }) {
                         {moment(order.time, "HH:mm:ss").format("hh:mm A")}
                       </span>
                       <span className="text-lg row-span-3 col-start-2 font-semibold place-self-center">
-                        Php {order.total.toFixed(2)}
+                        ₱ {order.total.toFixed(2)}
                       </span>
                       <span>
                         {order.payment_option === "cod"
@@ -74,11 +76,41 @@ export default function OrdersPage({ orders }) {
                       >
                         {order.status.toUpperCase()}
                       </span>
-                    </div>
+                    </Link>
                   )
               )
             : orders?.map((order, index) => (
-                <div key={index}>{order.total}</div>
+                <div
+                  key={index}
+                  className="p-2 bg-teal rounded-lg text-cream grid grid-cols-[2fr_1fr]"
+                >
+                  <span className="flex items-center gap-1 font-semibold text-lg">
+                    <FaClock className="text-maroon" />
+                    {moment(order.time, "HH:mm:ss").format("hh:mm A")}
+                  </span>
+                  <span className="text-lg row-span-3 col-start-2 font-semibold place-self-center">
+                    ₱ {order.total.toFixed(2)}
+                  </span>
+                  <span>
+                    {order.payment_option === "cod"
+                      ? "Cash on Delivery"
+                      : "Over the counter"}
+                  </span>
+
+                  <span>
+                    {order.delivery_option === "delivery"
+                      ? "Room Delivery"
+                      : "Pickup"}
+                  </span>
+                  <span
+                    className={
+                      "w-min px-3 rounded-full col-span-full place-self-center " +
+                      statusColor[order.status]
+                    }
+                  >
+                    {order.status.toUpperCase()}
+                  </span>
+                </div>
               ))}
         </div>
       </Layout>
