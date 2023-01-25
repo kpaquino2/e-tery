@@ -38,7 +38,6 @@ export default function StoreCartPage({ id }) {
     resolver: yupResolver(schema),
     defaultValues: {
       option: "delivery",
-      payment: "cod",
       building: 1,
       room: 1,
       when: "now",
@@ -92,7 +91,7 @@ export default function StoreCartPage({ id }) {
             .from("orders")
             .insert([
               {
-                payment_option: data.payment,
+                payment_option: "cod",
                 delivery_option: data.option,
                 time: time,
                 status: "pending",
@@ -109,7 +108,7 @@ export default function StoreCartPage({ id }) {
             .from("orders")
             .insert([
               {
-                payment_option: data.payment,
+                payment_option: "counter",
                 delivery_option: data.option,
                 time: time,
                 status: "pending",
@@ -242,6 +241,14 @@ export default function StoreCartPage({ id }) {
               )}
             </div>
             <div className="text-xl font-semibold col-span-2">
+              Mode of Payment
+            </div>
+            <span className="mx-2">
+              {watch("option") === "delivery"
+                ? "Cash on Delivery"
+                : "Over the counter"}
+            </span>
+            <div className="text-xl font-semibold col-span-2">
               Delivery Time
             </div>
             <span className="mx-2">
@@ -283,33 +290,6 @@ export default function StoreCartPage({ id }) {
                 </SelectInputAlt>
               </div>
             )}
-            <div className="text-xl font-semibold col-span-2">
-              Mode of Payment
-            </div>
-            <span className="mx-2">
-              <RadioInput
-                size={5}
-                id="cod"
-                value="cod"
-                register={register}
-                name="payment"
-              />
-              <label className="pl-2" htmlFor="cod">
-                Cash on Delivery
-              </label>
-            </span>
-            <span className="mx-2">
-              <RadioInput
-                size={5}
-                id="counter"
-                value="counter"
-                register={register}
-                name="payment"
-              />
-              <label className="pl-2" htmlFor="counter">
-                Over the counter
-              </label>
-            </span>
           </div>
         </div>
       </Layout>
