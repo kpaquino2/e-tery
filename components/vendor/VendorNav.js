@@ -96,7 +96,7 @@ export default function VendorNav({ vendor_id }) {
   };
 
   const handleClick = () => {
-    router.replace(`/orders/${newOrderId}`).then(() => {
+    router.replace(`/orders/v/${newOrderId}`).then(() => {
       setIsNotifScreenOpen(false);
     });
   };
