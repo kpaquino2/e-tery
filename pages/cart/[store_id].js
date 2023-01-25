@@ -48,6 +48,7 @@ export default function StoreCartPage({ id }) {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
   const cart = useCart((state) => state.getCartStore(router.query.store_id));
+  const removeStoreFromCart = useCart((state) => state.removeStoreFromCart);
   const [buildings, setBuildings] = useState([]);
   const [rooms, setRooms] = useState([]);
   const selected_bldg = watch("building");
@@ -146,6 +147,7 @@ export default function StoreCartPage({ id }) {
         );
       if (insertOrderItemOptions.error) throw insertOrderItemOptions.error;
     });
+    router.push("/").then(() => removeStoreFromCart(router.query.store_id));
   };
 
   return (
@@ -320,7 +322,7 @@ export default function StoreCartPage({ id }) {
             </span>
           </div>
           <button className="bg-teal my-2 rounded-full text-xl font-bold text-light disabled:grayscale">
-            ADD TO CART
+            CHECK OUT
           </button>
         </div>
       </Footer>
