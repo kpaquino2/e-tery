@@ -25,9 +25,11 @@ export default function CustomerNav({ customer_id }) {
         <Link href="/cart" className="rounded-full">
           <div className="relative">
             <IoCart className="text-cream text-4xl" />
-            <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-light bg-red-500 border-2 border-cream rounded-full -top-2 -right-2">
-              {totalQty || 0}
-            </div>
+            {totalQty > 0 && (
+              <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-light bg-red-500 border-2 border-cream rounded-full -top-2 -right-2">
+                {totalQty}
+              </div>
+            )}
           </div>
         </Link>
         <button onClick={openMenu} className="rounded-full">
