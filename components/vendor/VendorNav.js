@@ -106,7 +106,7 @@ export default function VendorNav({ vendor_id }) {
       <motion.div
         animate={isNotifScreenOpen && newOrderId ? "open" : "closed"}
         variants={notifScreen}
-        className="fixed inset-0 bg-maroon grid place-content-center place-items-center gap-4 p-12"
+        className="fixed inset-0 bg-maroon grid place-content-center place-items-center gap-4 p-12 z-50"
         onClick={handleClick}
       >
         <motion.div
