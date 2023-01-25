@@ -19,10 +19,10 @@ const getTimes = () => {
   const times = [];
   const ms = 1000 * 60 * 15;
   const now = moment();
-  const time =
-    now.hours() >= 7 ? moment(Math.ceil(now / ms) * ms) : moment("07", "hh");
+  const time = moment(Math.ceil(now / ms) * ms);
+  const closing = moment("23:59", "HH:mm");
 
-  while (time.hours() < 19) {
+  while (time.isBefore(closing)) {
     let from = time.clone();
     time.add(15, "m");
     let to = time.clone();
