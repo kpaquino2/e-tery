@@ -34,7 +34,7 @@ export default function VendorNav({ vendor_id }) {
   const [loading, setLoading] = useState(false);
   const [isMenuOpen, setisMenuOpen] = useState(false);
   const [isNotifScreenOpen, setIsNotifScreenOpen] = useState(true);
-  const [newOderId, setNewOrderId] = useState(null);
+  const [newOrderId, setNewOrderId] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -60,14 +60,26 @@ export default function VendorNav({ vendor_id }) {
           filter: `vendor_id=eq.${vendor_id}`,
         },
         (payload) => {
-          if (newOderId === null) {
+          if (newOrderId === null) {
             setNewOrderId(payload.new.id);
             setIsNotifScreenOpen(true);
           }
         }
       )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "orders",
+          filter: `vendor_id=eq.${vendor_id}`,
+        },
+        (payload) => {
+          setNewOrderId(null);
+        }
+      )
       .subscribe();
-  }, [supabaseClient, vendor_id, isNotifScreenOpen, newOderId]);
+  }, [supabaseClient, vendor_id, isNotifScreenOpen, newOrderId]);
 
   const openStore = async () => {
     setLoading(true);
@@ -84,14 +96,15 @@ export default function VendorNav({ vendor_id }) {
   };
 
   const handleClick = () => {
-    setIsNotifScreenOpen(false);
-    router.push(`/orders/${newOderId}`);
+    router.replace(`/orders/${newOrderId}`).then(() => {
+      setIsNotifScreenOpen(false);
+    });
   };
 
   return (
     <>
       <motion.div
-        animate={isNotifScreenOpen && newOderId ? "open" : "closed"}
+        animate={isNotifScreenOpen && newOrderId ? "open" : "closed"}
         variants={notifScreen}
         className="fixed inset-0 bg-maroon grid place-content-center place-items-center gap-4 p-12"
         onClick={handleClick}
