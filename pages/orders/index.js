@@ -40,7 +40,7 @@ export default function OrdersPage({ orders }) {
             )}
           </div>
         </div>
-        <div className="flex flex-col m-2">
+        <div className="flex flex-col m-2 gap-2">
           {tab === 0
             ? orders?.map(
                 (order, index) =>
