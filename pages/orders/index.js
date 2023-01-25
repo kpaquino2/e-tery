@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FaClock, FaRegClock } from "react-icons/fa";
 import Layout from "../../components/layout/Layout";
 
-export default function OrdersPage({ orders }) {
+export default function OrdersPage({ orders, acct_type }) {
   const [tab, setTab] = useState(0);
   const statusColor = {
     pending: "bg-gray-400 text-gray-900",
@@ -56,7 +56,11 @@ export default function OrdersPage({ orders }) {
                   "pending",
                 ].includes(order.status)) && (
                 <Link
-                  href={`/orders/${order.id}`}
+                  href={
+                    acct_type === "vendor"
+                      ? `/orders/v/${order.id}`
+                      : `/orders/c/${order.id}`
+                  }
                   key={index}
                   className="p-2 bg-cream rounded-lg text-teal grid grid-cols-[2fr_1fr]"
                 >
@@ -97,6 +101,14 @@ export default function OrdersPage({ orders }) {
 export const getServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const acct_type = session?.user.email?.endsWith("@g.batstate-u.edu.ph")
+    ? "customer"
+    : "vendor";
+
   const { data } = await supabase
     .from("orders")
     .select(
@@ -104,5 +116,5 @@ export const getServerSideProps = async (ctx) => {
     )
     .order("time", { ascending: false });
 
-  return { props: { orders: data } };
+  return { props: { orders: data, acct_type } };
 };

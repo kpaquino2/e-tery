@@ -2,7 +2,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import moment from "moment";
 import { useRouter } from "next/router";
-import Layout from "../../components/layout/Layout";
+import Layout from "../../../components/layout/Layout";
 
 export default function OrderPage({ order, items, customer }) {
   const supabaseClient = useSupabaseClient();
