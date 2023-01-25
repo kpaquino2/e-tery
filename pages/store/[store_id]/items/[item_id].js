@@ -119,7 +119,7 @@ export default function StoreItemPage({ store, item }) {
         <div className="grid grid-cols-2 mx-6 gap-2 pb-20">
           <div className="font-bold text-4xl mt-4">{item.name}</div>
           <div className="font-semibold text-xl justify-self-end self-end mt-4">
-            Php {item.base_price.toFixed(2)}
+            ₱ {item.base_price.toFixed(2)}
           </div>
           <div className="col-span-2">{item.description}</div>
           <div className="bg-cream h-1 col-span-2 rounded-full" />

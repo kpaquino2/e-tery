@@ -47,7 +47,7 @@ export default function Item({ vendor_id, data }) {
       >
         <span className="font-semibold">{data.name}</span>
         <span className="text-sm">{data.description}</span>
-        <span className="">Php {data.base_price.toFixed(2)}</span>
+        <span className="">₱ {data.base_price.toFixed(2)}</span>
         <button
           className="underline decoration-solid text-xs pt-2"
           onClick={updateAvailability}
