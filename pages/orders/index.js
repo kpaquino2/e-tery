@@ -112,7 +112,7 @@ export const getServerSideProps = async (ctx) => {
     .select(
       "id, total, payment_option, delivery_option, time, status, room_id, order_rating"
     )
-    .order("time", { ascending: false });
+    .order("time", { ascending: true });
 
   return { props: { orders: data, acct_type } };
 };
