@@ -113,10 +113,12 @@ export default function OrderPage({ order, items, customer }) {
               {moment(order?.time, "HH:mm:ss").format("hh:mm:ss A")}
             </span>
           </span>
-          <div className="bg-cream min-h-[300px] p-3">
+          <div className="bg-cream min-h-[300px] p-4">
             {order?.order_items.map((item, index) => (
-              <div key={index} className="grid grid-cols-[1fr_3fr_1.5fr]">
-                <div className="text-maroon font-bold">{item.quantity}x</div>
+              <div key={index} className="m-2 grid grid-cols-[1fr_3fr_1.5fr]">
+                <div className="text-maroon font-bold text-center">
+                  {item.quantity}x
+                </div>
                 <div className="flex flex-col">
                   <span className="font-bold">{items[index].item_name}</span>
                   {items[index].options.map((option, index) => (
@@ -125,7 +127,7 @@ export default function OrderPage({ order, items, customer }) {
                     </div>
                   ))}
                 </div>
-                <div className="text-maroon font-semibold">
+                <div className="text-maroon font-semibold text-end">
                   ₱{item.price.toFixed(2)}
                 </div>
               </div>
