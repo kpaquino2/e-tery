@@ -57,7 +57,7 @@ export default function OrderPage({ order, items, customer }) {
           </div>
         ) : (
           <button
-            onClick={() => updateOrder("picked_up")}
+            onClick={() => updateOrder("shipped")}
             className="bg-teal text-light font-bold rounded-full"
           >
             ORDER PICKED UP
@@ -65,7 +65,7 @@ export default function OrderPage({ order, items, customer }) {
         )}
       </div>
     ),
-    picked_up: (
+    shipped: (
       <div className="grid font-semibold text-base text-center">
         Waiting for customer to receive their order...
       </div>

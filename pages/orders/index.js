@@ -12,7 +12,7 @@ export default function OrdersPage({ orders, acct_type }) {
     pending: "bg-gray-400 text-gray-900",
     accepted: "bg-blue-400 text-blue-900",
     prepared: "bg-amber-400 text-amber-900",
-    picked_up: "bg-purple-400 text-purple-900",
+    shipped: "bg-purple-400 text-purple-900",
     cancelled: "bg-red-400 text-red-900",
   };
 
@@ -50,7 +50,7 @@ export default function OrdersPage({ orders, acct_type }) {
           {orders?.map(
             (order, index) =>
               (tab === 1 ||
-                ["picked_up", "prepared", "accepted", "pending"].includes(
+                ["shipped", "prepared", "accepted", "pending"].includes(
                   order.status
                 )) && (
                 <Link
