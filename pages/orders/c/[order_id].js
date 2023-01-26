@@ -1,16 +1,79 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { FaStar } from "react-icons/fa";
 import Layout from "../../../components/layout/Layout";
+
+const bar = {
+  done: {
+    clipPath: `inset(0 0 0 100%)`,
+    transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+      delay: 1,
+    },
+  },
+  tocome: {
+    clipPath: `inset(0 0 0 0%)`,
+    transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+      delay: 1,
+    },
+  },
+  ongoing: {
+    clipPath: `inset(0 0 0 100%)`,
+    transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+      delay: 1,
+    },
+  },
+};
 
 export default function OrderStatusPage({ order, items }) {
   const supabaseClient = useSupabaseClient();
   const states =
     order.delivery_option === "delivery"
-      ? ["pending", "accepted", "prepared", "picked_up", "received"]
-      : ["pending", "accepted", "prepared", "received"];
+      ? ["pending", "accepted", "prepared", "shipped", "completed"]
+      : ["pending", "accepted", "prepared", "completed"];
   const [orderStatus, setOrderStatus] = useState(order.status);
+  const statusMessage = {
+    pending: [
+      "Your order has been submitted",
+      "Waiting for the vendor to accept your order",
+    ],
+    accepted: ["Your order has been accepted", "It is not being prepared"],
+    prepared: [
+      "Your order has been prepared",
+      order.delivery_option === "delivery"
+        ? "It is now ready for delivery"
+        : "It is now ready to be picked up.",
+    ],
+    shipped: ["Your order has been picked up", "It is now out for delivery"],
+  };
+
+  const [rated, setRated] = useState(order.order_rating);
+  const [rating, setRating] = useState(0);
+
+  const receiveOrder = async () => {
+    await supabaseClient
+      .from("orders")
+      .update({ status: "completed" })
+      .eq("id", order.id);
+  };
+
+  const submitRating = async () => {
+    await supabaseClient
+      .from("orders")
+      .update({ order_rating: rating })
+      .eq("id", order.id);
+  };
 
   useEffect(() => {
     const subscription = supabaseClient
@@ -25,6 +88,7 @@ export default function OrderStatusPage({ order, items }) {
         },
         (payload) => {
           setOrderStatus(payload.new.status);
+          if (payload.new.order_rating) setRated(true);
         }
       )
       .subscribe();
@@ -32,7 +96,139 @@ export default function OrderStatusPage({ order, items }) {
   return (
     <>
       <Layout title="Order Status">
-        <div className="bg-cream m-4 p-4 rounded-lg">
+        <div className="m-4 p-4 bg-cream rounded-lg">
+          <div className="grid grid-flow-col">
+            {states.map((state, index) => (
+              <div key={index} className="grid place-items-center">
+                <motion.div
+                  animate={
+                    states.indexOf(orderStatus) >= index
+                      ? { backgroundColor: "#26B0BA" }
+                      : { backgroundColor: "#d4d4d8" }
+                  }
+                  transition={{
+                    duration: 1,
+                  }}
+                  className="shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.5)] z-10 w-6 h-6 rounded-full col-start-1 row-start-1 grid place-self-center"
+                />
+                {index < states.length - 1 && (
+                  <motion.div
+                    animate={
+                      states.indexOf(orderStatus) < index
+                        ? {
+                            background: "#d4d4d8",
+                          }
+                        : states.indexOf(orderStatus) > index
+                        ? {
+                            background: "#26B0BA",
+                          }
+                        : states.indexOf(orderStatus) === index && {
+                            background: [
+                              "linear-gradient(to right, #26B0BA -200%, #197278 -100%, #26B0BA 0%, #197278 100%)",
+                              "linear-gradient(to right, #26B0BA -100%, #197278 0%, #26B0BA 100%, #197278 200%)",
+                              "linear-gradient(to right, #26B0BA 0%, #197278 100%, #26B0BA 200%, #197278 300%)",
+                            ],
+                            transition: {
+                              repeat: Infinity,
+                              duration: 3,
+                            },
+                          }
+                    }
+                    className="shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.5)] col-start-1 row-start-1 h-2 w-full translate-y-0 translate-x-0 ml-[100%]"
+                  >
+                    <motion.div
+                      animate={
+                        states.indexOf(orderStatus) < index
+                          ? "tocome"
+                          : states.indexOf(orderStatus) > index
+                          ? "done"
+                          : "ongoing"
+                      }
+                      variants={bar}
+                      className="shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.5)] bg-zinc-300 h-full"
+                    />
+                  </motion.div>
+                )}
+              </div>
+            ))}
+          </div>
+          {orderStatus !== "completed" ? (
+            <div>
+              <Image
+                src={`graphics/${orderStatus}.png`}
+                alt="NO STORES"
+                width={600}
+                height={600}
+              />
+              <div className="text-xl font-bold text-center text-dark">
+                {statusMessage[orderStatus][0]}
+              </div>
+              <div className="font-semibold text-center text-dark">
+                {statusMessage[orderStatus][1]}
+              </div>
+              {((order.delivery_option === "delivery" &&
+                orderStatus === "shipped") ||
+                (order.delivery_option === "pickup" &&
+                  orderStatus === "prepared")) && (
+                <button
+                  onClick={receiveOrder}
+                  className="bg-maroon w-full rounded-full text-cream font-bold text-lg mt-2"
+                >
+                  ORDER RECEIVED
+                </button>
+              )}
+            </div>
+          ) : (
+            <div>
+              <div className="text-xl font-bold text-center text-dark">
+                Order has been received
+              </div>
+              <div className="font-semibold text-center text-dark">
+                Enjoy your food!
+              </div>
+
+              {rated ? (
+                <div className="text-lg font-semibold text-center text-dark mt-2">
+                  Thank you for rating!
+                </div>
+              ) : (
+                <>
+                  <div className="text-lg font-semibold text-center text-dark mt-2">
+                    How was the food?
+                  </div>
+                  <div className="text-center">
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <button
+                        key={value}
+                        className="text-4xl"
+                        onClick={() => {
+                          setRating(value);
+                        }}
+                      >
+                        <FaStar
+                          className={
+                            (value > rating
+                              ? "text-zinc-400"
+                              : "text-amber-400") +
+                            " transition duration-300 active:-translate-y-2"
+                          }
+                        />
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={submitRating}
+                    className="bg-maroon w-full rounded-full text-cream font-bold text-lg mt-2 disabled:grayscale"
+                    disabled={!rating}
+                  >
+                    SUBMIT RATING
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+        <div className="bg-cream mx-4 mb-4 p-4 rounded-lg">
           {order?.order_items.map((item, index) => (
             <div key={index} className="m-2 grid grid-cols-[1fr_3fr_1.5fr]">
               <div className="text-maroon font-bold text-center">
@@ -63,57 +259,6 @@ export default function OrderStatusPage({ order, items }) {
             Total Amount: <span>₱{order?.total.toFixed(2)}</span>
           </div>
         </div>
-
-        <div className="mx-4 p-4 bg-cream rounded-lg">
-          <div className="grid grid-flow-col">
-            {states.map((state, index) => (
-              <div key={index} className="grid place-items-center">
-                <motion.div
-                  animate={
-                    states.indexOf(orderStatus) >= index
-                      ? { backgroundColor: "#26B0BA" }
-                      : { backgroundColor: "#d4d4d8" }
-                  }
-                  className={
-                    (states.indexOf(orderStatus) >= index
-                      ? "bg-teal"
-                      : "bg-stone-300") +
-                    "  shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.5)] z-10 w-6 h-6 rounded-full col-start-1 row-start-1 grid place-self-center"
-                  }
-                />
-                {index < states.length - 1 && (
-                  <motion.div
-                    animate={
-                      states.indexOf(orderStatus) < index
-                        ? { backgroundColor: "#d4d4d8" }
-                        : states.indexOf(orderStatus) > index
-                        ? { backgroundColor: "#26B0BA" }
-                        : states.indexOf(orderStatus) === index && {
-                            background: [
-                              "linear-gradient(to right, #26B0BA -200%, #197278 -100%, #26B0BA 0%, #197278 100%)",
-                              "linear-gradient(to right, #26B0BA -100%, #197278 0%, #26B0BA 100%, #197278 200%)",
-                              "linear-gradient(to right, #26B0BA 0%, #197278 100%, #26B0BA 200%, #197278 300%)",
-                            ],
-                            transition: {
-                              repeat: Infinity,
-                              duration: 2,
-                              delay: 1,
-                            },
-                          }
-                    }
-                    className={
-                      (states.indexOf(orderStatus) >= index
-                        ? "bg-teal"
-                        : "bg-stone-300") +
-                      "  shadow-[inset_0_2px_4px_0_rgba(0,0,0,0.5)] col-start-1 row-start-1 h-2 w-full translate-y-0 translate-x-0 ml-[100%]"
-                    }
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          <div>{orderStatus}</div>
-        </div>
       </Layout>
     </>
   );
@@ -125,7 +270,7 @@ export const getServerSideProps = async (ctx) => {
   const { data } = await supabase
     .from("orders")
     .select(
-      "id, total, status, payment_option, delivery_option, time, status, room_id, note, customer_id, order_items (id, item_id, quantity, price, order_item_options (option_id))"
+      "id, total, status, payment_option, delivery_option, time, status, room_id, note, customer_id, vendor_id, order_rating, order_items (id, item_id, quantity, price, order_item_options (option_id))"
     )
     .eq("id", ctx.params.order_id)
     .single();
