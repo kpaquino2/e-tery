@@ -25,8 +25,8 @@ export default function Drawer({
   return (
     <div
       className={
-        `fixed overflow-y-auto overflow-x-hidden ${top} right-0 bottom-0 left-0 pb-12 bg-dark z-50 transform ease-in-out transition duration-300 ` +
-        (isOpen ? "translate-x-0" : "translate-x-full")
+        `fixed overflow-y-auto overflow-x-hidden ${top} h-screen left-1/2 max-w-[450px] w-screen pb-12 bg-dark z-50 transform ease-in-out transition duration-300 ` +
+        (isOpen ? "-translate-x-1/2" : "translate-x-[100vw]")
       }
     >
       <div

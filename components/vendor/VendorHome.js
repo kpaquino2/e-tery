@@ -10,7 +10,7 @@ export default function VendorHome({ id, data }) {
       <div className="flex flex-col items-center">
         <Banner url={`banners/${id}`} />
         <div className="font-bold text-4xl">{data.name}</div>
-        <div className="flex flex-col px-2 pb-12 w-full">
+        <div className="flex flex-col px-2 w-full">
           {data.categories.length ? (
             data.categories.map((category, index) => (
               <div key={index}>

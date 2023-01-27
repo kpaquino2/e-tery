@@ -107,6 +107,8 @@ export default function Upload({
           aspect={aspect}
           keepSelection={true}
           className="m-12 rounded-2xl"
+          minHeight={height / 5}
+          minWidth={width / 5}
         >
           <Image
             src={file}

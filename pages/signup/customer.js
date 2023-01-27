@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Loading from "../../components/Loading";
 import { FaChevronLeft } from "react-icons/fa";
+import Layout from "../../components/layout/Layout";
 
 const schema = yup.object({
   firstname: yup.string().required("first name is required"),
@@ -82,90 +83,92 @@ export default function Customer() {
 
   return (
     <>
-      <Header />
-      <Loading isLoading={loading} />
-      <Link href={"/signup"}>
-        <FaChevronLeft className="absolute w-7 h-7 text-maroon mt-4 ml-2" />
-      </Link>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-4 p-5"
-      >
-        <div className="col-span-2 text-3xl font-bold place-self-center ">
-          Sign up
-        </div>
-        <div className="col-span-2 text-xl font-bold">USER DETAILS*</div>
-        <TextInput
-          register={register}
-          error={errors.firstname?.message}
-          name="firstname"
-          placeholder="first name"
-        />
-        <TextInput
-          register={register}
-          error={errors.lastname?.message}
-          name="lastname"
-          placeholder="last name"
-        />
-        <div className="col-span-2 text-xl font-bold">
-          LOGIN & CONTACT DETAILS*
-        </div>
-        <TextInput
-          register={register}
-          error={errors.email?.message}
-          name="email"
-          addtlClass="col-span-2"
-          placeholder="email"
-        />
-        <PasswordInput
-          register={register}
-          error={errors.password?.message}
-          name="password"
-          placeholder="password"
-        />
-        <PasswordInput
-          register={register}
-          error={errors.confirm_password?.message}
-          name="confirm_password"
-          placeholder="confirm password"
-        />
-        <TextInput
-          register={register}
-          error={errors.contact_no?.message}
-          name="contact_no"
-          addtlClass="col-span-2"
-          placeholder="contact number"
-        />
-        <div className="col-span-2 text-xl font-bold">CLASSIFICATION*</div>
-        <SelectInput
-          register={register}
-          error={errors.classification?.message}
-          addtlClass="col-span-2"
-          name="classification"
+      <Layout title="Customer Sign Up">
+        <Header />
+        <Loading isLoading={loading} />
+        <Link href={"/signup"}>
+          <FaChevronLeft className="absolute w-7 h-7 text-maroon mt-4 ml-2" />
+        </Link>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-2 gap-4 p-5"
         >
-          <option value="student">Student</option>
-          <option value="faculty/staff">Faculty/Staff</option>
-        </SelectInput>
-        {createAccError ? (
-          <div className="col-span-2 place-self-center text-red-500 font-semibold mb-3">
-            {createAccError}
+          <div className="col-span-2 text-3xl font-bold place-self-center ">
+            Sign up
           </div>
-        ) : (
-          <></>
-        )}
-        <button
-          type="submit"
-          className="col-span-2 w-48 px-10 py-1 font-bold leading-tight place-self-center bg-cream rounded-full text-lg hover:opacity-75"
-        >
-          create your account
-        </button>
-        <p className="col-span-2 place-self-center mt-3">
-          {"have an account? "}
-          <Link href="/login" className="font-bold underline">
-            log in
-          </Link>
-        </p>
-      </form>
+          <div className="col-span-2 text-xl font-bold">USER DETAILS*</div>
+          <TextInput
+            register={register}
+            error={errors.firstname?.message}
+            name="firstname"
+            placeholder="first name"
+          />
+          <TextInput
+            register={register}
+            error={errors.lastname?.message}
+            name="lastname"
+            placeholder="last name"
+          />
+          <div className="col-span-2 text-xl font-bold">
+            LOGIN & CONTACT DETAILS*
+          </div>
+          <TextInput
+            register={register}
+            error={errors.email?.message}
+            name="email"
+            addtlClass="col-span-2"
+            placeholder="email"
+          />
+          <PasswordInput
+            register={register}
+            error={errors.password?.message}
+            name="password"
+            placeholder="password"
+          />
+          <PasswordInput
+            register={register}
+            error={errors.confirm_password?.message}
+            name="confirm_password"
+            placeholder="confirm password"
+          />
+          <TextInput
+            register={register}
+            error={errors.contact_no?.message}
+            name="contact_no"
+            addtlClass="col-span-2"
+            placeholder="contact number"
+          />
+          <div className="col-span-2 text-xl font-bold">CLASSIFICATION*</div>
+          <SelectInput
+            register={register}
+            error={errors.classification?.message}
+            addtlClass="col-span-2"
+            name="classification"
+          >
+            <option value="student">Student</option>
+            <option value="faculty/staff">Faculty/Staff</option>
+          </SelectInput>
+          {createAccError ? (
+            <div className="col-span-2 place-self-center text-red-500 font-semibold mb-3">
+              {createAccError}
+            </div>
+          ) : (
+            <></>
+          )}
+          <button
+            type="submit"
+            className="col-span-2 w-48 px-10 py-1 font-bold leading-tight place-self-center bg-cream rounded-full text-lg hover:opacity-75"
+          >
+            create your account
+          </button>
+          <p className="col-span-2 place-self-center mt-3">
+            {"have an account? "}
+            <Link href="/login" className="font-bold underline">
+              log in
+            </Link>
+          </p>
+        </form>
+      </Layout>
     </>
   );
 }
