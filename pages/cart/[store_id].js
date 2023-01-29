@@ -47,6 +47,7 @@ export default function StoreCartPage({ id }) {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
   const cart = useCart((state) => state.getCartStore(router.query.store_id));
+  const removeItemFromCart = useCart((state) => state.removeItemFromCart);
   const removeStoreFromCart = useCart((state) => state.removeStoreFromCart);
   const [buildings, setBuildings] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -134,21 +135,28 @@ export default function StoreCartPage({ id }) {
         .select()
         .single();
       if (insertOrderItem.error) throw insertOrder.error;
-      const insertOrderItemOptions = await supabaseClient
-        .from("order_item_options")
-        .insert(
-          item.options.map((option) => {
-            return {
-              option_id: option.id,
-              order_item_id: insertOrderItem.data.id,
-            };
-          })
-        );
-      if (insertOrderItemOptions.error) throw insertOrderItemOptions.error;
+      if (item.options) {
+        console.log(item.options);
+        const insertOrderItemOptions = await supabaseClient
+          .from("order_item_options")
+          .insert(
+            item.options.map((option) => {
+              return {
+                option_id: option.id,
+                order_item_id: insertOrderItem.data.id,
+              };
+            })
+          );
+        if (insertOrderItemOptions.error) throw insertOrderItemOptions.error;
+      }
     });
     router
       .push(`/orders/c/${insertOrder.data.id}`)
       .then(() => removeStoreFromCart(router.query.store_id));
+  };
+
+  const removeItem = (item_index) => {
+    removeItemFromCart({ id: router.query.store_id, item_index: item_index });
   };
 
   return (
@@ -181,8 +189,17 @@ export default function StoreCartPage({ id }) {
                 ))}
               </div>
               <div className="text-dark font-semibold justify-self-end">
-                {item.price.toFixed(2)}
+                {item.price?.toFixed(2)}
               </div>
+              {cart.items.length !== 1 && (
+                <button
+                  type="button"
+                  className="place-self-end w-fit col-span-3 underline text-maroon"
+                  onClick={() => removeItem(index)}
+                >
+                  remove from cart
+                </button>
+              )}
             </div>
           ))}
           <div className="grid grid-cols-2 m-2 border-t-2 border-cream">
