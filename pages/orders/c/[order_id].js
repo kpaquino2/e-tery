@@ -136,13 +136,13 @@ export default function OrderStatusPage({ order, items }) {
                           }
                         : states.indexOf(orderStatus) === index && {
                             background: [
-                              "linear-gradient(to right, #26B0BA -200%, #197278 -100%, #26B0BA 0%, #197278 100%)",
-                              "linear-gradient(to right, #26B0BA -100%, #197278 0%, #26B0BA 100%, #197278 200%)",
-                              "linear-gradient(to right, #26B0BA 0%, #197278 100%, #26B0BA 200%, #197278 300%)",
+                              "linear-gradient(to right, #26B0BA -200%, #BBEEF1 -100%, #26B0BA 0%, #BBEEF1 100%)",
+                              "linear-gradient(to right, #26B0BA -100%, #BBEEF1 0%, #26B0BA 100%, #BBEEF1 200%)",
+                              "linear-gradient(to right, #26B0BA 0%, #BBEEF1 100%, #26B0BA 200%, #BBEEF1 300%)",
                             ],
                             transition: {
                               repeat: Infinity,
-                              duration: 3,
+                              duration: 2,
                             },
                           }
                     }
