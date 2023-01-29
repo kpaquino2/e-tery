@@ -6,7 +6,7 @@ import Layout from "../../components/layout/Layout";
 import useCart from "../../lib/cart";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FaClock, FaMapMarkerAlt } from "react-icons/fa";
+import { FaChevronLeft, FaClock, FaMapMarkerAlt } from "react-icons/fa";
 import { useEffect, useMemo, useState } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import SelectInputAlt from "../../components/forms/SelectInputAlt";
@@ -154,9 +154,19 @@ export default function StoreCartPage({ id }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Layout title={cart?.name}>
+        <button
+          type="button"
+          className="absolute top-24 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20"
+          onClick={() => router.back()}
+        >
+          <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
+        </button>
         <div className="mx-2 pb-20">
-          <p className="text-3xl font-bold text-dark text-center my-2">
-            {cart?.name} - Cart
+          <p className="text-5xl font-bold text-dark text-center my-2">
+            My Cart
+          </p>
+          <p className="text-3xl font-bold text-dark text-center my-2 mx-12">
+            {cart?.name}
           </p>
           <div className="text-xl font-semibold">Order Summary</div>
           {cart?.items.map((item, index) => (

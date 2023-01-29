@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CheckboxInput from "../../../../components/forms/CheckboxInput";
 import { useEffect } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaChevronLeft } from "react-icons/fa";
 import useCart from "../../../../lib/cart";
 import { useRouter } from "next/router";
 
@@ -128,6 +128,13 @@ export default function StoreItemPage({ store, item }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} onChange={onChange}>
       <Layout title={item.name}>
+        <button
+          type="button"
+          className="absolute top-28 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20 bg-cream"
+          onClick={() => router.back()}
+        >
+          <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
+        </button>
         <Banner url={`items/${store.id}/${item.id}`} />
         <div className="grid grid-cols-2 mx-6 gap-2 pb-20">
           <div className="font-bold text-4xl mt-4">{item.name}</div>

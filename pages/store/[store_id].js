@@ -5,8 +5,11 @@ import Banner from "../../components/vendor/Banner";
 import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
 import { useRef } from "react";
+import { FaChevronLeft } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 export default function StorePage({ store }) {
+  const router = useRouter();
   const categoryRefs = useRef([]);
   const [sliderRef] = useKeenSlider({
     mode: "free-snap",
@@ -27,6 +30,13 @@ export default function StorePage({ store }) {
   return (
     <>
       <Layout title={store.name}>
+        <button
+          type="button"
+          className="absolute top-28 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20 bg-cream"
+          onClick={() => router.back()}
+        >
+          <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
+        </button>
         <div className="flex flex-col items-center">
           <Banner url={`banners/${store.id}`} />
           <div className="font-bold text-4xl m-auto">{store.name}</div>

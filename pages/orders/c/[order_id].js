@@ -2,8 +2,9 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
+import { FaChevronLeft, FaStar } from "react-icons/fa";
 import Layout from "../../../components/layout/Layout";
 
 const bar = {
@@ -57,6 +58,7 @@ export default function OrderStatusPage({ order, items }) {
     ],
     shipped: ["Your order has been picked up", "It is now out for delivery"],
   };
+  const router = useRouter();
 
   const [rated, setRated] = useState(order.order_rating);
   const [rating, setRating] = useState(0);
@@ -96,6 +98,16 @@ export default function OrderStatusPage({ order, items }) {
   return (
     <>
       <Layout title="Order Status">
+        <button
+          type="button"
+          className="absolute top-24 left-4 rounded-full p-1"
+          onClick={() => router.back()}
+        >
+          <FaChevronLeft className="text-3xl text-maroon" />
+        </button>
+        <p className="text-5xl font-bold text-dark text-center my-2">
+          Order Status
+        </p>
         <div className="m-4 p-4 bg-cream rounded-lg">
           <div className="grid grid-flow-col">
             {states.map((state, index) => (
