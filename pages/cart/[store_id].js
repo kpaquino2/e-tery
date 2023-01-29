@@ -155,7 +155,12 @@ export default function StoreCartPage({ id }) {
   };
 
   const removeItem = (item) => {
-    removeItemFromCart(router.query.store_id, item);
+    if (cart.items.length > 1) {
+      removeItemFromCart(router.query.store_id, item);
+      return;
+    }
+    removeStoreFromCart(router.query.store_id);
+    router.back();
   };
 
   return (
@@ -190,15 +195,13 @@ export default function StoreCartPage({ id }) {
               <div className="text-dark font-semibold justify-self-end">
                 {item.price?.toFixed(2)}
               </div>
-              {cart.items.length !== 1 && (
-                <button
-                  type="button"
-                  className="place-self-end w-fit col-span-3 underline text-maroon"
-                  onClick={() => removeItem(item)}
-                >
-                  remove from cart
-                </button>
-              )}
+              <button
+                type="button"
+                className="place-self-end w-fit col-span-3 underline text-maroon"
+                onClick={() => removeItem(item)}
+              >
+                remove from cart
+              </button>
             </div>
           ))}
           <div className="grid grid-cols-2 m-2 border-t-2 border-cream">
