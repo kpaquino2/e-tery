@@ -41,7 +41,7 @@ export default function StoreCartPage({ id }) {
       building: 1,
       room: 1,
       when: "now",
-      time: times[0].from.format("HH:mm:ss"),
+      time: times?.[0].from.format("HH:mm:ss"),
     },
   });
   const supabaseClient = useSupabaseClient();
