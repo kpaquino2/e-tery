@@ -117,7 +117,6 @@ export default function StoreItemPage({ store, item }) {
             .flat(1)
         ),
     };
-    console.log(order_item);
     addToCart({ ...store, order_item });
     router.back();
   };
