@@ -154,8 +154,8 @@ export default function StoreCartPage({ id }) {
       .then(() => removeStoreFromCart(router.query.store_id));
   };
 
-  const removeItem = (item_index, item_price) => {
-    removeItemFromCart(router.query.store_id, item_index, item_price);
+  const removeItem = (item) => {
+    removeItemFromCart(router.query.store_id, item);
   };
 
   return (
@@ -194,7 +194,7 @@ export default function StoreCartPage({ id }) {
                 <button
                   type="button"
                   className="place-self-end w-fit col-span-3 underline text-maroon"
-                  onClick={() => removeItem(index, item.price)}
+                  onClick={() => removeItem(item)}
                 >
                   remove from cart
                 </button>
