@@ -20,7 +20,7 @@ export default function Item({ vendor_id, data }) {
     <div
       className={
         "w-full py-1 drop-shadow-lg break-inside-avoid " +
-        (itemAvailable ? "" : "opacity-50")
+        (!itemAvailable && "opacity-50")
       }
     >
       <div className="relative">
