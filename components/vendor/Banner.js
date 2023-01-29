@@ -2,24 +2,19 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function Banner({ url }) {
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [imgSrc, setImgSrc] = useState(url);
 
   return (
     <>
-      <div
-        className={
-          "relative top-0 left-0 right-0 w-full flex justify-center " +
-          (isLoaded ? "" : "hidden")
-        }
-      >
+      <div className="relative top-0 left-0 right-0 w-full flex justify-center ">
         <span className="absolute w-full h-1/2 bg-maroon" />
         <Image
           className="bg-cream clip-banner drop-shadow-2xl"
-          src={url}
+          src={imgSrc}
           alt="banner"
           width={600}
           height={300}
-          onError={() => setIsLoaded(false)}
+          onError={() => setImgSrc("graphics/default.png")}
         />
       </div>
     </>
