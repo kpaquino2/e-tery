@@ -15,25 +15,24 @@ import useCart from "../../../../lib/cart";
 import { useRouter } from "next/router";
 
 const schema = yup.object({
-  variants: yup.array(
+  radio_variants: yup.array(
+    yup.object({
+      selected_option: yup.number(),
+    })
+  ),
+  checkbox_variants: yup.array(
     yup
       .object({
-        optional: yup.boolean(),
         select: yup.number(),
-        options: yup.array(
-          yup.object({
-            id: yup.string(),
-            addtl_price: yup.number(),
-            checked: yup.boolean(),
-          })
-        ),
+        optional: yup.boolean(),
+        options: yup.array(yup.boolean()),
       })
       .test("count-checked", (value) =>
-        value.optional
-          ? value.select >=
-            value.options.map((v) => Number(v.checked)).reduce((a, b) => a + b)
-          : value.select ===
-            value.options.map((v) => Number(v.checked)).reduce((a, b) => a + b)
+        value?.optional
+          ? value?.select >=
+            value?.options.map((v) => Number(v)).reduce((a, b) => a + b)
+          : value?.select ===
+            value?.options.map((v) => Number(v)).reduce((a, b) => a + b)
       )
   ),
 });
@@ -54,30 +53,18 @@ export default function StoreItemPage({ store, item }) {
 
   useEffect(() => {
     for (let i = 0; i < item.item_variants.length; i++) {
-      register(`variants.${i}.optional`);
-      setValue(`variants.${i}.optional`, item.item_variants[i].optional);
-      register(`variants.${i}.select`);
-      setValue(`variants.${i}.select`, item.item_variants[i].select);
-      for (let j = 0; j < item.item_variants[i].item_options.length; j++) {
-        register(`variants.${i}.options.${j}.id`);
-        setValue(
-          `variants.${i}.options.${j}.id`,
-          item.item_variants[i].item_options[j].id
-        );
-        register(`variants.${i}.options.${j}.name`);
-        setValue(
-          `variants.${i}.options.${j}.name`,
-          item.item_variants[i].item_options[j].name
-        );
-        register(`variants.${i}.options.${j}.addtl_price`);
-        setValue(
-          `variants.${i}.options.${j}.addtl_price`,
-          item.item_variants[i].item_options[j].addtl_price
-        );
-      }
+      if (!item.item_variants[i].optional && item.item_variants[i].select === 1)
+        continue;
+      register(`checkbox_variants.${i}.optional`);
+      setValue(
+        `checkbox_variants.${i}.optional`,
+        item.item_variants[i].optional
+      );
+      register(`checkbox_variants.${i}.select`);
+      setValue(`checkbox_variants.${i}.select`, item.item_variants[i].select);
     }
     trigger();
-  }, [register, setValue, trigger, item]);
+  }, [trigger, item, register, setValue]);
 
   const subtract = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -90,10 +77,21 @@ export default function StoreItemPage({ store, item }) {
   const onSubmit = (data) => {
     const final_price =
       item.base_price +
-      data.variants
-        .map((variant) =>
+      data.radio_variants
+        .map(
+          (variant, index) =>
+            item.item_variants[index].item_options[variant.selected_option]
+              .addtl_price
+        )
+        .reduce((a, b) => a + b) +
+      +data.checkbox_variants
+        .map((variant, index) =>
           variant.options
-            .map((option) => (option.checked ? option.addtl_price : 0))
+            .map((option, idx) =>
+              option
+                ? item.item_variants[index].item_options[idx].addtl_price
+                : 0
+            )
             .reduce((a, b) => a + b)
         )
         .reduce((a, b) => a + b);
@@ -102,21 +100,34 @@ export default function StoreItemPage({ store, item }) {
       item_name: item.name,
       quantity: quantity,
       price: final_price * quantity,
-      options: data.variants
-        .map((variant) => variant.options.filter((option) => option.checked))
-        .flat(1),
+      options: data.checkbox_variants
+        .map((variant, index) =>
+          variant.options.map(
+            (option, idx) =>
+              option && item.item_variants[index].item_options[idx]
+          )
+        )
+        .flat(1)
+        .concat(
+          data.radio_variants
+            .map(
+              (variant, index) =>
+                item.item_variants[index].item_options[variant.selected_option]
+            )
+            .flat(1)
+        ),
     };
-
+    console.log(order_item);
     addToCart({ ...store, order_item });
     router.back();
   };
 
-  const onBlur = () => {
+  const onChange = () => {
     trigger();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} onChange={onBlur}>
+    <form onSubmit={handleSubmit(onSubmit)} onChange={onChange}>
       <Layout title={item.name}>
         <Banner url={`items/${store.id}/${item.id}`} />
         <div className="grid grid-cols-2 mx-6 gap-2 pb-20">
@@ -132,11 +143,14 @@ export default function StoreItemPage({ store, item }) {
                 {variant.name}
               </div>
               <div className="justify-self-end">
-                {Object.keys(errors).length || variant.optional ? (
-                  <></>
-                ) : (
-                  <FaCheck className="text-teal mt-1" />
-                )}
+                {!variant.optional &&
+                  ((variant.select > 1 &&
+                    !errors.checkbox_variants?.[index]?.message && (
+                      <FaCheck className="text-teal" />
+                    )) ||
+                    (variant.select == 1 && !errors.radio_variants?.[index] && (
+                      <FaCheck className="text-teal" />
+                    )))}
               </div>
               <span className="col-span-2 text-sm leading-tight">
                 {variant.optional
@@ -144,7 +158,7 @@ export default function StoreItemPage({ store, item }) {
                   : " Pick " + variant.select}
               </span>
               {variant.item_options.map((option, idx) => {
-                if (variant.optional && variant.select === 1)
+                if (!variant.optional && variant.select === 1)
                   return (
                     <>
                       <label
@@ -155,9 +169,9 @@ export default function StoreItemPage({ store, item }) {
                         <RadioInput
                           id={option.id}
                           size={5}
-                          value={true}
+                          value={idx}
                           register={register}
-                          name={`variants.${index}.options.${idx}.checked`}
+                          name={`radio_variants.${index}.selected_option`}
                         />
                         <div className="">{option.name}</div>
                       </label>
@@ -178,7 +192,7 @@ export default function StoreItemPage({ store, item }) {
                         size={5}
                         value={true}
                         register={register}
-                        name={`variants.${index}.options.${idx}.checked`}
+                        name={`checkbox_variants.${index}.options.${idx}`}
                       />
                       <div className="">{option.name}</div>
                     </label>
