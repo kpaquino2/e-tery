@@ -155,11 +155,7 @@ export default function StoreCartPage({ id }) {
   };
 
   const removeItem = (item_index, item_price) => {
-    removeItemFromCart({
-      id: router.query.store_id,
-      item_index: item_index,
-      item_price,
-    });
+    removeItemFromCart(router.query.store_id, item_index, item_price);
   };
 
   return (
