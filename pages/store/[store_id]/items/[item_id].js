@@ -105,10 +105,9 @@ export default function StoreItemPage({ store, item }) {
       price: final_price * quantity,
       options: data.checkbox_variants
         ?.map((variant, index) =>
-          variant.options.map(
-            (option, idx) =>
-              option && item.item_variants[index].item_options[idx]
-          )
+          variant.options
+            .filter((option) => option)
+            .map((option, idx) => item.item_variants[index].item_options[idx])
         )
         .flat(1)
         .concat(
@@ -120,6 +119,7 @@ export default function StoreItemPage({ store, item }) {
             .flat(1)
         ),
     };
+    console.log(order_item);
     addToCart({ ...store, order_item });
     router.back();
   };
