@@ -19,20 +19,21 @@ export default function CartPage() {
           <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
         </button>
         <p className="text-5xl font-bold text-dark text-center my-2">My Cart</p>
-        {cart.map((store, index) => (
-          <Link
-            href={`cart/${store.id}`}
-            key={index}
-            className="m-2 p-4 rounded-xl border-b-2 bg-teal text-cream"
-          >
-            <div className="text-lg font-bold">{store.name}</div>
-            <span>
-              {store.items.length +
-                " item" +
-                (store.items.length > 1 ? "s" : "")}
-            </span>
-          </Link>
-        ))}
+        {cart.map((store, index) => {
+          const qty = store.items
+            .map((item) => item.quantity)
+            .reduce((a, b) => a + b);
+          return (
+            <Link
+              href={`cart/${store.id}`}
+              key={index}
+              className="m-2 p-4 rounded-xl border-b-2 bg-teal text-cream"
+            >
+              <div className="text-lg font-bold">{store.name}</div>
+              <span>{qty + " item" + (qty > 1 ? "s" : "")}</span>
+            </Link>
+          );
+        })}
       </Layout>
     </>
   );
