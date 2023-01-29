@@ -97,7 +97,7 @@ export default function StoreItemPage({ store, item }) {
           )
           .reduce((a, b) => a + b) ?? 0
       );
-    console.log(final_price);
+
     const order_item = {
       item_id: item.id,
       item_name: item.name,

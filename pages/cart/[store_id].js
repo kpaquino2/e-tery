@@ -136,7 +136,6 @@ export default function StoreCartPage({ id }) {
         .single();
       if (insertOrderItem.error) throw insertOrder.error;
       if (item.options) {
-        console.log(item.options);
         const insertOrderItemOptions = await supabaseClient
           .from("order_item_options")
           .insert(
