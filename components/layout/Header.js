@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 max-w-[450px] w-screen left-1/2 -translate-x-1/2 m-auto bg-maroon z-30 overflow-x-clip">
+      <header className="fixed top-0 max-w-[450px] w-screen left-1/2 -translate-x-1/2 m-auto bg-maroon z-30">
         <div className="flex justify-between items-center px-3 h-20">
           {acctType === "customer" ? (
             <CustomerNav customer_id={user?.id} />
