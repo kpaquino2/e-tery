@@ -152,7 +152,7 @@ export default function VendorNav({ vendor_id }) {
         >
           ORDERS
         </Link>
-        <button onClick={openMenu} className="rounded-full">
+        <button type="button" onClick={openMenu} className="rounded-full">
           <TiThMenu
             className={(isMenuOpen ? "text-dark" : "text-cream") + " w-7 h-7"}
           />

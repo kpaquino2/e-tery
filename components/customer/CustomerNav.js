@@ -32,7 +32,7 @@ export default function CustomerNav({ customer_id }) {
             )}
           </div>
         </Link>
-        <button onClick={openMenu} className="rounded-full">
+        <button type="button" onClick={openMenu} className="rounded-full">
           <TiThMenu
             className={(isMenuOpen ? "text-dark" : "text-cream") + " text-3xl"}
           />
