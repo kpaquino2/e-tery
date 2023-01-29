@@ -8,7 +8,7 @@ export default function StoreItem({ vendor_id, data }) {
     <div
       className={
         "drop-shadow w-full py-1 break-inside-avoid " +
-        (!data.available && "opacity-50")
+        (!data.available && "opacity-50 pointer-events-none")
       }
     >
       <Link href={`${vendor_id}/items/${data.id}`}>
