@@ -77,31 +77,34 @@ export default function StoreItemPage({ store, item }) {
   const onSubmit = (data) => {
     const final_price =
       item.base_price +
-      data.radio_variants
-        .map(
+      (data.radio_variants
+        ?.map(
           (variant, index) =>
             item.item_variants[index].item_options[variant.selected_option]
               .addtl_price
         )
-        .reduce((a, b) => a + b) +
-      +data.checkbox_variants
-        .map((variant, index) =>
-          variant.options
-            .map((option, idx) =>
-              option
-                ? item.item_variants[index].item_options[idx].addtl_price
-                : 0
-            )
-            .reduce((a, b) => a + b)
-        )
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => a + b) ?? 0) +
+      +(
+        data.checkbox_variants
+          ?.map((variant, index) =>
+            variant.options
+              .map((option, idx) =>
+                option
+                  ? item.item_variants[index].item_options[idx].addtl_price
+                  : 0
+              )
+              .reduce((a, b) => a + b)
+          )
+          .reduce((a, b) => a + b) ?? 0
+      );
+    console.log(final_price);
     const order_item = {
       item_id: item.id,
       item_name: item.name,
       quantity: quantity,
       price: final_price * quantity,
       options: data.checkbox_variants
-        .map((variant, index) =>
+        ?.map((variant, index) =>
           variant.options.map(
             (option, idx) =>
               option && item.item_variants[index].item_options[idx]
@@ -110,7 +113,7 @@ export default function StoreItemPage({ store, item }) {
         .flat(1)
         .concat(
           data.radio_variants
-            .map(
+            ?.map(
               (variant, index) =>
                 item.item_variants[index].item_options[variant.selected_option]
             )

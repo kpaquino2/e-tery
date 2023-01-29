@@ -174,7 +174,7 @@ export default function StoreCartPage({ id }) {
               <div className="text-maroon font-semibold">{item.quantity}x</div>
               <div className="flex flex-col">
                 <span className="font-semibold">{item.item_name}</span>
-                {item.options.map((option, index) => (
+                {item.options?.map((option, index) => (
                   <div key={index} className="text-sm">
                     {option.name}
                   </div>
