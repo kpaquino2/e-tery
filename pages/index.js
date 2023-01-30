@@ -5,7 +5,13 @@ import Welcome from "../components/Welcome";
 import { useEffect, useState } from "react";
 import VendorHome from "../components/vendor/VendorHome";
 
-export default function Home({ id, acct_type, stores, vendor_data }) {
+export default function Home({
+  id,
+  acct_type,
+  stores,
+  vendor_data,
+  favorites,
+}) {
   const [welcomed, setWelcomed] = useState(true);
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("accounts_welcomed"));
@@ -32,7 +38,7 @@ export default function Home({ id, acct_type, stores, vendor_data }) {
       )}
       <Layout title="Home">
         {acct_type === "customer" ? (
-          <CustomerHome stores={stores} />
+          <CustomerHome stores={stores} favorites={favorites} />
         ) : (
           <VendorHome id={id} data={vendor_data} />
         )}
@@ -57,7 +63,19 @@ export const getServerSideProps = async (ctx) => {
       .from("vendors")
       .select("id,name,rating,price_range")
       .eq("open", true);
-    return { props: { id: session?.user.id, acct_type, stores } };
+    const { data: favoriteItemsId } = await supabase
+      .from("favorites")
+      .select("item_id");
+    const { data: favorites } = await supabase
+      .from("items")
+      .select("id, name, base_price, description, vendor_id, available")
+      .in(
+        "id",
+        favoriteItemsId.map((item) => item.item_id)
+      );
+    return {
+      props: { id: session?.user.id, acct_type, stores, favorites },
+    };
   }
   const {
     data: [vendor_data],
