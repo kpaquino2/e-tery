@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import moment from "moment";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaChevronLeft } from "react-icons/fa";
 import Layout from "../../../components/layout/Layout";
@@ -20,12 +21,12 @@ export default function OrderPage({ order, items, customer }) {
   const buttons = {
     pending: (
       <div className="grid grid-cols-2 gap-4">
-        <button
-          onClick={() => updateOrder("cancelled")}
-          className="bg-maroon text-light font-bold rounded-full"
+        <Link
+          href={`${order.id}/decline`}
+          className="bg-maroon text-light font-bold rounded-full text-center"
         >
           DECLINE
-        </button>
+        </Link>
         <button
           onClick={() => updateOrder("accepted")}
           className="bg-teal text-light font-bold rounded-full"
@@ -36,12 +37,12 @@ export default function OrderPage({ order, items, customer }) {
     ),
     accepted: (
       <div className="grid grid-cols-2 gap-4">
-        <button
-          onClick={() => updateOrder("cancelled")}
-          className="bg-maroon text-light font-bold rounded-full"
+        <Link
+          href={`${order.id}/decline`}
+          className="bg-maroon text-light font-bold rounded-full text-center"
         >
           CANCEL
-        </button>
+        </Link>
         <button
           onClick={() => updateOrder("prepared")}
           className="bg-teal text-light font-bold rounded-full"

@@ -164,7 +164,7 @@ export default function OrderStatusPage({ order, items }) {
               </div>
             ))}
           </div>
-          {orderStatus !== "completed" ? (
+          {orderStatus !== "completed" && orderStatus !== "cancelled" ? (
             <div>
               <Image
                 src={`graphics/${orderStatus}.png`}
@@ -190,7 +190,7 @@ export default function OrderStatusPage({ order, items }) {
                 </button>
               )}
             </div>
-          ) : (
+          ) : orderStatus === "completed" ? (
             <div>
               <div className="text-xl font-bold text-center text-dark">
                 Order has been received
@@ -238,6 +238,15 @@ export default function OrderStatusPage({ order, items }) {
                 </>
               )}
             </div>
+          ) : (
+            <div>
+              <div className="text-xl font-bold text-center text-dark">
+                Your order has been cancelled.
+              </div>
+              <div className="font-semibold text-center text-dark">
+                {order.decline_reason}
+              </div>
+            </div>
           )}
         </div>
         <div className="bg-cream mx-4 mb-4 p-4 rounded-lg">
@@ -282,7 +291,7 @@ export const getServerSideProps = async (ctx) => {
   const { data } = await supabase
     .from("orders")
     .select(
-      "id, total, status, payment_option, delivery_option, time, status, room_id, note, customer_id, vendor_id, order_rating, order_items (id, item_id, quantity, price, order_item_options (option_id))"
+      "id, total, status, payment_option, delivery_option, time, status, room_id, note, customer_id, vendor_id, order_rating, decline_reason, order_items (id, item_id, quantity, price, order_item_options (option_id))"
     )
     .eq("id", ctx.params.order_id)
     .single();
