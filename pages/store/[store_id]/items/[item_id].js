@@ -176,6 +176,11 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
           </div>
           <div className="col-span-2">{item.description}</div>
           <div className="bg-cream h-1 col-span-2 rounded-full" />
+          {!store.open && (
+            <div className="col-span-2 text-center text-lg font-semibold text-maroon">
+              The store is closed.
+            </div>
+          )}
           {item.item_variants.map((variant, index) => (
             <>
               <div key={index} className="text-xl font-semibold leading-none">
@@ -266,7 +271,7 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
           </div>
           <button
             className="bg-teal my-2 rounded-full text-xl font-bold text-light disabled:grayscale"
-            disabled={Object.keys(errors).length}
+            disabled={Object.keys(errors).length || !store.open}
           >
             ADD TO CART
           </button>
