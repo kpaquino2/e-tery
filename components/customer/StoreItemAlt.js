@@ -7,19 +7,22 @@ export default function StoreItemAlt({ vendor_id, data }) {
   return (
     <div
       className={
-        "drop-shadoww-full py-1 break-inside-avoid " +
+        "drop-shadoww-full h-full py-1 break-inside-avoid " +
         (!data.available && "opacity-50 pointer-events-none")
       }
     >
-      <Link className="flex h-24" href={`/store/${vendor_id}/items/${data.id}`}>
+      <Link
+        className="flex h-full"
+        href={`/store/${vendor_id}/items/${data.id}`}
+      >
         <Image
           className={
             "rounded-l-2xl bg-cream " + (isImageLoaded ? "" : "hidden")
           }
           src={`items/${vendor_id}/${data.id}`}
           alt=""
-          width={96}
-          height={96}
+          width={112}
+          height={112}
           onError={() => setisImageLoaded(false)}
         />
         <div
