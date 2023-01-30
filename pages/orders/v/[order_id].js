@@ -36,13 +36,7 @@ export default function OrderPage({ order, items, customer }) {
       </div>
     ),
     accepted: (
-      <div className="grid grid-cols-2 gap-4">
-        <Link
-          href={`${order.id}/decline`}
-          className="bg-maroon text-light font-bold rounded-full text-center"
-        >
-          CANCEL
-        </Link>
+      <div className="grid gap-4">
         <button
           onClick={() => updateOrder("prepared")}
           className="bg-teal text-light font-bold rounded-full"
@@ -72,9 +66,9 @@ export default function OrderPage({ order, items, customer }) {
         Waiting for customer to receive their order...
       </div>
     ),
-    cancelled: (
+    declined: (
       <div className="grid font-semibold text-base text-center">
-        This order has been cancelled.
+        This order has been declined.
       </div>
     ),
   };

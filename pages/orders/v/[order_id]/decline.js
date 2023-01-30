@@ -28,7 +28,7 @@ export default function DeclinePage({ items }) {
 
     const { error: statusError } = await supabaseClient
       .from("orders")
-      .update({ status: "cancelled", decline_reason: "Unavailable item/s" })
+      .update({ status: "declined", decline_reason: "Unavailable item/s" })
       .eq("id", router.query.order_id);
 
     if (!statusError) router.back();
@@ -37,7 +37,7 @@ export default function DeclinePage({ items }) {
   const declineOrder = async (reason) => {
     const { error: statusError } = await supabaseClient
       .from("orders")
-      .update({ status: "cancelled", decline_reason: reason })
+      .update({ status: "declined", decline_reason: reason })
       .eq("id", router.query.order_id);
 
     if (!statusError) router.back();

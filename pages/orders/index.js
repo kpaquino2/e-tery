@@ -14,7 +14,7 @@ export default function OrdersPage({ orders, acct_type }) {
     accepted: "bg-blue-400 text-blue-900",
     prepared: "bg-amber-400 text-amber-900",
     shipped: "bg-purple-400 text-purple-900",
-    cancelled: "bg-red-400 text-red-900",
+    declined: "bg-red-400 text-red-900",
   };
   const router = useRouter();
 

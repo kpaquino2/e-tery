@@ -164,7 +164,7 @@ export default function OrderStatusPage({ order, items }) {
               </div>
             ))}
           </div>
-          {orderStatus !== "completed" && orderStatus !== "cancelled" ? (
+          {orderStatus !== "completed" && orderStatus !== "declined" ? (
             <div>
               <Image
                 src={`graphics/${orderStatus}.png`}
@@ -241,7 +241,7 @@ export default function OrderStatusPage({ order, items }) {
           ) : (
             <div>
               <div className="text-xl font-bold text-center text-dark">
-                Your order has been cancelled.
+                Your order has been declined.
               </div>
               <div className="font-semibold text-center text-dark">
                 {order.decline_reason}
