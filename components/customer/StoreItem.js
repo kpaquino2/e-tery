@@ -11,7 +11,7 @@ export default function StoreItem({ vendor_id, data }) {
         (!data.available && "opacity-50 pointer-events-none")
       }
     >
-      <Link href={`${vendor_id}/items/${data.id}`}>
+      <Link href={`/store/${vendor_id}/items/${data.id}`}>
         <Image
           className={
             "rounded-t-2xl bg-cream " + (isImageLoaded ? "" : "hidden")
