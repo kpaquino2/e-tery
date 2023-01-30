@@ -7,7 +7,16 @@ export default function Layout({ title, children }) {
       <Head>
         <title>{title ? title + " | E-TERY" : "E-TERY"}</title>
         <meta name="description" content="delivery web app" />
-        <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="icon"
+          href="/logo.png"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          href="/logo-light.png"
+          media="(prefers-color-scheme: dark)"
+        />
       </Head>
       <Header />
       <div className="relative flex flex-col min-h-screen max-w-[450px] m-auto shadow-lg bg-light">
