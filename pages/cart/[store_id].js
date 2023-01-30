@@ -33,6 +33,7 @@ const getTimes = () => {
 };
 
 export default function StoreCartPage({ id, open }) {
+  console.log(open);
   const times = useMemo(() => getTimes(), []);
   const { register, watch, handleSubmit } = useForm({
     resolver: yupResolver(schema),
@@ -358,7 +359,8 @@ export const getServerSideProps = async (ctx) => {
   const { data: open } = await supabase
     .from("vendors")
     .select("open")
-    .eq("id", ctx.params.store_id);
+    .eq("id", ctx.params.store_id)
+    .single();
 
-  return { props: { id: session?.user.id, open } };
+  return { props: { id: session?.user.id, open: open.open } };
 };
