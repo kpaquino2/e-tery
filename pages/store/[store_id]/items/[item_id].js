@@ -10,9 +10,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CheckboxInput from "../../../../components/forms/CheckboxInput";
 import { useEffect } from "react";
-import { FaCheck, FaChevronLeft } from "react-icons/fa";
+import { FaCheck, FaChevronLeft, FaHeart, FaRegHeart } from "react-icons/fa";
 import useCart from "../../../../lib/cart";
 import { useRouter } from "next/router";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const schema = yup.object({
   radio_variants: yup.array(
@@ -37,7 +38,7 @@ const schema = yup.object({
   ),
 });
 
-export default function StoreItemPage({ store, item }) {
+export default function StoreItemPage({ customer_id, store, item, favorite }) {
   const {
     register,
     handleSubmit,
@@ -48,8 +49,10 @@ export default function StoreItemPage({ store, item }) {
     resolver: yupResolver(schema),
   });
   const [quantity, setQuantity] = useState(1);
+  const [fav, setFav] = useState(Boolean(favorite));
   const addToCart = useCart((state) => state.addToCart);
   const router = useRouter();
+  const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
     for (let i = 0; i < item.item_variants.length; i++) {
@@ -128,15 +131,43 @@ export default function StoreItemPage({ store, item }) {
     trigger();
   };
 
+  const clickHeart = async () => {
+    if (!fav) {
+      const { error } = await supabaseClient
+        .from("favorites")
+        .insert({ item_id: item.id, customer_id: customer_id });
+      if (error) console.error(error.message);
+      setFav(true);
+      return;
+    }
+    const { error } = await supabaseClient
+      .from("favorites")
+      .delete()
+      .eq("item_id", item.id);
+    if (error) console.error(error.message);
+    setFav(false);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} onChange={onChange}>
       <Layout title={item.name}>
         <button
           type="button"
-          className="absolute top-28 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20 bg-cream"
+          className="absolute top-32 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20 bg-cream"
           onClick={() => router.back()}
         >
           <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
+        </button>
+        <button
+          type="button"
+          className="absolute top-32 right-4 rounded-full pt-2.5 pb-1.5 px-2 z-20 bg-cream"
+          onClick={clickHeart}
+        >
+          {fav ? (
+            <FaHeart className="text-3xl text-maroon drop-shadow-lg" />
+          ) : (
+            <FaRegHeart className="text-3xl text-maroon drop-shadow-lg" />
+          )}
         </button>
         <Banner url={`items/${store.id}/${item.id}`} />
         <div className="grid grid-cols-2 mx-6 gap-2 pb-20">
@@ -262,6 +293,24 @@ export const getServerSideProps = async (ctx) => {
     .eq("id", ctx.params.item_id)
     .single();
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   if (!itemData) return { notFound: true };
-  return { props: { store: storeData, item: itemData } };
+
+  const { data: favoriteData } = await supabase
+    .from("favorites")
+    .select("customer_id, item_id")
+    .eq("item_id", itemData.id)
+    .single();
+
+  return {
+    props: {
+      customer_id: session?.user.id,
+      store: storeData,
+      item: itemData,
+      favorite: favoriteData,
+    },
+  };
 };
