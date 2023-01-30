@@ -24,7 +24,7 @@ export default function DeclinePage({ items }) {
         Object.keys(data).filter((d) => data[d])
       );
 
-    if (unavailableError) console.error(error.message);
+    if (unavailableError) console.error(unavailableError.message);
 
     const { error: statusError } = await supabaseClient
       .from("orders")
@@ -41,6 +41,22 @@ export default function DeclinePage({ items }) {
       .eq("id", router.query.order_id);
 
     if (!statusError) router.back();
+  };
+
+  const setStoreClosed = async () => {
+    const { error: statusError } = await supabaseClient
+      .from("orders")
+      .update({ status: "declined", decline_reason: "Store is closed" })
+      .eq("id", router.query.order_id);
+
+    if (statusError) console.error(statusError.message);
+
+    const { error: closedError } = await supabaseClient
+      .from("vendors")
+      .update({ open: false })
+      .eq("open", true);
+
+    if (!closedError) router.back();
   };
 
   return (
@@ -112,7 +128,7 @@ export default function DeclinePage({ items }) {
             <button
               type="button"
               className="bg-cream grid grid-cols-[1fr_4fr] rounded-2xl items-center p-5 text-maroon"
-              onClick={() => declineOrder("Store is closed")}
+              onClick={() => setStoreClosed()}
             >
               <TbDoor className="text-5xl place-self-center" />
               <p className="text-2xl font-bold">store closed</p>
