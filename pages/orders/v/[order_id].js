@@ -4,6 +4,7 @@ import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaChevronLeft } from "react-icons/fa";
+import { TiStarFullOutline } from "react-icons/ti";
 import Layout from "../../../components/layout/Layout";
 
 export default function OrderPage({ order, items, customer }) {
@@ -64,6 +65,26 @@ export default function OrderPage({ order, items, customer }) {
     shipped: (
       <div className="grid font-semibold text-base text-center">
         Waiting for customer to receive their order...
+      </div>
+    ),
+    completed: (
+      <div className="grid font-semibold text-base place-items-center">
+        This order has been completed
+        <span>Rating:</span>
+        <div className="flex items-center">
+          {order.order_rating ? (
+            <>
+              {Array.from({ length: order.order_rating }, (v, i) => (
+                <TiStarFullOutline key={i} className="w-5 h-5 text-maroon" />
+              ))}
+              {Array.from({ length: 5 - order.order_rating }, (v, i) => (
+                <TiStarFullOutline key={i} className="w-5 h-5 text-zinc-400" />
+              ))}
+            </>
+          ) : (
+            <>no ratings yet</>
+          )}
+        </div>
       </div>
     ),
     declined: (
@@ -161,7 +182,7 @@ export const getServerSideProps = async (ctx) => {
   const { data } = await supabase
     .from("orders")
     .select(
-      "id, total, status, payment_option, delivery_option, time, status, room_id, note, customer_id, order_items (id, item_id, quantity, price, order_item_options (option_id))"
+      "id, total, status, payment_option, order_rating, delivery_option, time, status, room_id, note, customer_id, order_items (id, item_id, quantity, price, order_item_options (option_id))"
     )
     .eq("id", ctx.params.order_id)
     .single();
