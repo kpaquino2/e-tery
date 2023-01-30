@@ -62,6 +62,7 @@ export default function OrderStatusPage({ order, items }) {
 
   const [rated, setRated] = useState(order.order_rating);
   const [rating, setRating] = useState(0);
+  const [reason, setReason] = useState(order.decline_reason);
 
   const receiveOrder = async () => {
     await supabaseClient
@@ -91,6 +92,7 @@ export default function OrderStatusPage({ order, items }) {
         (payload) => {
           setOrderStatus(payload.new.status);
           if (payload.new.order_rating) setRated(true);
+          if (payload.new.decline_reason) setReason(payload.new.decline_reason);
         }
       )
       .subscribe();
@@ -244,7 +246,7 @@ export default function OrderStatusPage({ order, items }) {
                 Your order has been declined.
               </div>
               <div className="font-semibold text-center text-dark">
-                {order.decline_reason}
+                {reason}
               </div>
             </div>
           )}
