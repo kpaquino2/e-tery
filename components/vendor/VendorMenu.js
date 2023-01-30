@@ -47,6 +47,7 @@ export default function VendorMenu({ vendor_id, isOpen, setIsOpen }) {
       </div>
 
       <button
+        type="button"
         className="rounded-full text-cream font-bold text-3xl mt-12"
         onClick={handleSignOut}
       >

@@ -54,6 +54,7 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
         </p>
       </div>
       <button
+        type="button"
         className="rounded-full text-cream font-bold text-3xl mb-8"
         onClick={handleSignOut}
       >
