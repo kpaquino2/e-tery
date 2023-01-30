@@ -12,6 +12,7 @@ module.exports = {
         cream: "#EDDDD4",
         dark: "#283d3b",
         light: "#fefefe",
+        burgundy: "#773027",
       },
     },
   },
