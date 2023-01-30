@@ -37,9 +37,6 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
       >
         Favorites
       </Link>
-      <Link href="/history" className="text-cream text-3xl font-bold mb-8">
-        History
-      </Link>
       <Link href="/orders" className="text-cream text-3xl font-bold mb-8">
         Orders
       </Link>
