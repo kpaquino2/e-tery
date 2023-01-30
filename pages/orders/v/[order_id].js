@@ -141,7 +141,7 @@ export default function OrderPage({ order, items, customer }) {
               <span className="text-end font-semibold text-maroon">
                 ₱{(order?.total - 10).toFixed(2)}
               </span>
-              <span className="font-bold">Delivery Fee</span>
+              <span className="font-bold">Service Fee</span>
               <span className="text-end font-semibold text-maroon">₱10.00</span>
             </div>
           </div>

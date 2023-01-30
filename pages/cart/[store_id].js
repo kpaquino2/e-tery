@@ -212,7 +212,7 @@ export default function StoreCartPage({ id, open }) {
           <div className="grid grid-cols-2 m-2 border-t-2 border-cream">
             <span>Subtotal</span>
             <span className="text-end">{cart?.subtotal.toFixed(2)}</span>
-            <span>Delivery Fee</span>
+            <span>Service Fee</span>
             <span className="text-end">10.00</span>
           </div>
           <div className="grid grid-cols-2">
