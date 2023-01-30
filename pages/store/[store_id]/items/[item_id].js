@@ -169,7 +169,7 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
           )}
         </button>
         <Banner url={`items/${store.id}/${item.id}`} />
-        <div className="grid grid-cols-2 mx-6 gap-2 pb-20">
+        <div className="grid grid-cols-auto mx-6 gap-2 pb-20">
           <div className="font-bold text-4xl mt-4">{item.name}</div>
           <div className="font-semibold text-xl justify-self-end self-end mt-4">
             ₱ {item.base_price.toFixed(2)}
@@ -185,10 +185,10 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                 {!variant.optional &&
                   ((variant.select > 1 &&
                     !errors.checkbox_variants?.[index]?.message && (
-                      <FaCheck className="text-teal" />
+                      <FaCheck className="text-teal mt-0.5" />
                     )) ||
                     (variant.select == 1 && !errors.radio_variants?.[index] && (
-                      <FaCheck className="text-teal" />
+                      <FaCheck className="text-teal mt-0.5" />
                     )))}
               </div>
               <span className="col-span-2 text-sm leading-tight">
