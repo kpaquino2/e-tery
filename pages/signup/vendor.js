@@ -21,7 +21,11 @@ const schema = yup.object({
   email: yup
     .string()
     .required("email is required")
-    .email("please enter a valid email address"),
+    .email("please enter a valid email address")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+((?!@g\.batstate-u\.edu\.ph).)*$/,
+      "do not use your school email address as a vendor"
+    ),
   password: yup
     .string()
     .required("password is required")
