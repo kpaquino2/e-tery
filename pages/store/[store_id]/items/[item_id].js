@@ -106,21 +106,22 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
       item_name: item.name,
       quantity: quantity,
       price: final_price * quantity,
-      options: data.checkbox_variants
-        ?.map((variant, index) =>
-          variant.options
-            .filter((option) => option)
-            .map((option, idx) => item.item_variants[index].item_options[idx])
-        )
-        .flat(1)
-        .concat(
-          data.radio_variants
-            ?.map(
-              (variant, index) =>
-                item.item_variants[index].item_options[variant.selected_option]
-            )
-            .flat(1)
-        ),
+      options: (
+        data.checkbox_variants
+          ?.map((variant, index) =>
+            variant.options
+              .filter((option) => option)
+              .map((option, idx) => item.item_variants[index].item_options[idx])
+          )
+          .flat(1) ?? []
+      ).concat(
+        data.radio_variants
+          ?.map(
+            (variant, index) =>
+              item.item_variants[index].item_options[variant.selected_option]
+          )
+          .flat(1) ?? []
+      ),
     };
     addToCart({ ...store, order_item });
     router.back();
