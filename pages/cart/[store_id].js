@@ -32,7 +32,7 @@ const getTimes = () => {
   return times;
 };
 
-export default function StoreCartPage({ id }) {
+export default function StoreCartPage({ id, open }) {
   const times = useMemo(() => getTimes(), []);
   const { register, watch, handleSubmit } = useForm({
     resolver: yupResolver(schema),
@@ -180,6 +180,11 @@ export default function StoreCartPage({ id }) {
           <p className="text-3xl font-bold text-dark text-center my-2 mx-12">
             {cart?.name}
           </p>
+          {!open && (
+            <p className="text-lg font-semibold text-maroon text-center my-2 mx-12">
+              This store is currently closed
+            </p>
+          )}
           <div className="text-xl font-semibold">Order Summary</div>
           {cart?.items.map((item, index) => (
             <div className="grid grid-cols-[2rem_auto_6rem] mx-2" key={index}>
@@ -332,7 +337,10 @@ export default function StoreCartPage({ id }) {
               {(cart?.subtotal + 10).toFixed(2)}
             </span>
           </div>
-          <button className="bg-teal my-2 rounded-full text-xl font-bold text-light disabled:grayscale">
+          <button
+            className="bg-teal my-2 rounded-full text-xl font-bold text-light disabled:grayscale"
+            disabled={!open}
+          >
             CHECK OUT
           </button>
         </div>
@@ -347,5 +355,10 @@ export const getServerSideProps = async (ctx) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  return { props: { id: session?.user.id } };
+  const { data: open } = await supabase
+    .from("vendors")
+    .select("open")
+    .eq("id", ctx.params.store_id);
+
+  return { props: { id: session?.user.id, open } };
 };
