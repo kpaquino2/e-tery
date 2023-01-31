@@ -61,7 +61,7 @@ export const getServerSideProps = async (ctx) => {
   if (acct_type === "customer") {
     const { data: stores } = await supabase
       .from("vendors")
-      .select("id,name,rating,price_range")
+      .select("id,name,rating")
       .eq("open", true);
     const { data: favoriteItemsId } = await supabase
       .from("favorites")
