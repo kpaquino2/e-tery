@@ -3,6 +3,7 @@ import useSearch from "../../lib/search";
 
 export default function SearchBox({ isMenuOpen }) {
   const setQuery = useSearch((state) => state.setQuery);
+  setQuery("");
 
   const handleOnChange = (event) => {
     setQuery(event.target.value);

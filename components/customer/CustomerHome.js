@@ -1,13 +1,11 @@
 import Image from "next/image";
 import AdCarousel from "./AdCarousel";
 import Store from "./Store";
-import StoreItem from "./StoreItem";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import StoreItemAlt from "./StoreItemAlt";
 import useSearch from "../../lib/search";
 import { useEffect, useState } from "react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export default function CustomerHome({ stores, favorites }) {
   const [storesShown, setStoresShown] = useState(stores);
