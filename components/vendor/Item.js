@@ -6,7 +6,6 @@ import { MdDoNotDisturbAlt } from "react-icons/md";
 export default function Item({ vendor_id, data }) {
   const supabaseClient = useSupabaseClient();
   const [itemAvailable, setItemAvailable] = useState(data.available);
-  const [isImageLoaded, setisImageLoaded] = useState(true);
 
   const updateAvailability = async () => {
     const { error } = await supabaseClient
@@ -23,25 +22,23 @@ export default function Item({ vendor_id, data }) {
         (!itemAvailable && "opacity-50")
       }
     >
-      <div className="relative">
-        <Image
-          className={"rounded-t-2xl bg-teal " + (isImageLoaded ? "" : "hidden")}
-          src={`items/${vendor_id}/${data.id}`}
-          alt=""
-          width={400}
-          height={400}
-          onError={() => setisImageLoaded(false)}
-        />
-
-        {!itemAvailable && isImageLoaded ? (
-          <MdDoNotDisturbAlt className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-maroon text-8xl" />
-        ) : (
-          <></>
-        )}
-      </div>
+      {data.has_image && (
+        <div className="relative">
+          <Image
+            className="rounded-t-2xl bg-teal"
+            src={`items/${vendor_id}/${data.id}`}
+            alt=""
+            width={400}
+            height={400}
+          />
+          {!itemAvailable && (
+            <MdDoNotDisturbAlt className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-maroon text-8xl" />
+          )}
+        </div>
+      )}
       <div
         className={
-          (isImageLoaded ? "rounded-b-2xl" : "rounded-2xl") +
+          (data.has_image ? "rounded-b-2xl" : "rounded-2xl") +
           " flex flex-col bg-teal text-cream text-md px-4 py-2 w-full break-words"
         }
       >
