@@ -58,7 +58,7 @@ export default function AddCategoryPage({ vendor_id }) {
           <button
             type="button"
             className="absolute top-6 left-4 rounded-full p-1"
-            onClick={() => router.back()}
+            onClick={() => router.push("/")}
             disabled={loading}
           >
             <FaChevronLeft className="text-3xl text-cream" />

@@ -170,7 +170,7 @@ export default function StoreCartPage({ id, open }) {
         <button
           type="button"
           className="absolute top-24 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20"
-          onClick={() => router.back()}
+          onClick={() => router.push("/cart")}
         >
           <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
         </button>
