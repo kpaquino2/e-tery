@@ -6,12 +6,12 @@ export default function Banner({ url }) {
 
   return (
     <>
-      <div className="relative top-0 left-0 right-0 w-full flex justify-center ">
+      <div className="drop-shadow-lg relative top-0 left-0 right-0 w-full flex justify-center ">
         <span className="absolute w-full h-1/2 bg-maroon" />
         <Image
           className="bg-cream clip-banner drop-shadow-2xl"
           src={imgSrc}
-          alt="banner"
+          alt=""
           width={600}
           height={300}
           onError={() => setImgSrc("graphics/default.png")}
