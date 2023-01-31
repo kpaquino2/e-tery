@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import Loading from "../components/Loading";
 import { useState } from "react";
+import Head from "next/head";
 
 const schema = yup.object({
   email: yup
@@ -48,6 +49,20 @@ export default function LogInForm() {
 
   return (
     <>
+      <Head>
+        <title>Log in | E-TERY</title>
+        <meta name="description" content="delivery web app" />
+        <link
+          rel="icon"
+          href="/logo.png"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          href="/logo-light.png"
+          media="(prefers-color-scheme: dark)"
+        />
+      </Head>
       <Loading isLoading={loading} />
       <div className="max-w-[450px] m-auto bg-light h-screen flex flex-col items-center shadow-lg">
         <Image src="graphics/logo.png" alt="" width={350} height={350} />

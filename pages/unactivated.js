@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -14,6 +15,20 @@ export default function Waiting() {
 
   return (
     <>
+      <Head>
+        <title>Registration Completed | E-TERY</title>
+        <meta name="description" content="delivery web app" />
+        <link
+          rel="icon"
+          href="/logo.png"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          rel="icon"
+          href="/logo-light.png"
+          media="(prefers-color-scheme: dark)"
+        />
+      </Head>
       <div className="sticky max-w-[450px] m-auto bg-light h-screen flex flex-col items-center shadow-lg gap-6 justify-end pb-20 overflow-x-hidden">
         <div className="absolute top-8 w-max">
           <Image src="graphics/waiting.png" alt="" width={600} height={600} />
