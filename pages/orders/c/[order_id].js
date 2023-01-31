@@ -111,7 +111,7 @@ export default function OrderStatusPage({ order, items }) {
           Order Status
         </p>
         <div className="m-4 p-4 bg-cream rounded-lg">
-          <div className="grid grid-flow-col">
+          <div className="inline-grid grid-flow-col auto-cols-fr w-full">
             {states.map((state, index) => (
               <div key={index} className="grid place-items-center">
                 <motion.div
