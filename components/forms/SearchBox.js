@@ -1,6 +1,13 @@
 import { MdSearch } from "react-icons/md";
+import useSearch from "../../lib/search";
 
 export default function SearchBox({ isMenuOpen }) {
+  const setQuery = useSearch((state) => state.setQuery);
+
+  const handleOnChange = (event) => {
+    setQuery(event.target.value);
+  };
+
   return (
     <>
       <div
@@ -17,6 +24,7 @@ export default function SearchBox({ isMenuOpen }) {
           className="border-none placeholder-black text-lg rounded-full w-full px-10 py-0 text-center focus:ring-0"
           placeholder="search"
           maxLength={256}
+          onChange={handleOnChange}
         />
       </div>
     </>
