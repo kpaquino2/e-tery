@@ -68,7 +68,9 @@ export const getServerSideProps = async (ctx) => {
       .select("item_id");
     const { data: favorites } = await supabase
       .from("items")
-      .select("id, name, base_price, description, vendor_id, available")
+      .select(
+        "id, name, base_price, description, vendor_id, available, has_image"
+      )
       .in(
         "id",
         favoriteItemsId.map((item) => item.item_id)
