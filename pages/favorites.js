@@ -1,9 +1,12 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/router";
 import { FaChevronLeft } from "react-icons/fa";
 import StoreItem from "../components/customer/StoreItem";
 import Layout from "../components/layout/Layout";
 
 export default function FavoritesPage({ favorites }) {
+  const router = useRouter();
+
   return (
     <>
       <Layout title="Favorites">
@@ -34,7 +37,9 @@ export const getServerSideProps = async (ctx) => {
     .select("item_id");
   const { data } = await supabase
     .from("items")
-    .select("id, name, base_price, description, vendor_id, available")
+    .select(
+      "id, name, base_price, description, vendor_id, available, has_image"
+    )
     .in(
       "id",
       favoriteItemsId.map((item) => item.item_id)
