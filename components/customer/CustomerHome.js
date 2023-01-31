@@ -36,14 +36,18 @@ export default function CustomerHome({ stores, favorites }) {
       {!query && (
         <>
           <AdCarousel />
-          <div className="font-bold text-4xl mb-2">Favorites</div>
-          <div ref={sliderRef} className="keen-slider">
-            {favorites?.map((fav, index) => (
-              <div key={index} className="keen-slider__slide number-slide1">
-                <StoreItemAlt vendor_id={fav.vendor_id} data={fav} />
+          {favorites.length > 0 && (
+            <>
+              <div className="font-bold text-4xl mb-2">Favorites</div>
+              <div ref={sliderRef} className="keen-slider">
+                {favorites?.map((fav, index) => (
+                  <div key={index} className="keen-slider__slide number-slide1">
+                    <StoreItemAlt vendor_id={fav.vendor_id} data={fav} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
           <div className="font-bold text-4xl mb-2">Stores</div>
         </>
       )}
