@@ -7,6 +7,7 @@ import VendorMenu from "./VendorMenu";
 import { motion } from "framer-motion";
 import { FaRegBell } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { useAnimationControls } from "framer-motion";
 
 const notifScreen = {
   open: {
@@ -36,6 +37,7 @@ export default function VendorNav({ vendor_id }) {
   const [isNotifScreenOpen, setIsNotifScreenOpen] = useState(true);
   const [newOrderId, setNewOrderId] = useState(null);
   const router = useRouter();
+  const controls = useAnimationControls();
 
   useEffect(() => {
     const fetchOpen = async () => {
@@ -62,7 +64,7 @@ export default function VendorNav({ vendor_id }) {
         (payload) => {
           if (newOrderId === null) {
             setNewOrderId(payload.new.id);
-            setIsNotifScreenOpen(true);
+            controls.start("open");
           }
         }
       )
@@ -74,12 +76,12 @@ export default function VendorNav({ vendor_id }) {
           table: "orders",
           filter: `vendor_id=eq.${vendor_id}`,
         },
-        (payload) => {
+        () => {
           setNewOrderId(null);
         }
       )
       .subscribe();
-  }, [supabaseClient, vendor_id, isNotifScreenOpen, newOrderId]);
+  }, [supabaseClient, vendor_id, newOrderId, controls, router]);
 
   const openStore = async () => {
     setLoading(true);
@@ -95,19 +97,19 @@ export default function VendorNav({ vendor_id }) {
     setisMenuOpen(!isMenuOpen);
   };
 
-  const handleClick = () => {
-    router.replace(`/orders/v/${newOrderId}`).then(() => {
-      setIsNotifScreenOpen(false);
-    });
+  const handleTap = () => {
+    router.replace(`/orders/v/${newOrderId}`);
   };
 
   return (
     <>
       <motion.div
-        animate={isNotifScreenOpen && newOrderId ? "open" : "closed"}
+        initial={"closed"}
+        animate={controls}
         variants={notifScreen}
         className="fixed w-screen h-screen inset-0 bg-maroon grid place-content-center place-items-center gap-4 p-12 z-50"
-        onClick={handleClick}
+        whileTap={"closed"}
+        onTap={handleTap}
       >
         <motion.div
           animate={{
