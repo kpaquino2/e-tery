@@ -7,7 +7,10 @@ import { TiStarFullOutline } from "react-icons/ti";
 
 export default function CustomerOrders({ orders }) {
   const [tab, setTab] = useState(0);
-  const inclusions = [["accepted", "prepared", "shipped"], ["completed"]];
+  const inclusions = [
+    ["pending", "accepted", "prepared", "shipped"],
+    ["completed"],
+  ];
   return (
     <>
       {" "}

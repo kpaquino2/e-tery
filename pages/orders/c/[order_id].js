@@ -103,7 +103,7 @@ export default function OrderStatusPage({ order, items }) {
         <button
           type="button"
           className="absolute top-24 left-4 rounded-full p-1"
-          onClick={() => router.back()}
+          onClick={() => router.push("/orders")}
         >
           <FaChevronLeft className="text-3xl text-maroon" />
         </button>
