@@ -20,7 +20,7 @@ export default function VendorHome({ id, data }) {
                   {category.items.map((item, index) => (
                     <Item key={index} vendor_id={id} data={item} />
                   ))}
-                  <div className="py-1">
+                  <div className="py-1 break-inside-avoid">
                     <Link
                       href={`add-item/${category.id}`}
                       className="flex flex-row py-4 gap-2 w-full items-center justify-center rounded-2xl bg-teal"
