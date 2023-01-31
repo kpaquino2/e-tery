@@ -95,7 +95,7 @@ export const getServerSideProps = async (ctx) => {
   const { data } = await supabase
     .from("vendors")
     .select(
-      "id, name, open, categories (id, name, desc, items (id, name, description, base_price, available))"
+      "id, name, open, categories (id, name, desc, items (id, name, description, base_price, available, has_image))"
     )
     .eq("id", ctx.params.store_id)
     .single();
