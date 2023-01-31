@@ -14,6 +14,7 @@ import { FaCheck, FaChevronLeft, FaHeart, FaRegHeart } from "react-icons/fa";
 import useCart from "../../../../lib/cart";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Fragment } from "react";
 
 const schema = yup.object({
   radio_variants: yup.array(
@@ -183,8 +184,8 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
             </div>
           )}
           {item.item_variants.map((variant, index) => (
-            <>
-              <div key={index} className="text-xl font-semibold leading-none">
+            <Fragment key={index}>
+              <div className="text-xl font-semibold leading-none">
                 {variant.name}
               </div>
               <div className="justify-self-end">
@@ -205,10 +206,9 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
               {variant.item_options.map((option, idx) => {
                 if (!variant.optional && variant.select === 1)
                   return (
-                    <>
+                    <Fragment key={idx}>
                       <label
                         htmlFor={option.id}
-                        key={idx}
                         className="text-lg flex items-center gap-2"
                       >
                         <RadioInput
@@ -223,13 +223,12 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                       <div className="font-semibold place-self-end">
                         +{option.addtl_price.toFixed(2)}
                       </div>
-                    </>
+                    </Fragment>
                   );
                 return (
-                  <>
+                  <Fragment key={idx}>
                     <label
                       htmlFor={option.id}
-                      key={idx}
                       className="text-lg flex items-center gap-2"
                     >
                       <CheckboxInput
@@ -244,10 +243,10 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                     <div className="font-semibold place-self-end">
                       +{option.addtl_price.toFixed(2)}
                     </div>
-                  </>
+                  </Fragment>
                 );
               })}
-            </>
+            </Fragment>
           ))}
         </div>
       </Layout>
