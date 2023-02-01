@@ -44,6 +44,7 @@ const schema = yup.object({
     .matches(/^((09)|(639))[0-9]{9}/, "enter a valid phone number"),
   bir_no: yup.string().required("BIR number is required"),
   owner: yup.string().required("owner name is required"),
+  banner: yup.mixed().required("store banner is required"),
 });
 
 export default function Customer() {
@@ -59,10 +60,6 @@ export default function Customer() {
   const [createAccError, setCreateAccError] = useState();
   const [banner, setBanner] = useState("");
   const onSubmit = async (data) => {
-    if (!banner) {
-      setCreateAccError("store banner is required");
-      return;
-    }
     setLoading(true);
     const { data: signUpData, error: signUpError } =
       await supabaseClient.auth.signUp({
@@ -159,9 +156,7 @@ export default function Customer() {
           />
           <div className="text-xl font-bold">STORE BANNER*</div>
           <Upload
-            finalImage={banner}
             setFinalImage={setBanner}
-            aspect={2}
             height={300}
             width={600}
             register={register}
@@ -171,6 +166,9 @@ export default function Customer() {
               <HiUpload className="m-auto text-5xl text-teal" />
             </div>
           </Upload>
+          <div className="text-red-500 font-semibold ml-2 text-sm">
+            {errors.banner?.message}
+          </div>
           {createAccError ? (
             <div className="place-self-center text-red-500 font-semibold mb-3">
               {createAccError}

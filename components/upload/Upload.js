@@ -1,158 +1,86 @@
-import { useCallback, useRef, useState } from "react";
-import Drawer from "../layout/Drawer";
-import ReactCrop from "react-image-crop";
-import Image from "next/image";
+import { useRef, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
 import "react-image-crop/dist/ReactCrop.css";
 
 export default function Upload({
-  finalImage,
   setFinalImage,
   children,
-  aspect,
   height,
   width,
-  setKey,
   loading,
+  register,
+  name,
 }) {
   const imgRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState("");
-  const [completedCrop, setCompletedCrop] = useState(null);
-  const [crop, setCrop] = useState({
-    unit: "px",
-    height: height / 5,
-    width: width / 5,
-  });
+  const [scale, setScale] = useState(1);
 
   const onSelectFile = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         setFile(reader.result);
-        setIsOpen(true);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
   };
 
-  const onLoad = useCallback((img) => {
-    imgRef.current = img;
-  }, []);
-
-  const getCroppedImage = (image, crop, filename) => {
-    const canvas = document.createElement("canvas");
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-    const ctx = canvas.getContext("2d");
-
-    const pixelRatio = window.devicePixelRatio;
-    canvas.width = crop.width * pixelRatio;
-    canvas.height = crop.height * pixelRatio;
-    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    ctx.imageSmoothingQuality = "high";
-
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width,
-      crop.height
-    );
-
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(
-        (blob) => {
-          blob.name = filename;
-          resolve(blob);
-        },
-        "image/jpeg",
-        1
-      );
-    });
+  const handleScale = (e) => {
+    const scale = parseFloat(e.target.value);
+    setScale(scale);
   };
 
-  const uploadImage = async () => {
-    const blobImg = await getCroppedImage(
-      imgRef.current.currentTarget,
-      completedCrop,
-      "banner"
-    );
-    setFinalImage(blobImg);
-    setIsOpen(false);
+  const handleImageChange = async () => {
+    if (imgRef.current) {
+      const canvasScaled = await imgRef.current.getImageScaledToCanvas();
+      canvasScaled.toBlob((blob) => setFinalImage(blob));
+    }
   };
 
-  const closeDrawer = () => {
-    setKey(Math.random | 0);
-    setIsOpen(false);
-  };
   return (
     <>
-      <Drawer
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        title="Resize Image"
-        close={closeDrawer}
-        top="top-0"
-      >
-        <ReactCrop
-          crop={crop}
-          onChange={(_, c) => setCrop(c)}
-          onComplete={(c) => setCompletedCrop(c)}
-          aspect={aspect}
-          keepSelection={true}
-          className="m-12 rounded-2xl"
-          minHeight={height / 5}
-          minWidth={width / 5}
-        >
-          <Image
-            src={file}
+      {file && (
+        <>
+          <AvatarEditor
             ref={imgRef}
-            onLoad={onLoad}
-            alt="upload"
+            image={file}
             width={width}
             height={height}
+            className=" rounded-xl scale-50 -m-20 self-center"
+            onImageChange={handleImageChange}
+            onImageReady={handleImageChange}
+            border={30}
+            scale={scale}
           />
-        </ReactCrop>
-        <div
-          className={
-            (!completedCrop?.width || !completedCrop?.height
-              ? "opacity-25"
-              : "") +
-            " rounded-full bg-teal text-white font-bold text-lg w-min px-8 py-1 "
-          }
-          disabled={!completedCrop?.width || !completedCrop?.height}
-          onClick={uploadImage}
-        >
-          upload
-        </div>
-      </Drawer>
+          <input
+            {...register(name)}
+            onChange={handleScale}
+            type="range"
+            min={1}
+            max={5}
+            defaultValue={1}
+            step={0.1}
+            className="w-full h-2 bg-teal rounded-lg appearance-none cursor-pointer"
+          ></input>
+        </>
+      )}
       <label className="flex">
         <input
           type="file"
           accept="image/png, image/jpeg, image/webp"
           className="hidden"
           onChange={onSelectFile}
-          onClick={(e) => {
-            e.currentTarget.value = null;
-          }}
           disabled={loading}
         />
-        {finalImage ? (
-          <Image
-            className="rounded-2xl cursor-pointer drop-shadow-lg m-auto"
-            src={URL.createObjectURL(finalImage)}
-            alt="a"
-            width={width / 2}
-            height={height / 2}
-          />
-        ) : (
+        {!file ? (
           <>{children}</>
+        ) : (
+          <button
+            type="button"
+            className="m-auto underline pointer-events-none "
+          >
+            replace image
+          </button>
         )}
       </label>
     </>

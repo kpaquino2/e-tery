@@ -74,6 +74,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
           description: data.desc,
           vendor_id: vendor_id,
           category_id: category_id,
+          has_image: image ? true : false,
         },
       ])
       .select()
@@ -222,13 +223,11 @@ export default function AddItemPage({ vendor_id, category_id }) {
             </button>
             <p className="text-cream text-4xl font-bold my-4">Insert Image:</p>
             <Upload
-              finalImage={image}
               setFinalImage={setImage}
-              aspect={1}
               height={400}
               width={400}
-              register={register}
               name="image"
+              register={register}
               loading={loading}
             >
               <div className="bg-teal rounded-2xl w-full p-4">
