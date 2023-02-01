@@ -96,6 +96,9 @@ export default function OrderStatusPage({ order, items }) {
         }
       )
       .subscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [order.id, supabaseClient]);
   return (
     <>

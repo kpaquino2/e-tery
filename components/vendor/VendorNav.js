@@ -81,6 +81,9 @@ export default function VendorNav({ vendor_id }) {
         }
       )
       .subscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [supabaseClient, vendor_id, newOrderId, controls, router]);
 
   const openStore = async () => {
