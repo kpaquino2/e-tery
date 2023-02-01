@@ -7,7 +7,7 @@ import StoreItemAlt from "./StoreItemAlt";
 import useSearch from "../../lib/search";
 import { useEffect, useState } from "react";
 
-export default function CustomerHome({ stores, favorites }) {
+export default function CustomerHome({ stores, favorites, ads }) {
   const [storesShown, setStoresShown] = useState(stores);
   const [sliderRef] = useKeenSlider({
     mode: "free",
@@ -35,7 +35,7 @@ export default function CustomerHome({ stores, favorites }) {
     <div className="flex flex-col mx-4 my-6">
       {!query && (
         <>
-          <AdCarousel />
+          <AdCarousel ads={ads} />
           {favorites.length > 0 && (
             <>
               <div className="font-bold text-4xl mb-2">Favorites</div>

@@ -11,6 +11,7 @@ export default function Home({
   stores,
   vendor_data,
   favorites,
+  ads,
 }) {
   const [welcomed, setWelcomed] = useState(true);
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function Home({
       )}
       <Layout title="Home">
         {acct_type === "customer" ? (
-          <CustomerHome stores={stores} favorites={favorites} />
+          <CustomerHome stores={stores} favorites={favorites} ads={ads} />
         ) : (
           <VendorHome id={id} data={vendor_data} />
         )}
@@ -75,8 +76,10 @@ export const getServerSideProps = async (ctx) => {
         "id",
         favoriteItemsId.map((item) => item.item_id)
       );
+    const { data: ads } = await supabase.storage.from("advertisements").list();
+
     return {
-      props: { id: session?.user.id, acct_type, stores, favorites },
+      props: { id: session?.user.id, acct_type, stores, favorites, ads },
     };
   }
   const {
