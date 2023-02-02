@@ -58,6 +58,7 @@ export default function Customer() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [createAccError, setCreateAccError] = useState();
+  const [initialImage, setInitialImage] = useState("");
   const [banner, setBanner] = useState("");
   const onSubmit = async (data) => {
     setLoading(true);
@@ -92,14 +93,14 @@ export default function Customer() {
     <>
       <Layout title="Vendor Sign Up">
         <Link href={"/signup"}>
-          <FaChevronLeft className="absolute w-7 h-7 text-maroon mt-4 ml-2" />
+          <FaChevronLeft className="absolute mt-4 ml-2 h-7 w-7 text-maroon" />
         </Link>
         <Loading isLoading={loading} />
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-4 p-5"
         >
-          <div className="text-3xl font-bold place-self-center ">
+          <div className="place-self-center text-3xl font-bold ">
             ACTIVATION
           </div>
           <div className="text-xl font-bold">STORE DETAILS*</div>
@@ -156,21 +157,23 @@ export default function Customer() {
           />
           <div className="text-xl font-bold">STORE BANNER*</div>
           <Upload
+            initialImage={initialImage}
+            setInitialImage={setInitialImage}
             setFinalImage={setBanner}
             height={300}
             width={600}
             register={register}
             name="banner"
           >
-            <div className="bg-cream rounded-2xl w-full p-4">
+            <div className="w-full rounded-2xl bg-cream p-4">
               <HiUpload className="m-auto text-5xl text-teal" />
             </div>
           </Upload>
-          <div className="text-red-500 font-semibold ml-2 text-sm">
+          <div className="ml-2 text-sm font-semibold text-red-500">
             {errors.banner?.message}
           </div>
           {createAccError ? (
-            <div className="place-self-center text-red-500 font-semibold mb-3">
+            <div className="mb-3 place-self-center font-semibold text-red-500">
               {createAccError}
             </div>
           ) : (
@@ -178,11 +181,11 @@ export default function Customer() {
           )}
           <button
             type="submit"
-            className="w-48 px-10 py-1 font-bold leading-tight place-self-center bg-cream rounded-full text-lg hover:opacity-75"
+            className="w-48 place-self-center rounded-full bg-cream px-10 py-1 text-lg font-bold leading-tight hover:opacity-75"
           >
             create your account
           </button>
-          <p className="place-self-center mt-3">
+          <p className="mt-3 place-self-center">
             {"have an account? "}
             <Link href="/login" className="font-bold underline">
               log in

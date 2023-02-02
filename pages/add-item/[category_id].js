@@ -61,6 +61,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
   });
   const router = useRouter();
   const [image, setImage] = useState("");
+  const [initialImage, setInitialImage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
@@ -115,7 +116,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
       if (image) {
         supabaseClient.storage
           .from("items")
-          .upload(vendor_id + "/" + itemData.id, image);
+          .upload(vendor_id + "/" + itemData.id, image, { cacheControl: 3600 });
       }
       router.push("/");
       return;
@@ -132,8 +133,8 @@ export default function AddItemPage({ vendor_id, category_id }) {
       <Layout title="New Item">
         <div
           className={
-            "relative flex flex-col items-center bg-dark h-full grow pb-12" +
-            (loading ? "opacity-75 cursor-wait" : "")
+            "relative flex h-full grow flex-col items-center bg-dark pb-12" +
+            (loading ? "cursor-wait opacity-75" : "")
           }
         >
           <button
@@ -144,9 +145,9 @@ export default function AddItemPage({ vendor_id, category_id }) {
           >
             <FaChevronLeft className="text-3xl text-cream" />
           </button>
-          <p className="text-cream text-4xl font-bold mb-4 mt-12">Details</p>
+          <p className="mb-4 mt-12 text-4xl font-bold text-cream">Details</p>
           <form
-            className="flex flex-col items-center gap-2 text-cream w-3/4"
+            className="flex w-3/4 flex-col items-center gap-2 text-cream"
             onSubmit={handleSubmit(onSubmit)}
           >
             <TextInputAlt
@@ -169,7 +170,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
             />
             {fields.map((field, index) => {
               return (
-                <div className="flex flex-col items-cnter" key={field.id}>
+                <div className="items-cnter flex flex-col" key={field.id}>
                   <TextInputAlt
                     label={`Variant ${index + 1} Name`}
                     register={register}
@@ -182,7 +183,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
                     error={errors.variants?.[index]?.select?.message}
                     name={`variants.${index}.select`}
                   />
-                  <div className="flex items-center gap-3 justify-evenly">
+                  <div className="flex items-center justify-evenly gap-3">
                     <CheckboxInputAlt
                       id={`variant${index}`}
                       value={true}
@@ -199,7 +200,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
                     <button
                       type="button"
                       onClick={() => remove(index)}
-                      className="underline text-xl self-end"
+                      className="self-end text-xl underline"
                     >
                       - remove variant
                     </button>
@@ -217,12 +218,14 @@ export default function AddItemPage({ vendor_id, category_id }) {
             <button
               type="button"
               onClick={addVariant}
-              className="underline text-2xl"
+              className="text-2xl underline"
             >
               + add variant
             </button>
-            <p className="text-cream text-4xl font-bold my-4">Insert Image:</p>
+            <p className="my-4 text-4xl font-bold text-cream">Insert Image:</p>
             <Upload
+              initialImage={initialImage}
+              setInitialImage={setInitialImage}
               setFinalImage={setImage}
               height={400}
               width={400}
@@ -230,14 +233,14 @@ export default function AddItemPage({ vendor_id, category_id }) {
               register={register}
               loading={loading}
             >
-              <div className="bg-teal rounded-2xl w-full p-4">
+              <div className="w-full rounded-2xl bg-teal p-4">
                 <HiUpload className="m-auto text-5xl text-maroon" />
               </div>
             </Upload>
             <button
               type="submit"
               className={
-                "rounded-full bg-teal text-white font-bold text-lg w-min px-8 py-1 mt-8 "
+                "mt-8 w-min rounded-full bg-teal px-8 py-1 text-lg font-bold text-white "
               }
               disabled={loading}
             >

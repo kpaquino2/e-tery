@@ -3,6 +3,8 @@ import AvatarEditor from "react-avatar-editor";
 import "react-image-crop/dist/ReactCrop.css";
 
 export default function Upload({
+  initialImage,
+  setInitialImage,
   setFinalImage,
   children,
   height,
@@ -12,14 +14,14 @@ export default function Upload({
   name,
 }) {
   const imgRef = useRef(null);
-  const [file, setFile] = useState("");
   const [scale, setScale] = useState(1);
+  const { onChange, ...rest } = register(name);
 
   const onSelectFile = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        setFile(reader.result);
+        setInitialImage(reader.result);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -39,28 +41,28 @@ export default function Upload({
 
   return (
     <>
-      {file && (
+      {initialImage && (
         <>
           <AvatarEditor
             ref={imgRef}
-            image={file}
+            image={initialImage}
             width={width}
             height={height}
-            className=" rounded-xl scale-50 -m-20 self-center"
+            className=" -m-20 scale-50 self-center rounded-xl"
             onImageChange={handleImageChange}
             onImageReady={handleImageChange}
             border={30}
             scale={scale}
+            crossOrigin="anonymous"
           />
           <input
-            {...register(name)}
             onChange={handleScale}
             type="range"
             min={1}
             max={5}
             defaultValue={1}
             step={0.1}
-            className="w-full h-2 bg-teal rounded-lg appearance-none cursor-pointer"
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-teal"
           ></input>
         </>
       )}
@@ -69,15 +71,20 @@ export default function Upload({
           type="file"
           accept="image/png, image/jpeg, image/webp"
           className="hidden"
-          onChange={onSelectFile}
+          onChange={(e) => {
+            console.log("aa");
+            onSelectFile(e);
+            onChange(e);
+          }}
           disabled={loading}
+          {...rest}
         />
-        {!file ? (
+        {!initialImage ? (
           <>{children}</>
         ) : (
           <button
             type="button"
-            className="m-auto underline pointer-events-none "
+            className="pointer-events-none m-auto underline "
           >
             replace image
           </button>
