@@ -70,7 +70,7 @@ export const getServerSideProps = async (ctx) => {
     const { data: favorites } = await supabase
       .from("items")
       .select(
-        "id, name, base_price, description, vendor_id, available, has_image"
+        "id, name, base_price, description, vendor_id, available, has_image, updated_at"
       )
       .in(
         "id",
@@ -87,7 +87,7 @@ export const getServerSideProps = async (ctx) => {
   } = await supabase
     .from("vendors")
     .select(
-      "name, categories (id, name, desc, items (id, name, base_price, description, available, has_image))"
+      "name, categories (id, name, desc, items (id, name, base_price, description, available, has_image, updated_at))"
     )
     .eq("id", session?.user.id);
 
