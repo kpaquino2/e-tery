@@ -108,36 +108,33 @@ export default function ItemPage({ id, item, imageUrl }) {
       return;
     }
 
+    const { error: deleteError } = await supabaseClient
+      .from("item_variants")
+      .delete()
+      .eq("item_id", itemData.id);
+
     for (let i = 0; i < data.variants.length; i++) {
       const { data: variantData, error: variantError } = await supabaseClient
         .from("item_variants")
-        .upsert(
-          [
-            {
-              id: item.item_variants[i]?.id ?? null,
-              name: data.variants[i].name,
-              optional: data.variants[i].optional,
-              select: data.variants[i].select,
-              item_id: itemData.id,
-            },
-          ],
-          { onConflict: "id" }
-        )
+        .insert([
+          {
+            name: data.variants[i].name,
+            optional: data.variants[i].optional,
+            select: data.variants[i].select,
+            item_id: itemData.id,
+          },
+        ])
         .select()
         .single();
 
       for (let j = 0; j < data.variants[i].options.length; j++) {
-        await supabaseClient.from("item_options").upsert(
-          [
-            {
-              id: item.item_variants[i]?.item_options[j]?.id ?? null,
-              name: data.variants[i].options[j].name,
-              addtl_price: data.variants[i].options[j].addtl_price,
-              variant_id: variantData.id,
-            },
-          ],
-          { onConflict: "id" }
-        );
+        await supabaseClient.from("item_options").insert([
+          {
+            name: data.variants[i].options[j].name,
+            addtl_price: data.variants[i].options[j].addtl_price,
+            variant_id: variantData.id,
+          },
+        ]);
       }
     }
 
@@ -165,6 +162,21 @@ export default function ItemPage({ id, item, imageUrl }) {
     setInitialImage(item.has_image && imageUrl);
     setImage("");
     setEditImage(false);
+  };
+
+  const handleDelete = async () => {
+    setLoading(true);
+    const { error } = await supabaseClient
+      .from("items")
+      .delete()
+      .eq("id", router.query.item_id);
+    if (error) console.error(error.message);
+    const { error: removeImageError } = await supabaseClient.storage
+      .from("items")
+      .remove(id + "/" + router.query.item_id);
+
+    if (!removeImageError) router.push("/");
+    setLoading(false);
   };
 
   return (
@@ -261,6 +273,7 @@ export default function ItemPage({ id, item, imageUrl }) {
                   alt=""
                   height={400}
                   width={400}
+                  className="rounded-2xl"
                 />
                 <button
                   type="button"
@@ -301,21 +314,29 @@ export default function ItemPage({ id, item, imageUrl }) {
                 </Upload>
               </>
             )}
-            <div className="flex w-full justify-center gap-2">
+            <div className="mt-2 grid w-full grid-cols-2 justify-center gap-4">
               <button
                 type="submit"
-                className="w-min whitespace-nowrap rounded-full bg-teal px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
+                className="rounded-full bg-teal px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
                 disabled={loading || !(editImage || isDirty)}
               >
-                SAVE CHANGES
+                SAVE
               </button>
               <button
                 type="button"
-                className="w-min rounded-full bg-maroon px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
+                className="rounded-full bg-cream px-8 py-1 text-lg font-bold text-teal disabled:brightness-50"
                 disabled={loading || !(editImage || isDirty)}
                 onClick={handleReset}
               >
                 RESET
+              </button>
+              <button
+                type="button"
+                className="col-span-2 rounded-full bg-maroon px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
+                disabled={loading}
+                onClick={handleDelete}
+              >
+                DELETE ITEM
               </button>
             </div>
           </form>
