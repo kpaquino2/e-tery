@@ -33,7 +33,6 @@ const getTimes = () => {
 };
 
 export default function StoreCartPage({ id, open }) {
-  console.log(open);
   const times = useMemo(() => getTimes(), []);
   const { register, watch, handleSubmit } = useForm({
     resolver: yupResolver(schema),
@@ -169,27 +168,27 @@ export default function StoreCartPage({ id, open }) {
       <Layout title={cart?.name}>
         <button
           type="button"
-          className="absolute top-24 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20"
+          className="absolute top-24 left-4 z-20 rounded-full py-2 pl-1.5 pr-2.5"
           onClick={() => router.push("/cart")}
         >
           <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
         </button>
         <div className="mx-2 pb-20">
-          <p className="text-5xl font-bold text-dark text-center my-2">
+          <p className="my-2 text-center text-5xl font-bold text-dark">
             My Cart
           </p>
-          <p className="text-3xl font-bold text-dark text-center my-2 mx-12">
+          <p className="my-2 mx-12 text-center text-3xl font-bold text-dark">
             {cart?.name}
           </p>
           {!open && (
-            <p className="text-lg font-semibold text-maroon text-center my-2 mx-12">
+            <p className="my-2 mx-12 text-center text-lg font-semibold text-maroon">
               This store is currently closed
             </p>
           )}
           <div className="text-xl font-semibold">Order Summary</div>
           {cart?.items.map((item, index) => (
-            <div className="grid grid-cols-[2rem_auto_6rem] mx-2" key={index}>
-              <div className="text-maroon font-semibold">{item.quantity}x</div>
+            <div className="mx-2 grid grid-cols-[2rem_auto_6rem]" key={index}>
+              <div className="font-semibold text-maroon">{item.quantity}x</div>
               <div className="flex flex-col">
                 <span className="font-semibold">{item.item_name}</span>
                 {item.options?.map((option, index) => (
@@ -198,26 +197,26 @@ export default function StoreCartPage({ id, open }) {
                   </div>
                 ))}
               </div>
-              <div className="text-dark font-semibold justify-self-end">
+              <div className="justify-self-end font-semibold text-dark">
                 {item.price?.toFixed(2)}
               </div>
               <button
                 type="button"
-                className="place-self-end w-fit col-span-3 underline text-maroon"
+                className="col-span-3 w-fit place-self-end text-maroon underline"
                 onClick={() => removeItem(item)}
               >
                 remove from cart
               </button>
             </div>
           ))}
-          <div className="grid grid-cols-2 m-2 border-t-2 border-cream">
+          <div className="m-2 grid grid-cols-2 border-t-2 border-cream">
             <span>Subtotal</span>
             <span className="text-end">{cart?.subtotal.toFixed(2)}</span>
             <span>Service Fee</span>
             <span className="text-end">10.00</span>
           </div>
           <div className="grid grid-cols-2">
-            <div className="text-xl font-semibold col-span-2">
+            <div className="col-span-2 text-xl font-semibold">
               Delivery Option
             </div>
             <span className="mx-2">
@@ -244,7 +243,7 @@ export default function StoreCartPage({ id, open }) {
                 Pick-up
               </label>
             </span>
-            <div className="col-span-2 flex bg-teal rounded-lg gap-2 p-3 mt-2 text-cream">
+            <div className="col-span-2 mt-2 flex gap-2 rounded-lg bg-teal p-3 text-cream">
               <FaMapMarkerAlt className="text-xl text-maroon" />
               {watch("option") === "pickup" ? (
                 <>{cart?.address}</>
@@ -269,7 +268,7 @@ export default function StoreCartPage({ id, open }) {
                   </label>
                   <input
                     id="note"
-                    className="col-span-2 p-1 bg-cream rounded-lg border-maroon placeholder-dark text-dark text-sm focus:border-maroon focus:ring-cream"
+                    className="col-span-2 rounded-lg border-maroon bg-cream p-1 text-sm text-dark placeholder-dark focus:border-maroon focus:ring-cream"
                     type="text"
                     placeholder="Optional..."
                     {...register("note")}
@@ -277,7 +276,7 @@ export default function StoreCartPage({ id, open }) {
                 </div>
               )}
             </div>
-            <div className="text-xl font-semibold col-span-2">
+            <div className="col-span-2 text-xl font-semibold">
               Mode of Payment
             </div>
             <span className="mx-2">
@@ -285,7 +284,7 @@ export default function StoreCartPage({ id, open }) {
                 ? "Cash on Delivery"
                 : "Over the counter"}
             </span>
-            <div className="text-xl font-semibold col-span-2">
+            <div className="col-span-2 text-xl font-semibold">
               Delivery Time
             </div>
             <span className="mx-2">
@@ -315,7 +314,7 @@ export default function StoreCartPage({ id, open }) {
             {watch("when") === "now" ? (
               <></>
             ) : (
-              <div className="col-span-2 flex bg-teal rounded-lg gap-2 p-3 mt-2 text-cream">
+              <div className="col-span-2 mt-2 flex gap-2 rounded-lg bg-teal p-3 text-cream">
                 <FaClock className="text-xl text-maroon" />
                 <SelectInputAlt register={register} name="time">
                   {times?.map((time, index) => (
@@ -331,15 +330,15 @@ export default function StoreCartPage({ id, open }) {
         </div>
       </Layout>
       <Footer>
-        <div className="grid grid-cols-2 gap-3 h-full mx-4">
-          <div className="text-cream flex items-center justify-around">
+        <div className="mx-4 grid h-full grid-cols-2 gap-3">
+          <div className="flex items-center justify-around text-cream">
             <span className="font-semibold">TOTAL</span>
-            <span className="font-bold text-xl">
+            <span className="text-xl font-bold">
               {(cart?.subtotal + 10).toFixed(2)}
             </span>
           </div>
           <button
-            className="bg-teal my-2 rounded-full text-xl font-bold text-light disabled:grayscale"
+            className="my-2 rounded-full bg-teal text-xl font-bold text-light disabled:grayscale"
             disabled={!open}
           >
             CHECK OUT

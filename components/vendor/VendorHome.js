@@ -12,7 +12,6 @@ export default function VendorHome({ id, data }) {
   const router = useRouter();
 
   const handleDelete = async (category_id) => {
-    console.log(category_id);
     const { error } = await supabaseClient
       .from("categories")
       .delete()

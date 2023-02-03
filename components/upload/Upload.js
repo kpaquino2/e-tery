@@ -72,7 +72,6 @@ export default function Upload({
           accept="image/png, image/jpeg, image/webp"
           className="hidden"
           onChange={(e) => {
-            console.log("aa");
             onSelectFile(e);
             onChange(e);
           }}
