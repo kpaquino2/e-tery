@@ -48,8 +48,13 @@ export default function Item({ vendor_id, data }) {
           <span className="text-sm">{data.description}</span>
           <span className="">₱ {data.base_price.toFixed(2)}</span>
           <button
+            type="button"
             className="pt-2 text-xs underline decoration-solid"
-            onClick={updateAvailability}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              updateAvailability();
+            }}
           >
             SET AS {itemAvailable ? "UNAVAILABLE" : "AVAILABLE"}
           </button>
