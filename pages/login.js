@@ -64,13 +64,19 @@ export default function LogInForm() {
         />
       </Head>
       <Loading isLoading={loading} />
-      <div className="max-w-[450px] m-auto bg-light h-screen flex flex-col items-center shadow-lg">
-        <Image src="graphics/logo.png" alt="" width={350} height={350} />
-        <p className="text-3xl font-bold mb-6">Log in</p>
-        <div className="text-red-500 font-semibold mb-3">{loginError}</div>
+      <div className="m-auto flex h-screen max-w-[450px] flex-col items-center bg-light shadow-lg">
+        <Image
+          src="graphics/logo.png"
+          alt=""
+          width={350}
+          height={350}
+          priority
+        />
+        <p className="mb-6 text-3xl font-bold">Log in</p>
+        <div className="mb-3 font-semibold text-red-500">{loginError}</div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col items-center w-full"
+          className="flex w-full flex-col items-center"
         >
           <InputGroup
             register={register}
@@ -79,7 +85,7 @@ export default function LogInForm() {
             type="text"
             error={errors.email?.message}
           >
-            <MdEmail className="w-6 h-6 text-teal" />
+            <MdEmail className="h-6 w-6 text-teal" />
           </InputGroup>
           <InputGroup
             register={register}
@@ -88,16 +94,16 @@ export default function LogInForm() {
             type="password"
             error={errors.password?.message}
           >
-            <MdLock className="w-6 h-6 text-teal" />
+            <MdLock className="h-6 w-6 text-teal" />
           </InputGroup>
           <button
             type="submit"
-            className="bg-teal text-cream rounded-full px-5 py-2 hover:opacity-75"
+            className="rounded-full bg-teal px-5 py-2 text-cream hover:opacity-75"
           >
             log in
           </button>
           <p className="mt-3">{"haven't signed up yet?"}</p>
-          <Link href="/signup" className="font-bold underline mb-10">
+          <Link href="/signup" className="mb-10 font-bold underline">
             sign up now
           </Link>
         </form>
