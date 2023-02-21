@@ -101,7 +101,7 @@ export default function StoreCartPage({ id, open, count }) {
                 room_id: data.room,
                 note: data.note,
                 total: cart.subtotal + 10,
-                number: count,
+                number: count + 1,
               },
             ])
             .select()
