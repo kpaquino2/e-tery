@@ -110,7 +110,7 @@ export default function VendorNav({ vendor_id }) {
         initial={"closed"}
         animate={controls}
         variants={notifScreen}
-        className="fixed w-screen h-screen inset-0 bg-maroon grid place-content-center place-items-center gap-4 p-12 z-50"
+        className="fixed inset-0 z-50 grid h-screen place-content-center place-items-center gap-4 bg-maroon"
         whileTap={"closed"}
         onTap={handleTap}
       >
@@ -126,40 +126,40 @@ export default function VendorNav({ vendor_id }) {
         >
           <FaRegBell className="text-7xl text-light" />
         </motion.div>
-        <span className="text-3xl font-bold text-light text-center">
+        <span className="text-center text-3xl font-bold text-light">
           You have a new order
         </span>
       </motion.div>
       <button
         className={
           (loading ? "cursor-wait bg-gray-300" : "") +
-          " flex items-center gap-2 rounded-lg bg-light px-3 py-1.5 w-28"
+          " flex w-28 items-center gap-2 rounded-lg bg-light px-3 py-1.5"
         }
         onClick={openStore}
         disabled={loading}
       >
         <div
           className={
-            (storeOpen ? "bg-teal" : "bg-dark") + " w-3 h-3 rounded-full"
+            (storeOpen ? "bg-teal" : "bg-dark") + " h-3 w-3 rounded-full"
           }
         />
-        <div className="grow text-dark font-semibold ">
+        <div className="grow font-semibold text-dark ">
           {storeOpen ? "OPEN" : "CLOSED"}
         </div>
       </button>
       <Link href="/" className="rounded-full">
         <Image src="graphics/logo-light.png" alt="" width={60} height={60} />
       </Link>
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center gap-3">
         <Link
           href="/orders"
-          className="text-cream font-semibold text-xl rounded-lg"
+          className="rounded-lg text-xl font-semibold text-cream"
         >
           ORDERS
         </Link>
         <button type="button" onClick={openMenu} className="rounded-full">
           <TiThMenu
-            className={(isMenuOpen ? "text-dark" : "text-cream") + " w-7 h-7"}
+            className={(isMenuOpen ? "text-dark" : "text-cream") + " h-7 w-7"}
           />
         </button>
       </div>
