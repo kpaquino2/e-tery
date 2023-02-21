@@ -140,6 +140,11 @@ export default function OrderPage({ order, items, customer }) {
               {moment(order?.time, "HH:mm:ss").format("hh:mm:ss A")}
             </span>
           </span>
+          {order.note && (
+            <span>
+              Note: <span className="font-semibold">{order?.note}</span>
+            </span>
+          )}
           <div className="min-h-[300px] bg-cream p-4">
             {order?.order_items.map((item, index) => (
               <div key={index} className="m-2 grid grid-cols-[1fr_3fr_1.5fr]">
