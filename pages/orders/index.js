@@ -42,8 +42,9 @@ export const getServerSideProps = async (ctx) => {
   const { data } = await supabase
     .from("orders")
     .select(
-      "id, total, payment_option, delivery_option, time, status, room_id, order_rating, number, created_at, vendor:vendor_id(name), order_items (id)"
+      "id, total, payment_option, delivery_option, time, status, room_id, order_rating, number, created_at, customer_id, vendor:vendor_id(name), order_items (id)"
     )
+    .eq(acct_type === "customer" ? "customer_id" : "vendor_id", session.user.id)
     .order("created_at", { ascending: false });
 
   return { props: { orders: data, acct_type } };

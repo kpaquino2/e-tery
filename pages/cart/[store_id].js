@@ -32,7 +32,7 @@ const getTimes = () => {
   return times;
 };
 
-export default function StoreCartPage({ id, open }) {
+export default function StoreCartPage({ id, open, count }) {
   const times = useMemo(() => getTimes(), []);
   const { register, watch, handleSubmit } = useForm({
     resolver: yupResolver(schema),
@@ -101,6 +101,7 @@ export default function StoreCartPage({ id, open }) {
                 room_id: data.room,
                 note: data.note,
                 total: cart.subtotal + 10,
+                number: count,
               },
             ])
             .select()
@@ -116,6 +117,7 @@ export default function StoreCartPage({ id, open }) {
                 vendor_id: router.query.store_id,
                 customer_id: id,
                 total: cart.subtotal + 10,
+                number: count,
               },
             ])
             .select()
@@ -361,5 +363,12 @@ export const getServerSideProps = async (ctx) => {
     .eq("id", ctx.params.store_id)
     .single();
 
-  return { props: { id: session?.user.id, open: open.open } };
+  const { count } = await await supabase
+    .from("orders")
+    .select("*", { count: "exact" })
+    .eq("vendor_id", ctx.params.store_id);
+  console.log(count);
+  return {
+    props: { id: session?.user.id, open: open.open, count: count },
+  };
 };
