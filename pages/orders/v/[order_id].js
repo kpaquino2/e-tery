@@ -24,13 +24,13 @@ export default function OrderPage({ order, items, customer }) {
       <div className="grid grid-cols-2 gap-4">
         <Link
           href={`${order.id}/decline`}
-          className="bg-maroon text-light font-bold rounded-full text-center"
+          className="rounded-full bg-maroon text-center font-bold text-light"
         >
           DECLINE
         </Link>
         <button
           onClick={() => updateOrder("accepted")}
-          className="bg-teal text-light font-bold rounded-full"
+          className="rounded-full bg-teal font-bold text-light"
         >
           ACCEPT
         </button>
@@ -40,7 +40,7 @@ export default function OrderPage({ order, items, customer }) {
       <div className="grid gap-4">
         <button
           onClick={() => updateOrder("prepared")}
-          className="bg-teal text-light font-bold rounded-full"
+          className="rounded-full bg-teal font-bold text-light"
         >
           DONE PREPARING
         </button>
@@ -49,13 +49,13 @@ export default function OrderPage({ order, items, customer }) {
     prepared: (
       <div className="grid gap-4">
         {order.delivery_option === "pickup" ? (
-          <div className="font-semibold text-base text-center">
+          <div className="text-center text-base font-semibold">
             Waiting for customer to pick up their order...
           </div>
         ) : (
           <button
             onClick={() => updateOrder("shipped")}
-            className="bg-teal text-light font-bold rounded-full"
+            className="rounded-full bg-teal font-bold text-light"
           >
             ORDER PICKED UP
           </button>
@@ -63,22 +63,22 @@ export default function OrderPage({ order, items, customer }) {
       </div>
     ),
     shipped: (
-      <div className="grid font-semibold text-base text-center">
+      <div className="grid text-center text-base font-semibold">
         Waiting for customer to receive their order...
       </div>
     ),
     completed: (
-      <div className="grid font-semibold text-base place-items-center">
+      <div className="grid place-items-center text-base font-semibold">
         This order has been completed
         <span>Rating:</span>
         <div className="flex items-center">
           {order.order_rating ? (
             <>
               {Array.from({ length: order.order_rating }, (v, i) => (
-                <TiStarFullOutline key={i} className="w-5 h-5 text-maroon" />
+                <TiStarFullOutline key={i} className="h-5 w-5 text-maroon" />
               ))}
               {Array.from({ length: 5 - order.order_rating }, (v, i) => (
-                <TiStarFullOutline key={i} className="w-5 h-5 text-zinc-400" />
+                <TiStarFullOutline key={i} className="h-5 w-5 text-zinc-400" />
               ))}
             </>
           ) : (
@@ -88,7 +88,7 @@ export default function OrderPage({ order, items, customer }) {
       </div>
     ),
     declined: (
-      <div className="grid font-semibold text-base text-center">
+      <div className="grid text-center text-base font-semibold">
         This order has been declined.
       </div>
     ),
@@ -104,8 +104,10 @@ export default function OrderPage({ order, items, customer }) {
         >
           <FaChevronLeft className="text-3xl text-maroon" />
         </button>
-        <p className="text-5xl font-bold text-dark text-center my-2">Order</p>
-        <div className="flex flex-col m-4 text-lg">
+        <p className="my-2 text-center text-5xl font-bold text-dark">
+          Order #{order.number.toString().padStart(3, "0")}
+        </p>
+        <div className="m-4 flex flex-col text-lg">
           <span>
             Name of Customer:{" "}
             <span className="font-bold">
@@ -138,10 +140,10 @@ export default function OrderPage({ order, items, customer }) {
               {moment(order?.time, "HH:mm:ss").format("hh:mm:ss A")}
             </span>
           </span>
-          <div className="bg-cream min-h-[300px] p-4">
+          <div className="min-h-[300px] bg-cream p-4">
             {order?.order_items.map((item, index) => (
               <div key={index} className="m-2 grid grid-cols-[1fr_3fr_1.5fr]">
-                <div className="text-maroon font-bold text-center">
+                <div className="text-center font-bold text-maroon">
                   {item.quantity}x
                 </div>
                 <div className="flex flex-col">
@@ -152,12 +154,12 @@ export default function OrderPage({ order, items, customer }) {
                     </div>
                   ))}
                 </div>
-                <div className="text-maroon font-semibold text-end">
+                <div className="text-end font-semibold text-maroon">
                   ₱{item.price.toFixed(2)}
                 </div>
               </div>
             ))}
-            <div className="grid grid-cols-2 m-2 border-t-2 border-teal">
+            <div className="m-2 grid grid-cols-2 border-t-2 border-teal">
               <span className="font-bold">Subtotal</span>
               <span className="text-end font-semibold text-maroon">
                 ₱{(order?.total - 10).toFixed(2)}
@@ -166,7 +168,7 @@ export default function OrderPage({ order, items, customer }) {
               <span className="text-end font-semibold text-maroon">₱10.00</span>
             </div>
           </div>
-          <div className="-translate-y-4 text-2xl font-bold text-center text-dark">
+          <div className="-translate-y-4 text-center text-2xl font-bold text-dark">
             Total Amount: <span>₱{order?.total.toFixed(2)}</span>
           </div>
           {buttons[order?.status]}
@@ -182,7 +184,7 @@ export const getServerSideProps = async (ctx) => {
   const { data } = await supabase
     .from("orders")
     .select(
-      "id, total, status, payment_option, order_rating, delivery_option, time, status, room_id, note, customer_id, order_items (id, item_id, quantity, price, order_item_options (option_id))"
+      "id, total, status, payment_option, order_rating, delivery_option, time, status, room_id, note, customer_id, number, order_items (id, item_id, quantity, price, order_item_options (option_id))"
     )
     .eq("id", ctx.params.order_id)
     .single();
