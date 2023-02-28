@@ -2,6 +2,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Drawer from "../layout/Drawer";
+import Link from "next/link";
 
 export default function VendorMenu({ vendor_id, isOpen, setIsOpen }) {
   const supabaseClient = useSupabaseClient();
@@ -30,8 +31,8 @@ export default function VendorMenu({ vendor_id, isOpen, setIsOpen }) {
 
   return (
     <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
-      <p className="text-cream text-4xl font-bold mb-4 mt-12">Details</p>
-      <div className="flex flex-col gap-2 text-cream text-3xl mx-12">
+      <p className="mb-4 mt-12 text-4xl font-bold text-cream">Details</p>
+      <div className="mx-12 mb-4 flex flex-col gap-2 text-3xl text-cream">
         <p>
           Store Name: <b>{vendorDetails?.name}</b>
         </p>
@@ -45,10 +46,12 @@ export default function VendorMenu({ vendor_id, isOpen, setIsOpen }) {
           BIR Number: <b>{vendorDetails?.bir_no}</b>
         </p>
       </div>
-
+      <Link href="/suggestions" className="mb-8 text-3xl font-bold text-cream">
+        Suggestions
+      </Link>
       <button
         type="button"
-        className="rounded-full text-cream font-bold text-3xl mt-12"
+        className="rounded-full text-3xl font-bold text-cream"
         onClick={handleSignOut}
       >
         Log Out

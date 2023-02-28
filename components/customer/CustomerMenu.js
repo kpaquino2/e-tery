@@ -33,15 +33,15 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
     <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
       <Link
         href="/favorites"
-        className="text-cream text-3xl font-bold mb-8 mt-12"
+        className="mb-8 mt-12 text-3xl font-bold text-cream"
       >
         Favorites
       </Link>
-      <Link href="/orders" className="text-cream text-3xl font-bold mb-8">
+      <Link href="/orders" className="mb-8 text-3xl font-bold text-cream">
         Orders
       </Link>
-      <p className="text-cream text-3xl font-bold mb-4">Details</p>
-      <div className="flex flex-col text-cream text-2xl mx-12 mb-8 max-w-[80%] overflow-hidden">
+      <p className="mb-4 text-3xl font-bold text-cream">Details</p>
+      <div className="mx-12 mb-8 flex max-w-[80%] flex-col overflow-hidden text-2xl text-cream">
         <p>
           Name:{" "}
           <b>{customerDetails?.firstname + " " + customerDetails?.lastname}</b>
@@ -53,9 +53,12 @@ export default function CustomerMenu({ customer_id, isOpen, setIsOpen }) {
           Classification: <b>{customerDetails?.classification}</b>
         </p>
       </div>
+      <Link href="/suggestions" className="mb-8 text-3xl font-bold text-cream">
+        Suggestions
+      </Link>
       <button
         type="button"
-        className="rounded-full text-cream font-bold text-3xl mb-8"
+        className="mb-8 rounded-full text-3xl font-bold text-cream"
         onClick={handleSignOut}
       >
         Log Out
