@@ -14,6 +14,7 @@ import Loading from "../../components/Loading";
 import { FaChevronLeft } from "react-icons/fa";
 import Upload from "../../components/upload/Upload";
 import Layout from "../../components/layout/Layout";
+import TokenInput from "../../components/forms/TokenInput";
 
 const schema = yup.object({
   name: yup.string().required("store name is required"),
@@ -58,38 +59,25 @@ export default function Customer() {
   } = useForm({ resolver: yupResolver(schema) });
 
   const supabaseClient = useSupabaseClient();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [createAccError, setCreateAccError] = useState();
   const [initialImage, setInitialImage] = useState("");
   const [banner, setBanner] = useState("");
+  const [data, setData] = useState({});
+
   const onSubmit = async (data) => {
     setLoading(true);
-    const { data: signUpData, error: signUpError } =
-      await supabaseClient.auth.signUp({
-        email: data.email,
-        password: data.password,
-      });
+    const { error: signUpError } = await supabaseClient.auth.signUp({
+      email: data.email,
+      password: data.password,
+    });
 
     if (!signUpError) {
-      await supabaseClient.from("vendors").insert([
-        {
-          id: signUpData.user.id,
-          name: data.name,
-          address: data.address,
-          phone: data.contact_no,
-          bir_no: data.bir_no,
-          owner: data.owner,
-        },
-      ]);
-      await supabaseClient.storage
-        .from("banners")
-        .upload(signUpData.user.id, banner);
-      router.push("/");
+      setData(data);
+      setLoading(false);
       return;
     }
     setCreateAccError(signUpError?.message);
-    setLoading(false);
   };
 
   return (
@@ -99,102 +87,111 @@ export default function Customer() {
           <FaChevronLeft className="absolute mt-4 ml-2 h-7 w-7 text-maroon" />
         </Link>
         <Loading isLoading={loading} />
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 p-5"
-        >
-          <div className="place-self-center text-3xl font-bold ">
-            ACTIVATION
-          </div>
-          <div className="text-xl font-bold">STORE DETAILS*</div>
-          <TextInput
-            register={register}
-            error={errors.name?.message}
-            name="name"
-            placeholder="store name"
+        {Object.keys(data).length ? (
+          <TokenInput
+            acct_type="vendors"
+            data={data}
+            setLoading={setLoading}
+            banner={banner}
           />
-          <TextInput
-            register={register}
-            error={errors.address?.message}
-            name="address"
-            placeholder="address"
-          />
+        ) : (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4 p-5"
+          >
+            <div className="place-self-center text-3xl font-bold ">
+              ACTIVATION
+            </div>
+            <div className="text-xl font-bold">STORE DETAILS*</div>
+            <TextInput
+              register={register}
+              error={errors.name?.message}
+              name="name"
+              placeholder="store name"
+            />
+            <TextInput
+              register={register}
+              error={errors.address?.message}
+              name="address"
+              placeholder="address"
+            />
 
-          <div className="text-xl font-bold">LOGIN & CONTACT DETAILS*</div>
-          <TextInput
-            register={register}
-            error={errors.email?.message}
-            name="email"
-            placeholder="email"
-          />
-          <PasswordInput
-            register={register}
-            error={errors.password?.message}
-            name="password"
-            placeholder="password"
-          />
-          <PasswordInput
-            register={register}
-            error={errors.confirm_password?.message}
-            name="confirm_password"
-            placeholder="confirm password"
-          />
-          <TextInput
-            register={register}
-            error={errors.contact_no?.message}
-            name="contact_no"
-            placeholder="contact number"
-          />
-          <div className="text-xl font-bold">ADDITIONAL INFO*</div>
-          <TextInput
-            register={register}
-            error={errors.bir_no?.message}
-            name="bir_no"
-            placeholder="BIR number"
-          />
-          <TextInput
-            register={register}
-            error={errors.owner?.message}
-            name="owner"
-            placeholder="owner"
-          />
-          <div className="text-xl font-bold">STORE BANNER*</div>
-          <Upload
-            initialImage={initialImage}
-            setInitialImage={setInitialImage}
-            setFinalImage={setBanner}
-            height={300}
-            width={600}
-            register={register}
-            name="banner"
-          >
-            <div className="w-full rounded-2xl bg-cream p-4">
-              <HiUpload className="m-auto text-5xl text-teal" />
+            <div className="text-xl font-bold">LOGIN & CONTACT DETAILS*</div>
+            <TextInput
+              register={register}
+              error={errors.email?.message}
+              name="email"
+              placeholder="email"
+            />
+            <PasswordInput
+              register={register}
+              error={errors.password?.message}
+              name="password"
+              placeholder="password"
+            />
+            <PasswordInput
+              register={register}
+              error={errors.confirm_password?.message}
+              name="confirm_password"
+              placeholder="confirm password"
+            />
+            <TextInput
+              register={register}
+              error={errors.contact_no?.message}
+              name="contact_no"
+              placeholder="contact number"
+            />
+            <div className="text-xl font-bold">ADDITIONAL INFO*</div>
+            <TextInput
+              register={register}
+              error={errors.bir_no?.message}
+              name="bir_no"
+              placeholder="BIR number"
+            />
+            <TextInput
+              register={register}
+              error={errors.owner?.message}
+              name="owner"
+              placeholder="owner"
+            />
+            <div className="text-xl font-bold">STORE BANNER*</div>
+            <Upload
+              initialImage={initialImage}
+              setInitialImage={setInitialImage}
+              setFinalImage={setBanner}
+              height={300}
+              width={600}
+              register={register}
+              name="banner"
+            >
+              <div className="w-full rounded-2xl bg-cream p-4">
+                <HiUpload className="m-auto text-5xl text-teal" />
+              </div>
+            </Upload>
+            <div className="ml-2 text-sm font-semibold text-red-500">
+              {errors.banner?.message}
             </div>
-          </Upload>
-          <div className="ml-2 text-sm font-semibold text-red-500">
-            {errors.banner?.message}
-          </div>
-          {createAccError ? (
-            <div className="mb-3 place-self-center font-semibold text-red-500">
-              {createAccError}
-            </div>
-          ) : (
-            <></>
-          )}
-          <button
-            type="submit"
-            className="w-48 place-self-center rounded-full bg-cream px-10 py-1 text-lg font-bold leading-tight hover:opacity-75"
-          >
-            create your account
-          </button>
-          <p className="mt-3 place-self-center">
-            {"have an account? "}
-            <Link href="/login" className="font-bold underline">
-              log in
-            </Link>
-          </p>
-        </form>
+            {createAccError ? (
+              <div className="mb-3 place-self-center font-semibold text-red-500">
+                {createAccError}
+              </div>
+            ) : (
+              <></>
+            )}
+            <button
+              type="submit"
+              className="w-48 place-self-center rounded-full bg-cream px-10 py-1 text-lg font-bold leading-tight hover:opacity-75"
+            >
+              create your account
+            </button>
+            <p className="mt-3 place-self-center">
+              {"have an account? "}
+              <Link href="/login" className="font-bold underline">
+                log in
+              </Link>
+            </p>
+          </form>
+        )}
       </Layout>
     </>
   );
