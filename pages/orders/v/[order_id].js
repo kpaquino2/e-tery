@@ -3,6 +3,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { TiStarFullOutline } from "react-icons/ti";
 import Layout from "../../../components/layout/Layout";
@@ -10,14 +11,42 @@ import Layout from "../../../components/layout/Layout";
 export default function OrderPage({ order, items, customer }) {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
+  const [orderId, setOrderId] = useState(order.id);
+  const [orderStatus, setOrderStatus] = useState(order.status);
+  const [rating, setRating] = useState(null);
 
   const updateOrder = async (decision) => {
     const { error } = await supabaseClient
       .from("orders")
       .update({ status: decision })
       .eq("id", order.id);
-    if (!error) router.replace(router.asPath);
   };
+
+  useEffect(() => {
+    const subscription = supabaseClient
+      .channel("db-changes-2")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "orders",
+          filter: `id=eq.${order.id}`,
+        },
+        (payload) => {
+          setOrderStatus(payload.new.status);
+          if (payload.new.order_rating) setRating(payload.new.order_rating);
+        }
+      )
+      .subscribe();
+    if (orderId !== order.id) {
+      setOrderStatus("pending");
+      setRating(null);
+    }
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [orderId, order.id, supabaseClient]);
 
   const buttons = {
     pending: (
@@ -72,12 +101,12 @@ export default function OrderPage({ order, items, customer }) {
         This order has been completed
         <span>Rating:</span>
         <div className="flex items-center">
-          {order.order_rating ? (
+          {rating ? (
             <>
-              {Array.from({ length: order.order_rating }, (v, i) => (
+              {Array.from({ length: rating }, (v, i) => (
                 <TiStarFullOutline key={i} className="h-5 w-5 text-maroon" />
               ))}
-              {Array.from({ length: 5 - order.order_rating }, (v, i) => (
+              {Array.from({ length: 5 - rating }, (v, i) => (
                 <TiStarFullOutline key={i} className="h-5 w-5 text-zinc-400" />
               ))}
             </>
@@ -176,7 +205,7 @@ export default function OrderPage({ order, items, customer }) {
           <div className="-translate-y-4 text-center text-2xl font-bold text-dark">
             Total Amount: <span>₱{order?.total.toFixed(2)}</span>
           </div>
-          {buttons[order?.status]}
+          {buttons[orderStatus]}
         </div>
       </Layout>
     </>
