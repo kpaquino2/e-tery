@@ -65,6 +65,7 @@ export default function VendorNav({ vendor_id }) {
           if (newOrderId === null) {
             setNewOrderId(payload.new.id);
             controls.start("open");
+            router.replace(`/orders/v/${payload.new.id}`);
           }
         }
       )
@@ -100,10 +101,6 @@ export default function VendorNav({ vendor_id }) {
     setisMenuOpen(!isMenuOpen);
   };
 
-  const handleTap = () => {
-    router.replace(`/orders/v/${newOrderId}`);
-  };
-
   return (
     <>
       <motion.div
@@ -112,7 +109,6 @@ export default function VendorNav({ vendor_id }) {
         variants={notifScreen}
         className="fixed inset-0 z-50 grid h-screen place-content-center place-items-center gap-4 bg-maroon"
         whileTap={"closed"}
-        onTap={handleTap}
       >
         <motion.div
           animate={{
