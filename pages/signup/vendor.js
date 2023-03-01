@@ -43,7 +43,10 @@ const schema = yup.object({
     .required("contact number is required")
     .matches(/^((09)|(639))[0-9]{9}/, "enter a valid phone number"),
   bir_no: yup.string().required("BIR number is required"),
-  owner: yup.string().required("owner name is required"),
+  owner: yup
+    .string()
+    .required("owner name is required")
+    .matches(/^[a-zA-ZñÑ\.'-]+$/, "please enter a valid name"),
   banner: yup.mixed().required("store banner is required"),
 });
 

@@ -15,8 +15,14 @@ import { FaChevronLeft } from "react-icons/fa";
 import Layout from "../../components/layout/Layout";
 
 const schema = yup.object({
-  firstname: yup.string().required("first name is required"),
-  lastname: yup.string().required("last name is required"),
+  firstname: yup
+    .string()
+    .required("first name is required")
+    .matches(/^[a-zA-ZñÑ\.'-]+$/, "please enter a valid first name"),
+  lastname: yup
+    .string()
+    .required("last name is required")
+    .matches(/^[a-zA-ZñÑ\.'-]+$/, "please enter a valid last name"),
   email: yup
     .string()
     .required("email is required")
@@ -87,13 +93,13 @@ export default function Customer() {
         <Header />
         <Loading isLoading={loading} />
         <Link href={"/signup"}>
-          <FaChevronLeft className="absolute w-7 h-7 text-maroon mt-4 ml-2" />
+          <FaChevronLeft className="absolute mt-4 ml-2 h-7 w-7 text-maroon" />
         </Link>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-2 gap-4 p-5"
         >
-          <div className="col-span-2 text-3xl font-bold place-self-center ">
+          <div className="col-span-2 place-self-center text-3xl font-bold ">
             Sign up
           </div>
           <div className="col-span-2 text-xl font-bold">USER DETAILS*</div>
@@ -149,7 +155,7 @@ export default function Customer() {
             <option value="faculty/staff">Faculty/Staff</option>
           </SelectInput>
           {createAccError ? (
-            <div className="col-span-2 place-self-center text-red-500 font-semibold mb-3">
+            <div className="col-span-2 mb-3 place-self-center font-semibold text-red-500">
               {createAccError}
             </div>
           ) : (
@@ -157,11 +163,11 @@ export default function Customer() {
           )}
           <button
             type="submit"
-            className="col-span-2 w-48 px-10 py-1 font-bold leading-tight place-self-center bg-cream rounded-full text-lg hover:opacity-75"
+            className="col-span-2 w-48 place-self-center rounded-full bg-cream px-10 py-1 text-lg font-bold leading-tight hover:opacity-75"
           >
             create your account
           </button>
-          <p className="col-span-2 place-self-center mt-3">
+          <p className="col-span-2 mt-3 place-self-center">
             {"have an account? "}
             <Link href="/login" className="font-bold underline">
               log in
