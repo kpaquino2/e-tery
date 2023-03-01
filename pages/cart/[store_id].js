@@ -224,13 +224,13 @@ export default function StoreCartPage({ id, open, count }) {
             <span className="text-end">{cart?.subtotal.toFixed(2)}</span>
             <span>Service Fee</span>
             <span className="text-end">10.00</span>
-            {cart && (cart.subtotal < 30 || cart.subtotal > 500) && (
+            {cart && (cart.subtotal < 30 || cart.subtotal > 1000) && (
               <span className="col-span-2 flex items-center justify-center gap-1 text-center font-bold text-maroon">
                 <TbAlertCircle className="text-xl" />
                 <span className="text-sm leading-none">
                   {cart.subtotal < 30
                     ? "Subtotal must be greater than 30."
-                    : "Subtotal must be less than 500."}
+                    : "Subtotal must be less than 1000."}
                 </span>
               </span>
             )}
@@ -363,7 +363,7 @@ export default function StoreCartPage({ id, open, count }) {
               !open ||
               !cart ||
               cart.subtotal < 30 ||
-              cart.subtotal > 500 ||
+              cart.subtotal > 1000 ||
               isSubmitting ||
               isSubmitSuccessful
             }
