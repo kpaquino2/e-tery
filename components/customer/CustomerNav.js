@@ -12,6 +12,12 @@ export default function CustomerNav({ customer_id }) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
   const router = useRouter();
   const totalQty = useCart((state) => state.totalQty);
+  const cart_owner = useCart((state) => state.cart_owner);
+  const clearCart = useCart((state) => state.clearCart);
+
+  if (customer_id && cart_owner !== customer_id) clearCart(customer_id);
+
+  console.log(customer_id);
 
   const openMenu = () => {
     setisMenuOpen(!isMenuOpen);
@@ -24,9 +30,9 @@ export default function CustomerNav({ customer_id }) {
       <div className="flex gap-2">
         <Link href="/cart" className="rounded-full">
           <div className="relative">
-            <IoCart className="text-cream text-4xl" />
+            <IoCart className="text-4xl text-cream" />
             {totalQty > 0 && (
-              <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-light bg-red-500 border-2 border-cream rounded-full -top-2 -right-2">
+              <div className="absolute -top-2 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-cream bg-red-500 text-xs font-bold text-light">
                 {totalQty}
               </div>
             )}
