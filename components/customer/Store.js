@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { TiStarFullOutline } from "react-icons/ti";
 
 export default function Store({ details }) {
@@ -7,26 +8,30 @@ export default function Store({ details }) {
     i = 0,
     len = details.price_range;
   while (++i <= len) price.push("$");
+
+  const [imgSrc, setImgSrc] = useState(`banners/${details.id}`);
+
   return (
     <Link href={"store/" + details.id} className="flex flex-col drop-shadow-md">
       <Image
         className="rounded-t-2xl"
-        src={`banners/${details.id}`}
+        src={imgSrc}
         alt="banner"
         width={1200}
         height={600}
+        onError={() => setImgSrc("graphics/default.png")}
       />
-      <div className="flex flex-row justify-between bg-teal rounded-b-2xl px-4 py-2 w-full">
-        <div className="text-cream font-bold text-xl">{details.name}</div>
+      <div className="flex w-full flex-row justify-between rounded-b-2xl bg-teal px-4 py-2">
+        <div className="text-xl font-bold text-cream">{details.name}</div>
         <div className="">
           {price.map(function (i) {
             return i;
           })}
         </div>
-        <div className="self-end mt-auto text-cream font-semibold">
+        <div className="mt-auto self-end font-semibold text-cream">
           {details.rating ? (
             <div className="flex items-center ">
-              <TiStarFullOutline className="w-5 h-5 text-maroon" />
+              <TiStarFullOutline className="h-5 w-5 text-maroon" />
               {details.rating.toFixed(1)}
             </div>
           ) : (
