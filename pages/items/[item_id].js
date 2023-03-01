@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { FaChevronLeft } from "react-icons/fa";
 import { HiUpload } from "react-icons/hi";
+import { ImSpinner5 } from "react-icons/im";
 import { MdDelete, MdEdit } from "react-icons/md";
 import * as yup from "yup";
 import CheckboxInputAlt from "../../components/forms/CheckboxInputAlt";
@@ -54,7 +55,7 @@ export default function ItemPage({ id, item, imageUrl }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, dirtyFields },
+    formState: { errors, isDirty, isSubmitSuccessful, isSubmitting },
     control,
     reset,
   } = useForm({
@@ -83,10 +84,8 @@ export default function ItemPage({ id, item, imageUrl }) {
   const [image, setImage] = useState("");
   const [editImage, setEditImage] = useState(false);
   const [initialImage, setInitialImage] = useState(item.has_image && imageUrl);
-  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    setLoading(true);
     const { data: itemData, error: itemError } = await supabaseClient
       .from("items")
       .update([
@@ -150,7 +149,6 @@ export default function ItemPage({ id, item, imageUrl }) {
       router.push("/");
       return;
     }
-    setLoading(false);
   };
 
   const addVariant = () => {
@@ -165,7 +163,6 @@ export default function ItemPage({ id, item, imageUrl }) {
   };
 
   const handleDelete = async () => {
-    setLoading(true);
     const { error } = await supabaseClient
       .from("items")
       .delete()
@@ -176,7 +173,6 @@ export default function ItemPage({ id, item, imageUrl }) {
       .remove(id + "/" + router.query.item_id);
 
     if (!removeImageError) router.push("/");
-    setLoading(false);
   };
 
   return (
@@ -187,6 +183,7 @@ export default function ItemPage({ id, item, imageUrl }) {
             type="button"
             className="absolute top-6 left-4 rounded-full p-1"
             onClick={() => router.push("/")}
+            disabled={isSubmitting || isSubmitSuccessful}
           >
             <FaChevronLeft className="text-3xl text-cream" />
           </button>
@@ -306,7 +303,7 @@ export default function ItemPage({ id, item, imageUrl }) {
                   width={400}
                   name="image"
                   register={register}
-                  loading={loading}
+                  loading={isSubmitting || isSubmitSuccessful}
                 >
                   <div className="mb-4 w-full rounded-2xl bg-teal p-4">
                     <HiUpload className="m-auto text-5xl text-maroon" />
@@ -317,15 +314,22 @@ export default function ItemPage({ id, item, imageUrl }) {
             <div className="mt-2 grid w-full grid-cols-2 justify-center gap-4">
               <button
                 type="submit"
-                className="rounded-full bg-teal px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
-                disabled={loading || !(editImage || isDirty)}
+                className="flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-teal px-8 py-1 text-lg font-bold text-white disabled:brightness-75"
+                disabled={
+                  isSubmitting || isSubmitSuccessful || !(editImage || isDirty)
+                }
               >
+                {(isSubmitting || isSubmitSuccessful) && (
+                  <ImSpinner5 className="animate-spin" />
+                )}
                 SAVE
               </button>
               <button
                 type="button"
                 className="rounded-full bg-cream px-8 py-1 text-lg font-bold text-teal disabled:brightness-50"
-                disabled={loading || !(editImage || isDirty)}
+                disabled={
+                  isSubmitting || isSubmitSuccessful || !(editImage || isDirty)
+                }
                 onClick={handleReset}
               >
                 RESET
@@ -333,7 +337,7 @@ export default function ItemPage({ id, item, imageUrl }) {
               <button
                 type="button"
                 className="col-span-2 rounded-full bg-maroon px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
-                disabled={loading}
+                disabled={isSubmitting || isSubmitSuccessful}
                 onClick={handleDelete}
               >
                 DELETE ITEM

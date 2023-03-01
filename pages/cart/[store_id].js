@@ -13,6 +13,7 @@ import SelectInputAlt from "../../components/forms/SelectInputAlt";
 import * as moment from "moment";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { TbAlertCircle } from "react-icons/tb";
+import { ImSpinner5 } from "react-icons/im";
 
 const schema = yup.object({});
 
@@ -35,7 +36,12 @@ const getTimes = () => {
 
 export default function StoreCartPage({ id, open, count }) {
   const times = useMemo(() => getTimes(), []);
-  const { register, watch, handleSubmit } = useForm({
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { isSubmitting, isSubmitSuccessful },
+  } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       option: "delivery",
@@ -173,6 +179,7 @@ export default function StoreCartPage({ id, open, count }) {
           type="button"
           className="absolute top-24 left-4 z-20 rounded-full py-2 pl-1.5 pr-2.5"
           onClick={() => router.push("/cart")}
+          disabled={isSubmitting || isSubmitSuccessful}
         >
           <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
         </button>
@@ -351,11 +358,19 @@ export default function StoreCartPage({ id, open, count }) {
             </span>
           </div>
           <button
-            className="my-2 rounded-full bg-teal text-xl font-bold text-light disabled:grayscale"
+            className="my-2 flex items-center justify-center gap-2 rounded-full bg-teal text-xl font-bold text-light disabled:brightness-75"
             disabled={
-              !open || !cart || cart.subtotal < 30 || cart.subtotal > 500
+              !open ||
+              !cart ||
+              cart.subtotal < 30 ||
+              cart.subtotal > 500 ||
+              isSubmitting ||
+              isSubmitSuccessful
             }
           >
+            {(isSubmitting || isSubmitSuccessful) && (
+              <ImSpinner5 className="animate-spin" />
+            )}
             CHECK OUT
           </button>
         </div>

@@ -12,6 +12,7 @@ import Layout from "../../components/layout/Layout";
 import { FaChevronLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 import CheckboxInputAlt from "../../components/forms/CheckboxInputAlt";
+import { ImSpinner5 } from "react-icons/im";
 
 const schema = yup.object({
   name: yup.string().required("name is required"),
@@ -51,8 +52,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     control,
   } = useForm({ resolver: yupResolver(schema) });
   const { fields, append, remove } = useFieldArray({
@@ -62,10 +62,8 @@ export default function AddItemPage({ vendor_id, category_id }) {
   const router = useRouter();
   const [image, setImage] = useState("");
   const [initialImage, setInitialImage] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    setLoading(true);
     const { data: itemData, error: itemError } = await supabaseClient
       .from("items")
       .insert([
@@ -121,7 +119,6 @@ export default function AddItemPage({ vendor_id, category_id }) {
       router.push("/");
       return;
     }
-    setLoading(false);
   };
 
   const addVariant = () => {
@@ -131,17 +128,12 @@ export default function AddItemPage({ vendor_id, category_id }) {
   return (
     <>
       <Layout title="New Item">
-        <div
-          className={
-            "relative flex h-full grow flex-col items-center bg-dark pb-12" +
-            (loading ? "cursor-wait opacity-75" : "")
-          }
-        >
+        <div className="relative flex h-full grow flex-col items-center bg-dark pb-12">
           <button
             type="button"
             className="absolute top-6 left-4 rounded-full p-1"
             onClick={() => router.push("/")}
-            disabled={loading}
+            disabled={isSubmitting || isSubmitSuccessful}
           >
             <FaChevronLeft className="text-3xl text-cream" />
           </button>
@@ -231,7 +223,7 @@ export default function AddItemPage({ vendor_id, category_id }) {
               width={400}
               name="image"
               register={register}
-              loading={loading}
+              loading={isSubmitting || isSubmitSuccessful}
             >
               <div className="w-full rounded-2xl bg-teal p-4">
                 <HiUpload className="m-auto text-5xl text-maroon" />
@@ -239,11 +231,12 @@ export default function AddItemPage({ vendor_id, category_id }) {
             </Upload>
             <button
               type="submit"
-              className={
-                "mt-8 w-min rounded-full bg-teal px-8 py-1 text-lg font-bold text-white "
-              }
-              disabled={loading}
+              className="mt-8 flex w-min items-center justify-center gap-2 rounded-full bg-teal px-8 py-1 text-lg font-bold text-light disabled:brightness-75"
+              disabled={isSubmitting || isSubmitSuccessful}
             >
+              {(isSubmitting || isSubmitSuccessful) && (
+                <ImSpinner5 className="animate-spin" />
+              )}
               SUBMIT
             </button>
           </form>

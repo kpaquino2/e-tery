@@ -15,6 +15,7 @@ import useCart from "../../../../lib/cart";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Fragment } from "react";
+import { ImSpinner5 } from "react-icons/im";
 
 const schema = yup.object({
   radio_variants: yup.array(
@@ -44,7 +45,7 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     trigger,
   } = useForm({
     resolver: yupResolver(schema),
@@ -154,14 +155,15 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
       <Layout title={item.name}>
         <button
           type="button"
-          className="absolute top-32 left-4 rounded-full py-2 pl-1.5 pr-2.5 z-20 bg-cream"
+          className="absolute top-32 left-4 z-20 rounded-full bg-cream py-2 pl-1.5 pr-2.5"
           onClick={() => router.back()}
+          disabled={isSubmitting || isSubmitSuccessful}
         >
           <FaChevronLeft className="text-3xl text-maroon drop-shadow-lg" />
         </button>
         <button
           type="button"
-          className="absolute top-32 right-4 rounded-full pt-2.5 pb-1.5 px-2 z-20 bg-cream"
+          className="absolute top-32 right-4 z-20 rounded-full bg-cream px-2 pt-2.5 pb-1.5"
           onClick={clickHeart}
         >
           {fav ? (
@@ -171,13 +173,13 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
           )}
         </button>
         <Banner url={`items/${store.id}/${item.id}`} />
-        <div className="grid grid-cols-auto mx-6 gap-2 pb-20">
-          <div className="font-bold text-4xl mt-4">{item.name}</div>
-          <div className="font-semibold text-xl justify-self-end self-end mt-4">
+        <div className="grid-cols-auto mx-6 grid gap-2 pb-20">
+          <div className="mt-4 text-4xl font-bold">{item.name}</div>
+          <div className="mt-4 self-end justify-self-end text-xl font-semibold">
             ₱ {item.base_price.toFixed(2)}
           </div>
           <div className="col-span-2">{item.description}</div>
-          <div className="bg-cream h-1 col-span-2 rounded-full" />
+          <div className="col-span-2 h-1 rounded-full bg-cream" />
           {!store.open && (
             <div className="col-span-2 text-center text-lg font-semibold text-maroon">
               The store is closed.
@@ -192,10 +194,10 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                 {!variant.optional &&
                   ((variant.select > 1 &&
                     !errors.checkbox_variants?.[index]?.message && (
-                      <FaCheck className="text-teal mt-0.5" />
+                      <FaCheck className="mt-0.5 text-teal" />
                     )) ||
                     (variant.select == 1 && !errors.radio_variants?.[index] && (
-                      <FaCheck className="text-teal mt-0.5" />
+                      <FaCheck className="mt-0.5 text-teal" />
                     )))}
               </div>
               <span className="col-span-2 text-sm leading-tight">
@@ -209,7 +211,7 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                     <Fragment key={idx}>
                       <label
                         htmlFor={option.id}
-                        className="text-lg flex items-center gap-2"
+                        className="flex items-center gap-2 text-lg"
                       >
                         <RadioInput
                           id={option.id}
@@ -220,7 +222,7 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                         />
                         <div className="">{option.name}</div>
                       </label>
-                      <div className="font-semibold place-self-end">
+                      <div className="place-self-end font-semibold">
                         +{option.addtl_price.toFixed(2)}
                       </div>
                     </Fragment>
@@ -229,7 +231,7 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                   <Fragment key={idx}>
                     <label
                       htmlFor={option.id}
-                      className="text-lg flex items-center gap-2"
+                      className="flex items-center gap-2 text-lg"
                     >
                       <CheckboxInput
                         id={option.id}
@@ -240,7 +242,7 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
                       />
                       <div className="">{option.name}</div>
                     </label>
-                    <div className="font-semibold place-self-end">
+                    <div className="place-self-end font-semibold">
                       +{option.addtl_price.toFixed(2)}
                     </div>
                   </Fragment>
@@ -251,28 +253,36 @@ export default function StoreItemPage({ customer_id, store, item, favorite }) {
         </div>
       </Layout>
       <Footer>
-        <div className="grid grid-cols-2 gap-3 h-full mx-4">
+        <div className="mx-4 grid h-full grid-cols-2 gap-3">
           <div className="flex items-center justify-around">
             <button
               type="button"
               onClick={subtract}
-              className="bg-light rounded-full p-1"
+              className="rounded-full bg-light p-1"
             >
-              <TiMinus className="text-maroon text-2xl font-semibold" />
+              <TiMinus className="text-2xl font-semibold text-maroon" />
             </button>
-            <span className="text-cream font-bold text-2xl">{quantity}</span>
+            <span className="text-2xl font-bold text-cream">{quantity}</span>
             <button
               type="button"
               onClick={add}
-              className="bg-light rounded-full p-1"
+              className="rounded-full bg-light p-1"
             >
-              <TiPlus className="text-maroon text-2xl font-semibold" />
+              <TiPlus className="text-2xl font-semibold text-maroon" />
             </button>
           </div>
           <button
-            className="bg-teal my-2 rounded-full text-xl font-bold text-light disabled:grayscale"
-            disabled={Object.keys(errors).length || !store.open}
+            className="my-2 flex items-center justify-center gap-2 rounded-full bg-teal text-xl font-bold text-light disabled:brightness-75"
+            disabled={
+              Object.keys(errors).length ||
+              !store.open ||
+              isSubmitting ||
+              isSubmitSuccessful
+            }
           >
+            {(isSubmitting || isSubmitSuccessful) && (
+              <ImSpinner5 className="animate-spin" />
+            )}
             ADD TO CART
           </button>
         </div>

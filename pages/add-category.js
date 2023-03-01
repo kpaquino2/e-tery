@@ -9,6 +9,7 @@ import TextInputAlt from "../components/forms/TextInputAlt";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import Layout from "../components/layout/Layout";
 import { FaChevronLeft } from "react-icons/fa";
+import { ImSpinner5 } from "react-icons/im";
 
 const schema = yup.object({
   name: yup.string().required("name is required"),
@@ -19,12 +20,10 @@ export default function AddCategoryPage({ vendor_id }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm({ resolver: yupResolver(schema) });
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
   const categorySamples = [
     "Drinks",
@@ -35,7 +34,6 @@ export default function AddCategoryPage({ vendor_id }) {
   ];
 
   const onSubmit = async (data) => {
-    setLoading(true);
     const { error } = await supabaseClient
       .from("categories")
       .insert([{ name: data.name, desc: data.desc, vendor_id: vendor_id }]);
@@ -43,29 +41,22 @@ export default function AddCategoryPage({ vendor_id }) {
       router.push("/");
       return;
     }
-    setLoading(false);
   };
 
   return (
     <>
       <Layout title="New Category">
-        <div
-          className={
-            "relative flex flex-col items-center bg-dark h-full grow pb-12" +
-            (loading ? "opacity-75 cursor-wait" : "")
-          }
-        >
+        <div className="relative flex h-full grow flex-col items-center bg-dark pb-12">
           <button
             type="button"
             className="absolute top-6 left-4 rounded-full p-1"
             onClick={() => router.push("/")}
-            disabled={loading}
           >
             <FaChevronLeft className="text-3xl text-cream" />
           </button>
-          <p className="text-cream text-4xl font-bold mb-4 mt-12">Details</p>
+          <p className="mb-4 mt-12 text-4xl font-bold text-cream">Details</p>
           <form
-            className="flex flex-col items-center gap-2 text-cream w-3/4"
+            className="flex w-3/4 flex-col items-center gap-2 text-cream"
             onSubmit={handleSubmit(onSubmit)}
           >
             <TextInputAlt
@@ -83,9 +74,12 @@ export default function AddCategoryPage({ vendor_id }) {
             />
             <button
               type="submit"
-              className="rounded-full bg-teal text-white font-bold text-lg w-min px-8 py-1 mt-8 "
-              disabled={loading}
+              className="mt-8 flex w-min items-center justify-center gap-2 rounded-full bg-teal px-8 py-1 text-lg font-bold text-light disabled:brightness-75"
+              disabled={isSubmitting || isSubmitSuccessful}
             >
+              {(isSubmitting || isSubmitSuccessful) && (
+                <ImSpinner5 className="animate-spin" />
+              )}
               SUBMIT
             </button>
           </form>

@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import TextInputAlt from "../../components/forms/TextInputAlt";
+import { ImSpinner5 } from "react-icons/im";
 
 const schema = yup.object({
   name: yup.string().required("name is required"),
@@ -18,7 +19,7 @@ export default function EditCategoryPage({ category }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isSubmitting, isSubmitSuccessful },
     reset,
   } = useForm({
     resolver: yupResolver(schema),
@@ -29,10 +30,8 @@ export default function EditCategoryPage({ category }) {
   });
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    setLoading(true);
     const { error } = await supabaseClient.from("categories").upsert(
       [
         {
@@ -48,7 +47,6 @@ export default function EditCategoryPage({ category }) {
       router.push("/");
       return;
     }
-    setLoading(false);
   };
 
   const handleReset = () => {
@@ -63,7 +61,7 @@ export default function EditCategoryPage({ category }) {
             type="button"
             className="absolute top-6 left-4 rounded-full p-1"
             onClick={() => router.push("/")}
-            disabled={loading}
+            disabled={isSubmitting || isSubmitSuccessful}
           >
             <FaChevronLeft className="text-3xl text-cream" />
           </button>
@@ -89,15 +87,18 @@ export default function EditCategoryPage({ category }) {
             <div className="flex w-full justify-center gap-2">
               <button
                 type="submit"
-                className="w-min whitespace-nowrap rounded-full bg-teal px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
-                disabled={loading || !isDirty}
+                className="flex w-min items-center gap-2 whitespace-nowrap rounded-full bg-teal px-8 py-1 text-lg font-bold text-white disabled:brightness-75"
+                disabled={isSubmitting || isSubmitSuccessful || !isDirty}
               >
+                {(isSubmitting || isSubmitSuccessful) && (
+                  <ImSpinner5 className="animate-spin" />
+                )}
                 SAVE CHANGES
               </button>
               <button
                 type="button"
-                className="w-min rounded-full bg-maroon px-8 py-1 text-lg font-bold text-white disabled:brightness-50"
-                disabled={loading || !isDirty}
+                className="w-min rounded-full bg-maroon px-8 py-1 text-lg font-bold text-white disabled:brightness-75"
+                disabled={isSubmitting || isSubmitSuccessful || !isDirty}
                 onClick={handleReset}
               >
                 RESET
