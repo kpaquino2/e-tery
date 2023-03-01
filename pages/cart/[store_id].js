@@ -12,6 +12,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import SelectInputAlt from "../../components/forms/SelectInputAlt";
 import * as moment from "moment";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { TbAlertCircle } from "react-icons/tb";
 
 const schema = yup.object({});
 
@@ -216,6 +217,16 @@ export default function StoreCartPage({ id, open, count }) {
             <span className="text-end">{cart?.subtotal.toFixed(2)}</span>
             <span>Service Fee</span>
             <span className="text-end">10.00</span>
+            {cart && (cart.subtotal < 30 || cart.subtotal > 500) && (
+              <span className="col-span-2 flex items-center justify-center gap-1 text-center font-bold text-maroon">
+                <TbAlertCircle className="text-xl" />
+                <span className="text-sm leading-none">
+                  {cart.subtotal < 30
+                    ? "Subtotal must be greater than 30."
+                    : "Subtotal must be less than 500."}
+                </span>
+              </span>
+            )}
           </div>
           <div className="grid grid-cols-2">
             <div className="col-span-2 text-xl font-semibold">
@@ -341,7 +352,9 @@ export default function StoreCartPage({ id, open, count }) {
           </div>
           <button
             className="my-2 rounded-full bg-teal text-xl font-bold text-light disabled:grayscale"
-            disabled={!open}
+            disabled={
+              !open || !cart || cart.subtotal < 30 || cart.subtotal > 500
+            }
           >
             CHECK OUT
           </button>
