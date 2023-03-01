@@ -14,9 +14,9 @@ export default function Store({ details }) {
   return (
     <Link href={"store/" + details.id} className="flex flex-col drop-shadow-md">
       <Image
-        className="rounded-t-2xl"
+        className="rounded-t-2xl bg-cream"
         src={imgSrc}
-        alt="banner"
+        alt=""
         width={1200}
         height={600}
         onError={() => setImgSrc("graphics/default.png")}
