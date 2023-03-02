@@ -48,14 +48,16 @@ const schema = yup.object({
     .string()
     .required("owner name is required")
     .matches(/^[a-zA-ZñÑ\.'-]+$/, "please enter a valid name"),
-  banner: yup.mixed().required("store banner is required"),
+  banner: yup
+    .mixed()
+    .test("exists", "store banner is required", (value) => value.length),
 });
 
 export default function Customer() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, dirtyFields },
   } = useForm({ resolver: yupResolver(schema) });
 
   const supabaseClient = useSupabaseClient();
@@ -66,17 +68,18 @@ export default function Customer() {
   const [data, setData] = useState({});
 
   const onSubmit = async (data) => {
-    setLoading(true);
-    const { error: signUpError } = await supabaseClient.auth.signUp({
-      email: data.email,
-      password: data.password,
-    });
-    setLoading(false);
-    if (!signUpError) {
-      setData(data);
-      return;
-    }
-    setCreateAccError(signUpError?.message);
+    console.log(data);
+    // setLoading(true);
+    // const { error: signUpError } = await supabaseClient.auth.signUp({
+    //   email: data.email,
+    //   password: data.password,
+    // });
+    // setLoading(false);
+    // if (!signUpError) {
+    //   setData(data);
+    //   return;
+    // }
+    // setCreateAccError(signUpError?.message);
   };
 
   return (
