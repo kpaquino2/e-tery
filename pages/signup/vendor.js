@@ -42,7 +42,7 @@ const schema = yup.object({
   contact_no: yup
     .string()
     .required("contact number is required")
-    .matches(/^((09)|(639))[0-9]{9}/, "enter a valid phone number"),
+    .matches(/^((09)|(639)|(+639))[0-9]{9}$/, "enter a valid phone number"),
   bir_no: yup.string().required("BIR number is required"),
   owner: yup
     .string()
