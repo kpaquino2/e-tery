@@ -67,10 +67,9 @@ export default function Customer() {
       email: data.email,
       password: data.password,
     });
-
+    setLoading(false);
     if (!signUpError) {
       setData(data);
-      setLoading(false);
       return;
     }
     setCreateAccError(signUpError?.message);
