@@ -6,7 +6,7 @@ import { BiMailSend } from "react-icons/bi";
 export default function TokenInput({ acct_type, data, setLoading, banner }) {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
-  const [timer, setTimer] = useState(0);
+  const [timer, setTimer] = useState(120);
   const [tries, setTries] = useState(0);
   const disable = tries > 2 ? true : false;
   const length = 6;
@@ -14,7 +14,6 @@ export default function TokenInput({ acct_type, data, setLoading, banner }) {
 
   const inputs = useRef([]);
   const [token, setToken] = useState("");
-  console.log(token.length);
 
   useEffect(() => {
     if (timer > 0) {
@@ -133,10 +132,10 @@ export default function TokenInput({ acct_type, data, setLoading, banner }) {
           >
             confirm
           </button>
-          <p className="text-center text-dark">
+          <div className="text-center text-dark">
             {timer > 0 ? (
               <>
-                {"resend again in "}
+                {"resend token in "}
                 <p className="inline font-bold">
                   {Math.floor(timer / 60)}:
                   {(timer % 60).toString().padStart(2, "0")}
@@ -150,7 +149,7 @@ export default function TokenInput({ acct_type, data, setLoading, banner }) {
                 </button>
               </>
             )}
-          </p>
+          </div>
         </div>
       )}
     </div>
